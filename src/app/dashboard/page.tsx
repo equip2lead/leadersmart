@@ -72,35 +72,17 @@ export default async function DashboardRouter() {
     );
   }
 
-  const { data: church, error: churchError } = await supabase
-    .from('churches')
-    .insert({ name: churchName, language: preferredLanguage })
-    .select('id')
-    .single();
-
-  if (churchError || !church) {
-    return (
-      <SetupError
-        message="We couldn't create your church. This is almost always a Supabase RLS policy blocking the insert for new signups."
-        detail={churchError?.message ?? 'No error message returned.'}
-      />
-    );
-  }
-
-  const { error: userError } = await supabase.from('users').insert({
-    id: user.id,
-    church_id: church.id,
-    full_name: fullName,
-    email: user.email!,
-    role: 'senior_pastor',
-    preferred_language: preferredLanguage,
+  const { error: rpcError } = await supabase.rpc('bootstrap_my_church', {
+    p_church_name: churchName,
+    p_full_name: fullName,
+    p_language: preferredLanguage,
   });
 
-  if (userError) {
+  if (rpcError) {
     return (
       <SetupError
-        message="We created your church but couldn't link your user record."
-        detail={userError.message}
+        message="We couldn't finish setting up your church. If this is your first signup, the database function bootstrap_my_church may not be installed yet."
+        detail={rpcError.message}
       />
     );
   }

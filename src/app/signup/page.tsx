@@ -46,38 +46,15 @@ export default function SignupPage() {
       }
 
       // Email confirmation required → no session yet.
-      // Church + user row will be created on first /dashboard visit after confirm.
+      // Provisioning happens when they land on /dashboard after confirming.
       if (!data.session || !data.user) {
         router.push('/login?check=email');
         return;
       }
 
-      // Session available → provision church + user row now.
-      const { data: church, error: churchError } = await supabase
-        .from('churches')
-        .insert({ name: churchName, language })
-        .select('id')
-        .single();
-
-      if (churchError || !church) {
-        setError(churchError?.message ?? t('auth.error.generic'));
-        return;
-      }
-
-      const { error: userError } = await supabase.from('users').insert({
-        id: data.user.id,
-        church_id: church.id,
-        full_name: fullName,
-        email,
-        role: 'senior_pastor',
-        preferred_language: language,
-      });
-
-      if (userError) {
-        setError(userError.message);
-        return;
-      }
-
+      // Session available. Let the dashboard router finish provisioning via
+      // the bootstrap_my_church SECURITY DEFINER function — it's the single
+      // source of truth so RLS changes only need to be made in one place.
       router.push('/dashboard');
       router.refresh();
     } catch {
