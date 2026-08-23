@@ -5,6 +5,7 @@ import { hasAdminKey } from '@/lib/supabase/admin';
 import { t } from '@/lib/i18n';
 import { PageHeading } from '@/components/page-heading';
 import { InviteUserForm } from './_invite-form';
+import { UserRow, type UserRowData } from './_user-row';
 
 export const dynamic = 'force-dynamic';
 
@@ -26,7 +27,7 @@ export default async function UsersPage() {
     .order('created_at', { ascending: true })
     .limit(PAGE_LIMIT);
 
-  const users = data ?? [];
+  const users = (data ?? []) as UserRowData[];
   const serviceKeyAvailable = hasAdminKey();
   const callerIsOwner = isOwner(me.role);
 
@@ -37,11 +38,6 @@ export default async function UsersPage() {
     (u) => u.role === 'admin_pastor' || u.role === 'pastor',
   ).length;
   const showSoftWarning = adminPastorCount >= ADMIN_PASTOR_SOFT_LIMIT;
-
-  function formatDate(iso: string | null): string {
-    if (!iso) return '—';
-    return new Date(iso).toLocaleDateString(lang === 'fr' ? 'fr-FR' : 'en-US');
-  }
 
   return (
     <div className="px-4 py-6 sm:px-8 sm:py-8">
@@ -88,49 +84,16 @@ export default async function UsersPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
-                {users.map((u) => {
-                  const isRowOwner = u.role === 'owner';
-                  return (
-                    <tr key={u.id}>
-                      <td className="px-4 py-3 text-sm font-medium text-ink">
-                        {u.full_name}
-                        {isRowOwner && (
-                          <span
-                            className="ml-2 inline-flex items-center rounded-full bg-flame-100 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-flame-700"
-                            title={t('nav.owner.badgeTitle', lang)}
-                          >
-                            {t('nav.owner.badge', lang)}
-                          </span>
-                        )}
-                        {u.id === me.id && (
-                          <span className="ml-2 text-xs text-muted">
-                            ({t('users.you', lang)})
-                          </span>
-                        )}
-                      </td>
-                      <td className="px-4 py-3 text-sm text-body">{u.email}</td>
-                      <td className="px-4 py-3 text-sm text-body">
-                        {t(`role.${u.role}`, lang)}
-                      </td>
-                      <td className="px-4 py-3">
-                        <span
-                          className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                            u.is_active
-                              ? 'bg-emerald-100 text-emerald-800'
-                              : 'bg-gray-100 text-gray-700'
-                          }`}
-                        >
-                          {u.is_active
-                            ? t('users.status.active', lang)
-                            : t('users.status.inactive', lang)}
-                        </span>
-                      </td>
-                      <td className="px-4 py-3 text-sm text-muted">
-                        {formatDate(u.last_login_at)}
-                      </td>
-                    </tr>
-                  );
-                })}
+                {users.map((u) => (
+                  <UserRow
+                    key={u.id}
+                    user={u}
+                    meId={me.id}
+                    callerIsOwner={callerIsOwner}
+                    currentAdminPastorCount={adminPastorCount}
+                    lang={lang}
+                  />
+                ))}
               </tbody>
             </table>
             {users.length === 0 && (

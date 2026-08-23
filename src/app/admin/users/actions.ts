@@ -2,7 +2,8 @@
 
 import { revalidatePath } from 'next/cache';
 import { requireRole } from '@/lib/auth';
-import { ADMIN_ROLES, isOwner } from '@/lib/roles';
+import { ADMIN_ROLES, OWNER_ROLES, isOwner } from '@/lib/roles';
+import { createClient } from '@/lib/supabase/server';
 import { createAdminClient, hasAdminKey } from '@/lib/supabase/admin';
 import { logAudit } from '@/lib/audit';
 import type { UserRole } from '@/lib/types';
@@ -115,4 +116,165 @@ export async function inviteUser(formData: FormData): Promise<InviteResult> {
 
   revalidatePath('/admin/users');
   return { ok: true, email };
+}
+
+// ─────────────────────────────────────────────────────────────
+// Role change + membership removal (Owner-only, per spec Section 17).
+// ─────────────────────────────────────────────────────────────
+
+export type RoleChangeResult = { ok: true } | { ok: false; error: string };
+
+// Only these primary-role transitions are exposed via the UI in Phase 3.
+// Owner assignments happen via the transfer flow, not a direct promote;
+// admin_pastor and fire_kids_coordinator invites use the invite path.
+const ALLOWED_ROLE_TRANSITIONS: ReadonlyArray<{
+  from: UserRole;
+  to: UserRole;
+}> = [
+  { from: 'admin_pastor', to: 'department_head' },
+  { from: 'department_head', to: 'admin_pastor' },
+  // Legacy fallbacks so a pre-migration user with role='pastor' or
+  // 'department_leader' can still be promoted/demoted through this UI.
+  { from: 'pastor', to: 'department_head' },
+  { from: 'department_leader', to: 'admin_pastor' },
+];
+
+function isAllowedTransition(from: UserRole, to: UserRole): boolean {
+  return ALLOWED_ROLE_TRANSITIONS.some((t) => t.from === from && t.to === to);
+}
+
+export async function changeUserRole(
+  targetUserId: string,
+  toRole: UserRole,
+): Promise<RoleChangeResult> {
+  const { user: me, church } = await requireRole(OWNER_ROLES);
+  const supabase = await createClient();
+
+  if (targetUserId === me.id) {
+    return { ok: false, error: 'cannot_change_own_role' };
+  }
+
+  const { data: target } = await supabase
+    .from('users')
+    .select('id, church_id, role, is_active, full_name')
+    .eq('id', targetUserId)
+    .maybeSingle();
+
+  if (!target || target.church_id !== church.id) {
+    return { ok: false, error: 'not_found' };
+  }
+  if (target.role === 'owner') {
+    return { ok: false, error: 'cannot_change_owner' };
+  }
+
+  const fromRole = target.role as UserRole;
+  if (!isAllowedTransition(fromRole, toRole)) {
+    return { ok: false, error: 'invalid_transition' };
+  }
+
+  const { error } = await supabase
+    .from('users')
+    .update({ role: toRole })
+    .eq('id', targetUserId);
+
+  if (error) return { ok: false, error: error.message };
+
+  await logAudit({
+    churchId: church.id,
+    userId: me.id,
+    action: 'update',
+    entityType: 'user',
+    entityId: targetUserId,
+    beforeValue: { role: fromRole },
+    afterValue: { role: toRole },
+  });
+
+  revalidatePath('/admin/users');
+  revalidatePath('/admin');
+  return { ok: true };
+}
+
+export async function removeUserFromChurch(
+  targetUserId: string,
+): Promise<RoleChangeResult> {
+  const { user: me, church } = await requireRole(OWNER_ROLES);
+  const supabase = await createClient();
+
+  if (targetUserId === me.id) {
+    return { ok: false, error: 'cannot_remove_self' };
+  }
+
+  const { data: target } = await supabase
+    .from('users')
+    .select('id, church_id, role, is_active, full_name')
+    .eq('id', targetUserId)
+    .maybeSingle();
+
+  if (!target || target.church_id !== church.id) {
+    return { ok: false, error: 'not_found' };
+  }
+  if (target.role === 'owner') {
+    return { ok: false, error: 'cannot_remove_owner' };
+  }
+  if (!target.is_active) return { ok: true };
+
+  const { error } = await supabase
+    .from('users')
+    .update({ is_active: false })
+    .eq('id', targetUserId);
+
+  if (error) return { ok: false, error: error.message };
+
+  await logAudit({
+    churchId: church.id,
+    userId: me.id,
+    action: 'deactivate',
+    entityType: 'user',
+    entityId: targetUserId,
+    beforeValue: { is_active: true, role: target.role },
+    afterValue: { is_active: false, role: target.role },
+  });
+
+  revalidatePath('/admin/users');
+  revalidatePath('/admin');
+  return { ok: true };
+}
+
+export async function reactivateUser(
+  targetUserId: string,
+): Promise<RoleChangeResult> {
+  const { user: me, church } = await requireRole(OWNER_ROLES);
+  const supabase = await createClient();
+
+  const { data: target } = await supabase
+    .from('users')
+    .select('id, church_id, role, is_active')
+    .eq('id', targetUserId)
+    .maybeSingle();
+
+  if (!target || target.church_id !== church.id) {
+    return { ok: false, error: 'not_found' };
+  }
+  if (target.is_active) return { ok: true };
+
+  const { error } = await supabase
+    .from('users')
+    .update({ is_active: true })
+    .eq('id', targetUserId);
+
+  if (error) return { ok: false, error: error.message };
+
+  await logAudit({
+    churchId: church.id,
+    userId: me.id,
+    action: 'reactivate',
+    entityType: 'user',
+    entityId: targetUserId,
+    beforeValue: { is_active: false },
+    afterValue: { is_active: true },
+  });
+
+  revalidatePath('/admin/users');
+  revalidatePath('/admin');
+  return { ok: true };
 }
