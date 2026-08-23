@@ -20,14 +20,28 @@ export default async function UsersPage() {
   const lang = me.preferred_language;
   const supabase = await createClient();
 
-  const { data } = await supabase
-    .from('users')
-    .select('id, full_name, email, role, is_active, last_login_at')
-    .eq('church_id', church.id)
-    .order('created_at', { ascending: true })
-    .limit(PAGE_LIMIT);
+  const [usersRes, secondaryRes] = await Promise.all([
+    supabase
+      .from('users')
+      .select('id, full_name, email, role, is_active, last_login_at')
+      .eq('church_id', church.id)
+      .order('created_at', { ascending: true })
+      .limit(PAGE_LIMIT),
+    supabase
+      .from('user_secondary_roles')
+      .select('user_id, role')
+      .eq('church_id', church.id),
+  ]);
 
-  const users = (data ?? []) as UserRowData[];
+  const secondaryByUser: Record<string, UserRowData['secondary_roles']> = {};
+  for (const row of secondaryRes.data ?? []) {
+    (secondaryByUser[row.user_id] ??= []).push(row.role as UserRowData['secondary_roles'][number]);
+  }
+
+  const users: UserRowData[] = (usersRes.data ?? []).map((u) => ({
+    ...u,
+    secondary_roles: secondaryByUser[u.id] ?? [],
+  }));
   const serviceKeyAvailable = hasAdminKey();
   const callerIsOwner = isOwner(me.role);
 

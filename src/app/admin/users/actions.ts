@@ -240,6 +240,92 @@ export async function removeUserFromChurch(
   return { ok: true };
 }
 
+// ─────────────────────────────────────────────────────────────
+// Secondary role grants (user_secondary_roles). Fire Kids Coordinator
+// is the only one wired to a UI button in Phase 3 — owner-only per
+// Section 17 decision #5.
+// ─────────────────────────────────────────────────────────────
+
+export async function grantFireKidsCoordinator(
+  targetUserId: string,
+): Promise<RoleChangeResult> {
+  const { user: me, church } = await requireRole(OWNER_ROLES);
+  const supabase = await createClient();
+
+  const { data: target } = await supabase
+    .from('users')
+    .select('id, church_id')
+    .eq('id', targetUserId)
+    .maybeSingle();
+
+  if (!target || target.church_id !== church.id) {
+    return { ok: false, error: 'not_found' };
+  }
+
+  const { error } = await supabase.from('user_secondary_roles').insert({
+    user_id: targetUserId,
+    church_id: church.id,
+    role: 'fire_kids_coordinator',
+    granted_by_user_id: me.id,
+  });
+
+  if (error) {
+    if (error.code === '23505') return { ok: true }; // already granted — idempotent
+    return { ok: false, error: error.message };
+  }
+
+  await logAudit({
+    churchId: church.id,
+    userId: me.id,
+    action: 'create',
+    entityType: 'user_secondary_role',
+    entityId: targetUserId,
+    afterValue: { role: 'fire_kids_coordinator' },
+  });
+
+  revalidatePath('/admin/users');
+  revalidatePath('/admin');
+  return { ok: true };
+}
+
+export async function revokeFireKidsCoordinator(
+  targetUserId: string,
+): Promise<RoleChangeResult> {
+  const { user: me, church } = await requireRole(OWNER_ROLES);
+  const supabase = await createClient();
+
+  const { data: target } = await supabase
+    .from('users')
+    .select('id, church_id')
+    .eq('id', targetUserId)
+    .maybeSingle();
+
+  if (!target || target.church_id !== church.id) {
+    return { ok: false, error: 'not_found' };
+  }
+
+  const { error } = await supabase
+    .from('user_secondary_roles')
+    .delete()
+    .eq('user_id', targetUserId)
+    .eq('role', 'fire_kids_coordinator');
+
+  if (error) return { ok: false, error: error.message };
+
+  await logAudit({
+    churchId: church.id,
+    userId: me.id,
+    action: 'deactivate',
+    entityType: 'user_secondary_role',
+    entityId: targetUserId,
+    beforeValue: { role: 'fire_kids_coordinator' },
+  });
+
+  revalidatePath('/admin/users');
+  revalidatePath('/admin');
+  return { ok: true };
+}
+
 export async function reactivateUser(
   targetUserId: string,
 ): Promise<RoleChangeResult> {
