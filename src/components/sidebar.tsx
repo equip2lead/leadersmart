@@ -27,7 +27,7 @@ type NavItem = { href: string; labelKey: string; icon: LucideIcon };
 
 const ADMIN_NAV: NavItem[] = [
   { href: '/admin', labelKey: 'nav.dashboard', icon: LayoutDashboard },
-  { href: '/admin/pastors', labelKey: 'nav.pastors', icon: Star },
+  { href: '/admin/assignments', labelKey: 'nav.pastors', icon: Star },
   { href: '/admin/departments', labelKey: 'admin.departments.page', icon: Building2 },
   { href: '/admin/users', labelKey: 'nav.users', icon: UserCog },
   { href: '/kids/manage', labelKey: 'nav.kids', icon: Baby },

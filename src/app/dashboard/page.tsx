@@ -58,22 +58,31 @@ export default async function DashboardRouter() {
     redirect(ROLE_HOME[existing.role as UserRole] ?? '/admin');
   }
 
-  // Recovery: auth user exists, no user row. Provision church + user from metadata.
+  // Recovery: auth user exists, no user row. Provision from metadata.
+  // Invited users have inviting_church_id in app_metadata (server-set); they
+  // link to the inviting church and don't need a churchName.
   const meta = user.user_metadata ?? {};
+  const appMeta = (user.app_metadata ?? {}) as Record<string, unknown>;
+  const isInvited = typeof appMeta.inviting_church_id === 'string';
+
   const churchName = typeof meta.church_name === 'string' ? meta.church_name : null;
   const fullName =
-    typeof meta.full_name === 'string' ? meta.full_name : (user.email ?? '');
+    typeof meta.full_name === 'string'
+      ? meta.full_name
+      : typeof appMeta.invited_full_name === 'string'
+        ? (appMeta.invited_full_name as string)
+        : (user.email ?? '');
   const preferredLanguage: AppLanguage =
     meta.preferred_language === 'fr' ? 'fr' : 'en';
 
-  if (!churchName) {
+  if (!isInvited && !churchName) {
     return (
       <SetupError message="Your account is missing the church name from signup. Please sign out and sign up again." />
     );
   }
 
   const { error: rpcError } = await supabase.rpc('bootstrap_my_church', {
-    p_church_name: churchName,
+    p_church_name: churchName ?? '',
     p_full_name: fullName,
     p_language: preferredLanguage,
   });
@@ -87,5 +96,11 @@ export default async function DashboardRouter() {
     );
   }
 
-  redirect('/admin');
+  // Re-read the freshly-inserted users row to route to the correct home.
+  const { data: fresh } = await supabase
+    .from('users')
+    .select('role')
+    .eq('id', user.id)
+    .maybeSingle();
+  redirect(ROLE_HOME[(fresh?.role as UserRole) ?? 'senior_pastor'] ?? '/admin');
 }

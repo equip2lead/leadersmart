@@ -158,7 +158,7 @@ export function EvaluationForm({
         return;
       }
 
-      router.push('/admin/pastors');
+      router.push('/admin/assignments');
       router.refresh();
     } finally {
       setSaving(false);
