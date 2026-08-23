@@ -20,6 +20,7 @@ import {
   CreditCard,
   ArrowRightLeft,
   AlertTriangle,
+  History,
   type LucideIcon,
 } from 'lucide-react';
 import { cn } from '@/lib/cn';
@@ -60,6 +61,7 @@ const LEADER_NAV: NavItem[] = [
 // Owner-only tools rendered as a separate labelled section at the bottom
 // of the sidebar. Pages themselves are Phase 3 stubs.
 const OWNER_TOOLS: NavItem[] = [
+  { href: '/admin/audit-log', labelKey: 'nav.owner.auditLog', icon: History },
   { href: '/settings/billing', labelKey: 'nav.owner.billing', icon: CreditCard },
   { href: '/settings/transfer-ownership', labelKey: 'nav.owner.transfer', icon: ArrowRightLeft },
   { href: '/settings/danger', labelKey: 'nav.owner.danger', icon: AlertTriangle },
