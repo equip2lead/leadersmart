@@ -14,13 +14,30 @@ import { PageHeading } from '@/components/page-heading';
 
 export const dynamic = 'force-dynamic';
 
-function StatCard({ label, value }: { label: string; value: string }) {
+type SundayScheduleStatus =
+  | { kind: 'none' }
+  | {
+      kind: 'draft' | 'published';
+      id: string;
+      service_name: string;
+      slot_count: number;
+      confirmed_count: number;
+    };
+
+function StatCard({
+  label,
+  value,
+  hint,
+}: {
+  label: string;
+  value: string;
+  hint?: string;
+}) {
   return (
     <div className="card">
-      <p className="text-xs font-medium uppercase tracking-wide text-muted">
-        {label}
-      </p>
+      <p className="text-xs font-medium uppercase tracking-wide text-muted">{label}</p>
       <p className="mt-2 text-2xl font-bold text-ink">{value}</p>
+      {hint && <p className="mt-1 text-xs text-muted">{hint}</p>}
     </div>
   );
 }
@@ -50,6 +67,24 @@ function QuickAction({
   );
 }
 
+// This Sunday (or today, if today IS Sunday) → YYYY-MM-DD UTC.
+function thisSunday(): string {
+  const d = new Date();
+  d.setUTCHours(0, 0, 0, 0);
+  const day = d.getUTCDay(); // 0 = Sunday
+  const daysUntilSunday = day === 0 ? 0 : 7 - day;
+  d.setUTCDate(d.getUTCDate() + daysUntilSunday);
+  return d.toISOString().slice(0, 10);
+}
+
+// Start of current week (Sunday) as YYYY-MM-DD UTC.
+function currentWeekStart(): string {
+  const d = new Date();
+  d.setUTCHours(0, 0, 0, 0);
+  d.setUTCDate(d.getUTCDate() - d.getUTCDay());
+  return d.toISOString().slice(0, 10);
+}
+
 export default async function LeaderDashboard() {
   const { user, church } = await requireRole(['department_leader']);
   const lang = user.preferred_language;
@@ -74,7 +109,10 @@ export default async function LeaderDashboard() {
     );
   }
 
-  const [teamRes, scheduleRes] = await Promise.all([
+  const targetSunday = thisSunday();
+  const weekStart = currentWeekStart();
+
+  const [teamRes, sundayScheduleRes, latestReportRes] = await Promise.all([
     supabase
       .from('team_members')
       .select('id', { count: 'exact', head: true })
@@ -82,28 +120,89 @@ export default async function LeaderDashboard() {
       .eq('is_active', true),
     supabase
       .from('schedules')
-      .select('id, service_date, status')
+      .select('id, service_name, status, slots')
       .eq('department_id', dept.id)
-      .gte('service_date', new Date().toISOString().slice(0, 10))
-      .order('service_date', { ascending: true })
+      .eq('service_date', targetSunday)
+      .maybeSingle(),
+    supabase
+      .from('department_weekly_reports')
+      .select('week_start_date, submitted_at')
+      .eq('department_id', dept.id)
+      .not('submitted_at', 'is', null)
+      .order('week_start_date', { ascending: false })
       .limit(1)
       .maybeSingle(),
   ]);
 
   const teamSize = teamRes.count ?? 0;
-  const upcoming = scheduleRes.data?.service_date ?? '—';
+  const latestReport = latestReportRes.data;
+
+  // Compute "this Sunday" schedule status.
+  let sundayStatus: SundayScheduleStatus = { kind: 'none' };
+  if (sundayScheduleRes.data) {
+    const raw = sundayScheduleRes.data;
+    const slots = Array.isArray(raw.slots) ? raw.slots : [];
+    const slot_count = slots.length;
+    let confirmed_count = 0;
+    if (slot_count > 0) {
+      const { count } = await supabase
+        .from('schedule_confirmations')
+        .select('id', { count: 'exact', head: true })
+        .eq('schedule_id', raw.id)
+        .eq('response', 'yes');
+      confirmed_count = count ?? 0;
+    }
+    sundayStatus = {
+      kind: raw.status === 'published' ? 'published' : 'draft',
+      id: raw.id,
+      service_name: raw.service_name,
+      slot_count,
+      confirmed_count,
+    };
+  }
+
+  const formatDate = (iso: string | null | undefined) => {
+    if (!iso) return '—';
+    return new Date(iso).toLocaleDateString(lang === 'fr' ? 'fr-FR' : 'en-US');
+  };
+
+  const sundayCardValue =
+    sundayStatus.kind === 'none'
+      ? t('leader.sunday.none', lang)
+      : sundayStatus.kind === 'draft'
+        ? t('leader.sunday.draft', lang)
+        : `${sundayStatus.confirmed_count}/${sundayStatus.slot_count} ${t('leader.sunday.confirmed', lang)}`;
+  const sundayCardHint =
+    sundayStatus.kind === 'none'
+      ? formatDate(targetSunday)
+      : `${sundayStatus.service_name} · ${formatDate(targetSunday)}`;
+
+  const reportSubmittedThisWeek = latestReport?.week_start_date === weekStart;
+  const reportCardValue = reportSubmittedThisWeek
+    ? t('leader.report.thisWeek', lang)
+    : latestReport?.week_start_date
+      ? formatDate(latestReport.week_start_date)
+      : t('leader.report.never', lang);
+  const reportCardHint = latestReport?.submitted_at
+    ? `${t('leader.report.lastSubmitted', lang)} ${formatDate(latestReport.submitted_at)}`
+    : undefined;
 
   return (
     <div className="px-4 py-6 sm:px-8 sm:py-8">
-      <PageHeading
-        title={dept.name}
-        subtitle={t('leader.title', lang)}
-      />
+      <PageHeading title={dept.name} subtitle={t('leader.title', lang)} />
 
-      <div className="mt-6 grid grid-cols-2 gap-4 lg:grid-cols-3">
+      <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
         <StatCard label={t('leader.stat.team', lang)} value={String(teamSize)} />
-        <StatCard label={t('leader.stat.upcoming', lang)} value={upcoming} />
-        <StatCard label={t('leader.stat.attendance', lang)} value="—" />
+        <StatCard
+          label={t('leader.stat.sunday', lang)}
+          value={sundayCardValue}
+          hint={sundayCardHint}
+        />
+        <StatCard
+          label={t('leader.stat.lastReport', lang)}
+          value={reportCardValue}
+          hint={reportCardHint}
+        />
       </div>
 
       <section className="mt-8">

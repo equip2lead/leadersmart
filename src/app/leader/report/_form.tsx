@@ -1,10 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
-import { createClient } from '@/lib/supabase/client';
 import { t } from '@/lib/i18n';
 import type { AppLanguage } from '@/lib/types';
+import { saveWeeklyReport } from './actions';
 
 type Initial = {
   showed_up_count: number | null;
@@ -18,7 +18,6 @@ export function WeeklyReportForm({
   departmentId,
   weekStart,
   existingId,
-  userId,
   initial,
   suggestedShowed,
   suggestedAbsent,
@@ -28,7 +27,6 @@ export function WeeklyReportForm({
   departmentId: string;
   weekStart: string;
   existingId: string | null;
-  userId: string;
   initial: Initial | null;
   suggestedShowed: number;
   suggestedAbsent: number;
@@ -36,6 +34,7 @@ export function WeeklyReportForm({
   lang: AppLanguage;
 }) {
   const router = useRouter();
+
   const [showedUp, setShowedUp] = useState<string>(
     initial?.showed_up_count !== null && initial?.showed_up_count !== undefined
       ? String(initial.showed_up_count)
@@ -51,55 +50,37 @@ export function WeeklyReportForm({
   const [helpNeeded, setHelpNeeded] = useState<string>(initial?.help_needed_text ?? '');
 
   const [rowId, setRowId] = useState<string | null>(existingId);
-  const [saving, setSaving] = useState(false);
+  const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
+  const [notice, setNotice] = useState<string | null>(null);
 
-  async function save(submit: boolean) {
+  function save(submit: boolean) {
     setError(null);
-    setSaving(true);
-    try {
-      const supabase = createClient();
-      const payload = {
-        department_id: departmentId,
-        week_start_date: weekStart,
-        showed_up_count: showedUp === '' ? null : Number(showedUp),
-        absent_count: absent === '' ? null : Number(absent),
-        went_well_text: wentWell || null,
-        went_wrong_text: wentWrong || null,
-        help_needed_text: helpNeeded || null,
-        submitted_by_user_id: submit ? userId : null,
-        submitted_at: submit ? new Date().toISOString() : null,
-      };
-
-      if (rowId) {
-        const { error: updErr } = await supabase
-          .from('department_weekly_reports')
-          .update(payload)
-          .eq('id', rowId);
-        if (updErr) {
-          setError(updErr.message);
-          return;
-        }
-      } else {
-        const { data, error: insErr } = await supabase
-          .from('department_weekly_reports')
-          .insert(payload)
-          .select('id')
-          .single();
-        if (insErr || !data) {
-          setError(insErr?.message ?? 'Save failed');
-          return;
-        }
-        setRowId(data.id);
+    setNotice(null);
+    startTransition(async () => {
+      const res = await saveWeeklyReport({
+        rowId,
+        departmentId,
+        weekStart,
+        showedUpCount: showedUp === '' ? null : Number(showedUp),
+        absentCount: absent === '' ? null : Number(absent),
+        wentWellText: wentWell || null,
+        wentWrongText: wentWrong || null,
+        helpNeededText: helpNeeded || null,
+        submit,
+      });
+      if (!res.ok) {
+        setError(errorMessage(res.error, lang));
+        return;
       }
-
+      if (!rowId) setRowId(res.id);
       if (submit) {
         router.push('/leader');
         router.refresh();
+      } else {
+        setNotice(t('report.savedNotice', lang));
       }
-    } finally {
-      setSaving(false);
-    }
+    });
   }
 
   return (
@@ -107,6 +88,11 @@ export function WeeklyReportForm({
       {hasAttendance && (
         <p className="rounded-lg bg-brand-50 px-4 py-3 text-sm text-brand-800">
           {t('report.autofillNotice', lang)}
+        </p>
+      )}
+      {notice && (
+        <p className="rounded-lg bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
+          {notice}
         </p>
       )}
 
@@ -189,16 +175,16 @@ export function WeeklyReportForm({
       <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
         <button
           type="button"
-          onClick={() => void save(false)}
-          disabled={saving}
+          onClick={() => save(false)}
+          disabled={pending}
           className="btn-secondary"
         >
           {t('report.saveDraft', lang)}
         </button>
         <button
           type="button"
-          onClick={() => void save(true)}
-          disabled={saving}
+          onClick={() => save(true)}
+          disabled={pending}
           className="btn-primary"
         >
           {t('report.submit', lang)}
@@ -206,4 +192,15 @@ export function WeeklyReportForm({
       </div>
     </div>
   );
+}
+
+function errorMessage(code: string, lang: AppLanguage): string {
+  switch (code) {
+    case 'unauthorized':
+      return t('team.error.unauthorized', lang);
+    case 'invalid_week_start':
+      return t('report.error.invalidWeek', lang);
+    default:
+      return code;
+  }
 }

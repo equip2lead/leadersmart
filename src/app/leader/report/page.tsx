@@ -91,7 +91,6 @@ export default async function WeeklyReportPage() {
         departmentId={dept.id}
         weekStart={wk}
         existingId={existing?.id ?? null}
-        userId={user.id}
         initial={
           existing
             ? {

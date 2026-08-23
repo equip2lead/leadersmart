@@ -2,13 +2,20 @@ import { requireRole } from '@/lib/auth';
 import { createClient } from '@/lib/supabase/server';
 import { t } from '@/lib/i18n';
 import { PageHeading } from '@/components/page-heading';
+import { NewScheduleForm, type MemberOption } from './_new-form';
+import { ScheduleRowCard, type ScheduleRow } from './_row';
+import type { Slot } from './actions';
 
 export const dynamic = 'force-dynamic';
 
-type ScheduleRow = {
+const PAGE_LIMIT = 50;
+
+type RawSchedule = {
   id: string;
   service_date: string;
+  service_name: string;
   status: 'draft' | 'published';
+  slots: unknown;
   created_at: string;
 };
 
@@ -36,65 +43,97 @@ export default async function SchedulesPage() {
     );
   }
 
-  const { data } = await supabase
-    .from('schedules')
-    .select('id, service_date, status, created_at')
-    .eq('department_id', dept.id)
-    .order('service_date', { ascending: false })
-    .limit(20);
+  const [membersRes, schedulesRes] = await Promise.all([
+    supabase
+      .from('team_members')
+      .select('id, full_name')
+      .eq('department_id', dept.id)
+      .eq('is_active', true)
+      .order('full_name'),
+    supabase
+      .from('schedules')
+      .select('id, service_date, service_name, status, slots, created_at')
+      .eq('department_id', dept.id)
+      .order('service_date', { ascending: false })
+      .limit(PAGE_LIMIT),
+  ]);
 
-  const schedules = (data ?? []) as ScheduleRow[];
+  const members: MemberOption[] = (membersRes.data ?? []).map((m) => ({
+    id: m.id,
+    full_name: m.full_name,
+  }));
+  const memberNames: Record<string, string> = {};
+  for (const m of members) memberNames[m.id] = m.full_name;
+
+  const rawSchedules = (schedulesRes.data ?? []) as RawSchedule[];
+
+  // Batch-load confirmation counts for all listed schedules.
+  const scheduleIds = rawSchedules.map((s) => s.id);
+  let confirmationsByScheduleId: Record<string, number> = {};
+  if (scheduleIds.length > 0) {
+    const { data: confs } = await supabase
+      .from('schedule_confirmations')
+      .select('schedule_id, response')
+      .in('schedule_id', scheduleIds)
+      .eq('response', 'yes');
+    confirmationsByScheduleId = (confs ?? []).reduce<Record<string, number>>((acc, c) => {
+      acc[c.schedule_id] = (acc[c.schedule_id] ?? 0) + 1;
+      return acc;
+    }, {});
+  }
+
+  const schedules: ScheduleRow[] = rawSchedules.map((s) => {
+    const slots = Array.isArray(s.slots) ? (s.slots as Slot[]) : [];
+    return {
+      id: s.id,
+      service_date: s.service_date,
+      service_name: s.service_name,
+      status: s.status,
+      slots,
+      created_at: s.created_at,
+      slot_count: slots.length,
+      confirmed_count: confirmationsByScheduleId[s.id] ?? 0,
+    };
+  });
 
   return (
     <div className="px-4 py-6 sm:px-8 sm:py-8">
-      <PageHeading
-        title={t('leader.schedules.title', lang)}
-        subtitle={dept.name}
-      />
+      <PageHeading title={t('leader.schedules.title', lang)} subtitle={dept.name} />
 
-      {schedules.length === 0 ? (
-        <div className="mt-6 rounded-xl border border-dashed border-gray-200 bg-white px-6 py-12 text-center">
-          <p className="text-sm text-muted">{t('common.empty', lang)}</p>
-          <p className="mt-2 text-xs text-muted">
-            Drag-and-drop schedule builder is in the next iteration.
-          </p>
+      <div className="mt-6 grid gap-6 lg:grid-cols-3">
+        <div className="card lg:col-span-1">
+          <h2 className="text-lg font-semibold text-ink">{t('sched.form.title', lang)}</h2>
+          <p className="mt-1 text-xs text-muted">{t('sched.form.helper', lang)}</p>
+          <div className="mt-4">
+            {members.length === 0 ? (
+              <p className="rounded-lg bg-amber-50 px-4 py-3 text-sm text-amber-900">
+                {t('sched.form.noMembers', lang)}
+              </p>
+            ) : (
+              <NewScheduleForm departmentId={dept.id} members={members} lang={lang} />
+            )}
+          </div>
         </div>
-      ) : (
-        <div className="mt-6 overflow-hidden rounded-xl border border-gray-100 bg-white">
-          <table className="w-full">
-            <thead className="bg-gray-50 text-left text-xs font-semibold uppercase tracking-wide text-muted">
-              <tr>
-                <th className="px-4 py-3">Service date</th>
-                <th className="px-4 py-3">Status</th>
-                <th className="px-4 py-3">Created</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100">
+
+        <div className="lg:col-span-2">
+          {schedules.length === 0 ? (
+            <div className="rounded-xl border border-dashed border-gray-200 bg-white px-6 py-12 text-center text-sm text-muted">
+              {t('common.empty', lang)}
+            </div>
+          ) : (
+            <ul className="space-y-3">
               {schedules.map((s) => (
-                <tr key={s.id}>
-                  <td className="px-4 py-3 text-sm font-medium text-ink">
-                    {s.service_date}
-                  </td>
-                  <td className="px-4 py-3">
-                    <span
-                      className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-medium capitalize ${
-                        s.status === 'published'
-                          ? 'bg-emerald-100 text-emerald-800'
-                          : 'bg-gray-100 text-gray-700'
-                      }`}
-                    >
-                      {s.status}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3 text-sm text-body">
-                    {new Date(s.created_at).toLocaleDateString()}
-                  </td>
-                </tr>
+                <ScheduleRowCard
+                  key={s.id}
+                  schedule={s}
+                  memberNames={memberNames}
+                  lang={lang}
+                />
               ))}
-            </tbody>
-          </table>
+            </ul>
+          )}
         </div>
-      )}
+      </div>
     </div>
   );
 }
