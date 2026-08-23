@@ -2,9 +2,9 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { createClient } from '@/lib/supabase/client';
 import { t } from '@/lib/i18n';
 import type { AppLanguage } from '@/lib/types';
+import { saveChecklist } from './actions';
 
 // Sunday Morning Checklist — 22 items across 3 phases and 7 sub-groups.
 // The `id` values are the stable storage keys (persisted into
@@ -164,6 +164,7 @@ const TOTAL_ITEMS = ITEMS.reduce(
 
 type ChecklistProps = {
   assignmentId: string;
+  serviceDate: string;
   existingId: string | null;
   initialItems: Record<string, boolean>;
   initialAttendance: number | null;
@@ -175,6 +176,7 @@ type ChecklistProps = {
 
 export function ChecklistForm({
   assignmentId,
+  serviceDate,
   existingId,
   initialItems,
   initialAttendance,
@@ -203,42 +205,24 @@ export function ChecklistForm({
 
   async function persist(isDraft: boolean) {
     setSaving(true);
+    setError(null);
     try {
-      const supabase = createClient();
-      const payload = {
-        pastor_assignment_id: assignmentId,
-        service_date: new Date().toISOString().slice(0, 10),
-        items_checked: items,
-        attendance_count: attendance ? Number(attendance) : null,
-        offering_total: offering ? Number(offering) : null,
-        new_visitors_count: visitors ? Number(visitors) : null,
-        issues_text: issues || null,
-        is_draft: isDraft,
-        submitted_at: isDraft ? null : new Date().toISOString(),
-      };
-
-      if (rowId) {
-        const { error: updErr } = await supabase
-          .from('sunday_checklists')
-          .update(payload)
-          .eq('id', rowId);
-        if (updErr) {
-          setError(updErr.message);
-          return false;
-        }
-      } else {
-        const { data, error: insErr } = await supabase
-          .from('sunday_checklists')
-          .insert(payload)
-          .select('id')
-          .single();
-        if (insErr || !data) {
-          setError(insErr?.message ?? 'Save failed');
-          return false;
-        }
-        setRowId(data.id);
+      const res = await saveChecklist({
+        rowId,
+        assignmentId,
+        serviceDate,
+        itemsChecked: items,
+        attendanceCount: attendance ? Number(attendance) : null,
+        offeringTotal: offering ? Number(offering) : null,
+        newVisitorsCount: visitors ? Number(visitors) : null,
+        issuesText: issues || null,
+        isDraft,
+      });
+      if (!res.ok) {
+        setError(res.error);
+        return false;
       }
-
+      if (!rowId) setRowId(res.id);
       setLastSaved(new Date().toLocaleTimeString());
       isDirty.current = false;
       return true;

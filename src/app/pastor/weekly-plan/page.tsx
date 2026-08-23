@@ -55,7 +55,7 @@ export default async function WeeklyPlanPage() {
         title={t('pastor.plan.title', lang)}
         subtitle={`${t('pastor.potm', lang)} — ${active.assignment_month}`}
       />
-      <WeeklyPlanBoard assignmentId={active.id} initial={tasks} />
+      <WeeklyPlanBoard assignmentId={active.id} initial={tasks} lang={lang} />
     </div>
   );
 }

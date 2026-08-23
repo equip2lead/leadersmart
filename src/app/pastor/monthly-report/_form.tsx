@@ -1,19 +1,23 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { createClient } from '@/lib/supabase/client';
+import { t } from '@/lib/i18n';
+import type { AppLanguage } from '@/lib/types';
+import { saveMonthlyReport } from './actions';
 
 const SECTIONS = [
-  { key: 'c1', title: 'Leadership and Team Management' },
-  { key: 'c2', title: 'Relationship with Senior Leadership' },
-  { key: 'c3', title: 'Department Oversight' },
-  { key: 'c4', title: 'Spiritual Follow-Up' },
-  { key: 'c5', title: 'Communication and Transparency' },
-  { key: 'c6', title: 'Organization of Services' },
-  { key: 'c7', title: 'Evangelism and Community Impact' },
-  { key: 'c8', title: 'Final Report Clarity' },
+  { key: 'c1', titleKey: 'eval.c1.title' },
+  { key: 'c2', titleKey: 'eval.c2.title' },
+  { key: 'c3', titleKey: 'eval.c3.title' },
+  { key: 'c4', titleKey: 'eval.c4.title' },
+  { key: 'c5', titleKey: 'eval.c5.title' },
+  { key: 'c6', titleKey: 'eval.c6.title' },
+  { key: 'c7', titleKey: 'eval.c7.title' },
+  { key: 'c8', titleKey: 'eval.c8.title' },
 ] as const;
+
+type SectionKey = (typeof SECTIONS)[number]['key'];
 
 type InitialState = {
   c1: Record<string, string>;
@@ -26,19 +30,24 @@ type InitialState = {
   c8: Record<string, string>;
   recommendations: string;
   handoverNotes: string;
+  submitted: boolean;
 };
 
 export function MonthlyReportForm({
   assignmentId,
   existingId,
   initial,
+  lang,
 }: {
   assignmentId: string;
   existingId: string | null;
   initial: InitialState;
+  lang: AppLanguage;
 }) {
   const router = useRouter();
-  const [sections, setSections] = useState<Record<string, string>>({
+  const locked = initial.submitted;
+
+  const [sections, setSections] = useState<Record<SectionKey, string>>({
     c1: initial.c1.narrative ?? '',
     c2: initial.c2.narrative ?? '',
     c3: initial.c3.narrative ?? '',
@@ -51,77 +60,88 @@ export function MonthlyReportForm({
   const [recommendations, setRecommendations] = useState(initial.recommendations);
   const [handoverNotes, setHandoverNotes] = useState(initial.handoverNotes);
   const [saving, setSaving] = useState(false);
+  const [lastSaved, setLastSaved] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [rowId, setRowId] = useState<string | null>(existingId);
+  const isDirty = useRef(false);
 
-  async function save(submit: boolean) {
-    setError(null);
+  async function persist(submit: boolean): Promise<boolean> {
     setSaving(true);
+    setError(null);
     try {
-      const supabase = createClient();
-      const payload = {
-        pastor_assignment_id: assignmentId,
-        criterion_1_data: { narrative: sections.c1 },
-        criterion_2_data: { narrative: sections.c2 },
-        criterion_3_data: { narrative: sections.c3 },
-        criterion_4_data: { narrative: sections.c4 },
-        criterion_5_data: { narrative: sections.c5 },
-        criterion_6_data: { narrative: sections.c6 },
-        criterion_7_data: { narrative: sections.c7 },
-        criterion_8_data: { narrative: sections.c8 },
+      const res = await saveMonthlyReport({
+        rowId,
+        assignmentId,
+        sections,
         recommendations: recommendations || null,
-        handover_notes: handoverNotes || null,
-        is_draft: !submit,
-        submitted_at: submit ? new Date().toISOString() : null,
-      };
-
-      if (rowId) {
-        const { error: updErr } = await supabase
-          .from('monthly_reports')
-          .update(payload)
-          .eq('id', rowId);
-        if (updErr) {
-          setError(updErr.message);
-          return false;
-        }
-      } else {
-        const { data, error: insErr } = await supabase
-          .from('monthly_reports')
-          .insert(payload)
-          .select('id')
-          .single();
-        if (insErr || !data) {
-          setError(insErr?.message ?? 'Save failed');
-          return false;
-        }
-        setRowId(data.id);
+        handoverNotes: handoverNotes || null,
+        submit,
+      });
+      if (!res.ok) {
+        setError(res.error);
+        return false;
       }
-
-      if (submit) {
-        router.push('/pastor');
-        router.refresh();
-      }
+      if (!rowId) setRowId(res.id);
+      setLastSaved(new Date().toLocaleTimeString());
+      isDirty.current = false;
       return true;
     } finally {
       setSaving(false);
     }
   }
 
+  // Auto-save every 15s while dirty and not yet submitted.
+  useEffect(() => {
+    if (locked) return;
+    const interval = setInterval(() => {
+      if (isDirty.current && !saving) {
+        void persist(false);
+      }
+    }, 15000);
+    return () => clearInterval(interval);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sections, recommendations, handoverNotes, rowId, saving, locked]);
+
+  function markDirty() {
+    isDirty.current = true;
+  }
+
+  async function onSubmit() {
+    const ok = await persist(true);
+    if (ok) {
+      router.push('/pastor');
+      router.refresh();
+    }
+  }
+
   return (
     <div className="mt-6 space-y-6">
+      {locked && (
+        <p className="rounded-lg bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
+          {t('monthly.locked', lang)}
+        </p>
+      )}
+      {!locked && lastSaved && (
+        <p className="text-xs text-muted">
+          {t('sunday.savedAt', lang)} {lastSaved}
+        </p>
+      )}
+
       {SECTIONS.map((s) => (
         <div key={s.key} className="card">
           <label className="label" htmlFor={s.key}>
-            {s.title}
+            {t(s.titleKey, lang)}
           </label>
           <textarea
             id={s.key}
             rows={4}
             className="input"
+            disabled={locked}
             value={sections[s.key]}
-            onChange={(e) =>
-              setSections((prev) => ({ ...prev, [s.key]: e.target.value }))
-            }
+            onChange={(e) => {
+              setSections((prev) => ({ ...prev, [s.key]: e.target.value }));
+              markDirty();
+            }}
           />
         </div>
       ))}
@@ -129,26 +149,34 @@ export function MonthlyReportForm({
       <div className="card space-y-4">
         <div>
           <label className="label" htmlFor="recs">
-            Recommendations
+            {t('monthly.recommendations', lang)}
           </label>
           <textarea
             id="recs"
             rows={3}
             className="input"
+            disabled={locked}
             value={recommendations}
-            onChange={(e) => setRecommendations(e.target.value)}
+            onChange={(e) => {
+              setRecommendations(e.target.value);
+              markDirty();
+            }}
           />
         </div>
         <div>
           <label className="label" htmlFor="handover">
-            Handover notes
+            {t('monthly.handover', lang)}
           </label>
           <textarea
             id="handover"
             rows={3}
             className="input"
+            disabled={locked}
             value={handoverNotes}
-            onChange={(e) => setHandoverNotes(e.target.value)}
+            onChange={(e) => {
+              setHandoverNotes(e.target.value);
+              markDirty();
+            }}
           />
         </div>
       </div>
@@ -159,24 +187,26 @@ export function MonthlyReportForm({
         </p>
       )}
 
-      <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
-        <button
-          type="button"
-          onClick={() => void save(false)}
-          disabled={saving}
-          className="btn-secondary"
-        >
-          Save draft
-        </button>
-        <button
-          type="button"
-          onClick={() => void save(true)}
-          disabled={saving}
-          className="btn-primary"
-        >
-          Submit report
-        </button>
-      </div>
+      {!locked && (
+        <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+          <button
+            type="button"
+            onClick={() => void persist(false)}
+            disabled={saving}
+            className="btn-secondary"
+          >
+            {t('monthly.saveDraft', lang)}
+          </button>
+          <button
+            type="button"
+            onClick={() => void onSubmit()}
+            disabled={saving}
+            className="btn-primary"
+          >
+            {t('monthly.submit', lang)}
+          </button>
+        </div>
+      )}
     </div>
   );
 }

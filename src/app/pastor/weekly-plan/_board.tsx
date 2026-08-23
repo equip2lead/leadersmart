@@ -1,87 +1,72 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useTransition } from 'react';
 import { Plus } from 'lucide-react';
-import { createClient } from '@/lib/supabase/client';
+import { t } from '@/lib/i18n';
+import type { AppLanguage, TaskCategory } from '@/lib/types';
 import type { PlanTask } from './page';
-import type { TaskCategory } from '@/lib/types';
+import { addWeeklyTask, toggleWeeklyTask } from './actions';
 
 const WEEKS = [1, 2, 3, 4, 5] as const;
 
-const CATEGORIES: Array<{ value: TaskCategory; label: string }> = [
-  { value: 'leadership', label: 'Leadership' },
-  { value: 'senior_leadership', label: 'Senior Leadership' },
-  { value: 'department_oversight', label: 'Department Oversight' },
-  { value: 'spiritual_followup', label: 'Spiritual Follow-Up' },
-  { value: 'communication', label: 'Communication' },
-  { value: 'service_organization', label: 'Service Organization' },
-  { value: 'evangelism', label: 'Evangelism' },
-  { value: 'report_clarity', label: 'Report Clarity' },
+const CATEGORIES: Array<{ value: TaskCategory; labelKey: string }> = [
+  { value: 'leadership', labelKey: 'plan.cat.leadership' },
+  { value: 'senior_leadership', labelKey: 'plan.cat.senior_leadership' },
+  { value: 'department_oversight', labelKey: 'plan.cat.department_oversight' },
+  { value: 'spiritual_followup', labelKey: 'plan.cat.spiritual_followup' },
+  { value: 'communication', labelKey: 'plan.cat.communication' },
+  { value: 'service_organization', labelKey: 'plan.cat.service_organization' },
+  { value: 'evangelism', labelKey: 'plan.cat.evangelism' },
+  { value: 'report_clarity', labelKey: 'plan.cat.report_clarity' },
 ];
 
 export function WeeklyPlanBoard({
   assignmentId,
   initial,
+  lang,
 }: {
   assignmentId: string;
   initial: PlanTask[];
+  lang: AppLanguage;
 }) {
   const [tasks, setTasks] = useState<PlanTask[]>(initial);
   const [newTaskText, setNewTaskText] = useState<Record<number, string>>({});
   const [newTaskCat, setNewTaskCat] = useState<Record<number, TaskCategory>>({});
   const [error, setError] = useState<string | null>(null);
+  const [pending, startTransition] = useTransition();
 
-  async function addTask(week: number) {
+  function addTask(week: number) {
     const text = (newTaskText[week] ?? '').trim();
     const category = newTaskCat[week] ?? 'leadership';
     if (!text) return;
-
-    const supabase = createClient();
-    const displayOrder = tasks.filter((t) => t.week_number === week).length;
-    const { data, error: insErr } = await supabase
-      .from('weekly_execution_tasks')
-      .insert({
-        pastor_assignment_id: assignmentId,
-        week_number: week,
-        task_text: text,
-        category,
-        display_order: displayOrder,
-        is_complete: false,
-      })
-      .select('id, week_number, task_text, is_complete, category, display_order')
-      .single();
-
-    if (insErr || !data) {
-      setError(insErr?.message ?? 'Insert failed');
-      return;
-    }
-    setTasks((prev) => [...prev, data as PlanTask]);
-    setNewTaskText((prev) => ({ ...prev, [week]: '' }));
+    setError(null);
+    startTransition(async () => {
+      const res = await addWeeklyTask(assignmentId, week, text, category);
+      if (!res.ok) {
+        setError(res.error);
+        return;
+      }
+      setTasks((prev) => [...prev, res.task]);
+      setNewTaskText((prev) => ({ ...prev, [week]: '' }));
+    });
   }
 
-  async function toggle(task: PlanTask) {
+  function toggle(task: PlanTask) {
     const nextDone = !task.is_complete;
     setTasks((prev) =>
-      prev.map((t) =>
-        t.id === task.id ? { ...t, is_complete: nextDone } : t,
-      ),
+      prev.map((tk) => (tk.id === task.id ? { ...tk, is_complete: nextDone } : tk)),
     );
-    const supabase = createClient();
-    const { error: updErr } = await supabase
-      .from('weekly_execution_tasks')
-      .update({
-        is_complete: nextDone,
-        completed_at: nextDone ? new Date().toISOString() : null,
-      })
-      .eq('id', task.id);
-    if (updErr) {
-      setError(updErr.message);
-      setTasks((prev) =>
-        prev.map((t) =>
-          t.id === task.id ? { ...t, is_complete: !nextDone } : t,
-        ),
-      );
-    }
+    startTransition(async () => {
+      const res = await toggleWeeklyTask(task.id);
+      if (!res.ok) {
+        setError(res.error);
+        setTasks((prev) =>
+          prev.map((tk) =>
+            tk.id === task.id ? { ...tk, is_complete: !nextDone } : tk,
+          ),
+        );
+      }
+    });
   }
 
   return (
@@ -93,14 +78,16 @@ export function WeeklyPlanBoard({
       )}
 
       {WEEKS.map((week) => {
-        const weekTasks = tasks.filter((t) => t.week_number === week);
-        const done = weekTasks.filter((t) => t.is_complete).length;
+        const weekTasks = tasks.filter((tk) => tk.week_number === week);
+        const done = weekTasks.filter((tk) => tk.is_complete).length;
         return (
           <div key={week} className="card">
             <div className="flex items-center justify-between">
-              <h3 className="text-base font-semibold text-ink">Week {week}</h3>
+              <h3 className="text-base font-semibold text-ink">
+                {t('pastor.week', lang)} {week}
+              </h3>
               <span className="text-xs text-muted">
-                {done}/{weekTasks.length} done
+                {done}/{weekTasks.length} {t('plan.done', lang)}
               </span>
             </div>
 
@@ -109,8 +96,9 @@ export function WeeklyPlanBoard({
                 <li key={task.id}>
                   <button
                     type="button"
-                    onClick={() => void toggle(task)}
-                    className="flex w-full items-start gap-3 rounded-lg border border-gray-100 px-3 py-2.5 text-left text-sm transition hover:bg-gray-50"
+                    onClick={() => toggle(task)}
+                    disabled={pending}
+                    className="flex w-full items-start gap-3 rounded-lg border border-gray-100 px-3 py-2.5 text-left text-sm transition hover:bg-gray-50 disabled:opacity-70"
                   >
                     <span
                       className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded border ${
@@ -132,14 +120,14 @@ export function WeeklyPlanBoard({
                 </li>
               ))}
               {weekTasks.length === 0 && (
-                <li className="text-xs text-muted">No tasks yet for this week.</li>
+                <li className="text-xs text-muted">{t('pastor.week.empty', lang)}</li>
               )}
             </ul>
 
             <div className="mt-4 flex flex-col gap-2 sm:flex-row">
               <input
                 type="text"
-                placeholder="Add a task…"
+                placeholder={t('plan.addPlaceholder', lang)}
                 className="input flex-1"
                 value={newTaskText[week] ?? ''}
                 onChange={(e) =>
@@ -148,7 +136,7 @@ export function WeeklyPlanBoard({
                 onKeyDown={(e) => {
                   if (e.key === 'Enter') {
                     e.preventDefault();
-                    void addTask(week);
+                    addTask(week);
                   }
                 }}
               />
@@ -164,17 +152,18 @@ export function WeeklyPlanBoard({
               >
                 {CATEGORIES.map((c) => (
                   <option key={c.value} value={c.value}>
-                    {c.label}
+                    {t(c.labelKey, lang)}
                   </option>
                 ))}
               </select>
               <button
                 type="button"
-                onClick={() => void addTask(week)}
+                onClick={() => addTask(week)}
+                disabled={pending}
                 className="btn-primary sm:w-auto"
               >
                 <Plus className="h-4 w-4" aria-hidden="true" />
-                Add
+                {t('common.add', lang)}
               </button>
             </div>
           </div>

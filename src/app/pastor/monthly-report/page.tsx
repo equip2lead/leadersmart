@@ -36,6 +36,8 @@ export default async function MonthlyReportPage() {
     .eq('pastor_assignment_id', active.id)
     .maybeSingle();
 
+  const submitted = !!(existing?.submitted_at && !existing.is_draft);
+
   return (
     <div className="px-4 py-6 sm:px-8 sm:py-8">
       <PageHeading
@@ -45,6 +47,7 @@ export default async function MonthlyReportPage() {
       <MonthlyReportForm
         assignmentId={active.id}
         existingId={existing?.id ?? null}
+        lang={lang}
         initial={{
           c1: (existing?.criterion_1_data as Record<string, string>) ?? {},
           c2: (existing?.criterion_2_data as Record<string, string>) ?? {},
@@ -56,6 +59,7 @@ export default async function MonthlyReportPage() {
           c8: (existing?.criterion_8_data as Record<string, string>) ?? {},
           recommendations: existing?.recommendations ?? '',
           handoverNotes: existing?.handover_notes ?? '',
+          submitted,
         }}
       />
     </div>

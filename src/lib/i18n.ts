@@ -224,6 +224,36 @@ const en: Dictionary = {
   'pastor.plan.title': 'Weekly Execution Plan',
   'pastor.report.title': 'End-of-Month Report',
   'pastor.eval.title': 'My Evaluations',
+  'pastor.week': 'Week',
+  'pastor.week.empty': 'No tasks yet for this week.',
+  'pastor.currentWeekBadge': 'now',
+  'pastor.card.month': 'Month',
+
+  // Sunday history + service date
+  'sunday.serviceDate': 'Service date',
+  'sunday.history.title': 'Recent Sundays',
+  'sunday.history.empty': 'No Sunday checklists submitted yet.',
+  'sunday.history.col.date': 'Date',
+  'sunday.history.col.status': 'Status',
+
+  // Monthly report
+  'monthly.locked': 'This report has been submitted and is locked.',
+  'monthly.saveDraft': 'Save draft',
+  'monthly.submit': 'Submit report',
+  'monthly.recommendations': 'Recommendations',
+  'monthly.handover': 'Handover notes',
+
+  // Weekly plan
+  'plan.done': 'done',
+  'plan.addPlaceholder': 'Add a task…',
+  'plan.cat.leadership': 'Leadership',
+  'plan.cat.senior_leadership': 'Senior Leadership',
+  'plan.cat.department_oversight': 'Department Oversight',
+  'plan.cat.spiritual_followup': 'Spiritual Follow-Up',
+  'plan.cat.communication': 'Communication',
+  'plan.cat.service_organization': 'Service Organization',
+  'plan.cat.evangelism': 'Evangelism',
+  'plan.cat.report_clarity': 'Report Clarity',
 
   // Leader dashboard
   'leader.title': 'Department Dashboard',
@@ -575,6 +605,36 @@ const fr: Dictionary = {
   'pastor.plan.title': 'Plan d\'Exécution Hebdomadaire',
   'pastor.report.title': 'Rapport de Fin de Mois',
   'pastor.eval.title': 'Mes Évaluations',
+  'pastor.week': 'Semaine',
+  'pastor.week.empty': 'Aucune tâche pour cette semaine.',
+  'pastor.currentWeekBadge': 'en cours',
+  'pastor.card.month': 'Mois',
+
+  // Historique du dimanche + date de service
+  'sunday.serviceDate': 'Date du culte',
+  'sunday.history.title': 'Dimanches récents',
+  'sunday.history.empty': 'Aucune liste dominicale soumise pour le moment.',
+  'sunday.history.col.date': 'Date',
+  'sunday.history.col.status': 'Statut',
+
+  // Rapport mensuel
+  'monthly.locked': 'Ce rapport a été soumis et est verrouillé.',
+  'monthly.saveDraft': 'Enregistrer le brouillon',
+  'monthly.submit': 'Soumettre le rapport',
+  'monthly.recommendations': 'Recommandations',
+  'monthly.handover': 'Notes de passation',
+
+  // Plan hebdomadaire
+  'plan.done': 'terminées',
+  'plan.addPlaceholder': 'Ajouter une tâche…',
+  'plan.cat.leadership': 'Leadership',
+  'plan.cat.senior_leadership': 'Direction Principale',
+  'plan.cat.department_oversight': 'Supervision des Départements',
+  'plan.cat.spiritual_followup': 'Suivi Spirituel',
+  'plan.cat.communication': 'Communication',
+  'plan.cat.service_organization': 'Organisation des Cultes',
+  'plan.cat.evangelism': 'Évangélisation',
+  'plan.cat.report_clarity': 'Clarté du Rapport',
 
   // Leader dashboard
   'leader.title': 'Tableau de Bord — Département',

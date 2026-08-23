@@ -3,7 +3,6 @@ import {
   ClipboardCheck,
   CalendarCheck,
   FileText,
-  Star,
   ArrowRight,
   type LucideIcon,
 } from 'lucide-react';
@@ -11,6 +10,7 @@ import { requireRole } from '@/lib/auth';
 import { createClient } from '@/lib/supabase/server';
 import { t } from '@/lib/i18n';
 import { PageHeading } from '@/components/page-heading';
+import { WeeklyTaskList, type DashboardTask } from './_task-list';
 
 export const dynamic = 'force-dynamic';
 
@@ -25,9 +25,7 @@ function StatCard({
 }) {
   return (
     <div className="card">
-      <p className="text-xs font-medium uppercase tracking-wide text-muted">
-        {label}
-      </p>
+      <p className="text-xs font-medium uppercase tracking-wide text-muted">{label}</p>
       <p className="mt-2 text-2xl font-bold text-ink">{value}</p>
       {hint && <p className="mt-1 text-xs text-muted">{hint}</p>}
     </div>
@@ -59,11 +57,19 @@ function QuickAction({
   );
 }
 
-function weekOfMonth(now: Date, first: Date): number {
+// Given an "assignment_month" (YYYY-MM-01 date), compute which of weeks 1-5
+// today falls into. Anything before the month → week 1. Anything after → 5.
+function computeCurrentWeek(assignmentMonth: string): number {
+  const [y, m] = assignmentMonth.split('-').map(Number);
+  if (!y || !m) return 1;
+  const firstOfMonth = new Date(Date.UTC(y, m - 1, 1));
+  const now = new Date();
+  const nowUtc = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
+  if (nowUtc < firstOfMonth) return 1;
   const diffDays = Math.floor(
-    (now.getTime() - first.getTime()) / (1000 * 60 * 60 * 24),
+    (nowUtc.getTime() - firstOfMonth.getTime()) / (1000 * 60 * 60 * 24),
   );
-  return Math.max(1, Math.floor(diffDays / 7) + 1);
+  return Math.min(5, Math.max(1, Math.floor(diffDays / 7) + 1));
 }
 
 export default async function PastorDashboard() {
@@ -90,7 +96,7 @@ export default async function PastorDashboard() {
     );
   }
 
-  const [tasksRes, checklistsRes, evalRes] = await Promise.all([
+  const [tasksRes, checklistsRes] = await Promise.all([
     supabase
       .from('weekly_execution_tasks')
       .select('id, week_number, task_text, is_complete')
@@ -99,36 +105,15 @@ export default async function PastorDashboard() {
       .order('display_order'),
     supabase
       .from('sunday_checklists')
-      .select('id, service_date, is_draft, submitted_at')
+      .select('id, is_draft, submitted_at')
       .eq('pastor_assignment_id', active.id),
-    supabase
-      .from('evaluations')
-      .select('overall_score, signed_at')
-      .eq('pastor_assignment_id', active.id)
-      .maybeSingle(),
   ]);
 
-  const tasks = tasksRes.data ?? [];
+  const tasks = (tasksRes.data ?? []) as DashboardTask[];
   const checklists = checklistsRes.data ?? [];
-  const evaluation = evalRes.data;
 
-  // Compute week-of-month (1-5)
-  const [y, m] = active.assignment_month.split('-').map(Number);
-  const firstOfMonth = new Date(y, (m ?? 1) - 1, 1);
-  const now = new Date();
-  const currentWeek =
-    now.getFullYear() === y && now.getMonth() === (m ?? 1) - 1
-      ? weekOfMonth(now, firstOfMonth)
-      : 1;
-  const totalWeeks = 5;
-
-  const thisWeekTasks = tasks.filter((t) => t.week_number === currentWeek);
-  const thisWeekDone = thisWeekTasks.filter((t) => t.is_complete).length;
-
+  const currentWeek = computeCurrentWeek(active.assignment_month);
   const submittedChecklists = checklists.filter((c) => !c.is_draft && c.submitted_at).length;
-  const totalSundays = 4; // approximate for a month; refined later with real service dates
-
-  const evalSigned = !!evaluation?.signed_at;
 
   return (
     <div className="px-4 py-6 sm:px-8 sm:py-8">
@@ -137,24 +122,18 @@ export default async function PastorDashboard() {
         subtitle={`${t('pastor.potm', lang)} — ${active.assignment_month}`}
       />
 
-      <div className="mt-6 grid grid-cols-2 gap-4 lg:grid-cols-4">
+      <div className="mt-6 grid grid-cols-2 gap-4 lg:grid-cols-3">
         <StatCard
-          label={t('pastor.card.currentWeek', lang)}
-          value={`${currentWeek}/${totalWeeks}`}
+          label={t('pastor.card.month', lang)}
+          value={active.assignment_month}
         />
         <StatCard
-          label={t('pastor.card.tasksCompleted', lang)}
-          value={`${thisWeekDone}/${thisWeekTasks.length}`}
-          hint={t('pastor.thisWeek', lang)}
+          label={t('pastor.card.currentWeek', lang)}
+          value={`${currentWeek}/5`}
         />
         <StatCard
           label={t('pastor.card.checklists', lang)}
-          value={`${submittedChecklists}/${totalSundays}`}
-        />
-        <StatCard
-          label={t('pastor.card.avgRating', lang)}
-          value={evalSigned ? Number(evaluation!.overall_score).toFixed(1) : '—'}
-          hint={evalSigned ? undefined : t('pastor.card.pendingEval', lang)}
+          value={String(submittedChecklists)}
         />
       </div>
 
@@ -169,67 +148,32 @@ export default async function PastorDashboard() {
             icon={ClipboardCheck}
           />
           <QuickAction
-            href="/pastor/monthly-report"
-            label={t('pastor.qa.postservice', lang)}
-            icon={FileText}
-          />
-          <QuickAction
             href="/pastor/weekly-plan"
             label={t('pastor.qa.plan', lang)}
             icon={CalendarCheck}
           />
+          <QuickAction
+            href="/pastor/monthly-report"
+            label={t('pastor.qa.postservice', lang)}
+            icon={FileText}
+          />
         </div>
       </section>
 
-      <section className="mt-8 grid gap-6 lg:grid-cols-2">
-        <div className="card">
+      <section className="mt-8">
+        <div className="flex items-center justify-between">
           <h2 className="text-lg font-semibold text-ink">
-            {t('pastor.thisWeek', lang)}
+            {t('pastor.plan.title', lang)}
           </h2>
-          {thisWeekTasks.length === 0 ? (
-            <p className="mt-4 text-sm text-muted">{t('common.empty', lang)}</p>
-          ) : (
-            <ul className="mt-4 space-y-3">
-              {thisWeekTasks.slice(0, 6).map((task) => (
-                <li key={task.id} className="flex items-start gap-3">
-                  <span
-                    className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border ${
-                      task.is_complete
-                        ? 'border-emerald-500 bg-emerald-500 text-white'
-                        : 'border-gray-300 bg-white'
-                    }`}
-                  >
-                    {task.is_complete && '✓'}
-                  </span>
-                  <span
-                    className={`text-sm ${
-                      task.is_complete ? 'text-muted line-through' : 'text-body'
-                    }`}
-                  >
-                    {task.task_text}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          )}
+          <Link
+            href="/pastor/weekly-plan"
+            className="text-sm font-medium text-brand-700 hover:underline"
+          >
+            {t('common.edit', lang)}
+          </Link>
         </div>
-
-        <div className="card">
-          <h2 className="text-lg font-semibold text-ink">
-            {t('pastor.evalAreas', lang)}
-          </h2>
-          {evalSigned ? (
-            <div className="mt-4 flex items-center gap-3">
-              <Star className="h-5 w-5 text-flame-600" aria-hidden="true" />
-              <p className="text-sm text-body">
-                Overall score: <strong>{Number(evaluation!.overall_score).toFixed(1)}/5</strong>
-              </p>
-            </div>
-          ) : (
-            <p className="mt-4 text-sm text-muted">
-              {t('pastor.evalPendingMsg', lang)}
-            </p>
-          )}
+        <div className="mt-4">
+          <WeeklyTaskList tasks={tasks} currentWeek={currentWeek} lang={lang} />
         </div>
       </section>
     </div>
