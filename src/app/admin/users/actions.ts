@@ -40,13 +40,18 @@ export async function inviteUser(formData: FormData): Promise<InviteResult> {
 
   const admin = createAdminClient();
 
-  const siteUrl =
+  // Priority: explicit APP_URL → SITE_URL → Vercel preview → prod default.
+  // redirectTo is where Supabase's built-in /verify endpoint (or a template
+  // that uses ConfirmationURL) sends the user after the token consumes.
+  // Templates that inline {{ .TokenHash }} into a URL themselves ignore this,
+  // but we still set it for defence-in-depth.
+  const rawBase =
+    process.env.NEXT_PUBLIC_APP_URL ||
     process.env.NEXT_PUBLIC_SITE_URL ||
     process.env.NEXT_PUBLIC_VERCEL_URL ||
-    'https://leadersmart.vercel.app';
-  const redirectTo = siteUrl.startsWith('http')
-    ? `${siteUrl.replace(/\/$/, '')}/auth/callback`
-    : `https://${siteUrl.replace(/\/$/, '')}/auth/callback`;
+    'https://leadersmart.app';
+  const baseUrl = rawBase.startsWith('http') ? rawBase : `https://${rawBase}`;
+  const redirectTo = `${baseUrl.replace(/\/$/, '')}/auth/accept-invite`;
 
   // 1) Send the invitation email. `data` is written to user_metadata (visible client-side).
   const { data: inviteData, error: inviteErr } = await admin.auth.admin.inviteUserByEmail(
