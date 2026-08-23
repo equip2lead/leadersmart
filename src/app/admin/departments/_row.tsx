@@ -16,16 +16,22 @@ export type DepartmentRow = {
   description: string | null;
   leader_user_id: string | null;
   leader_name: string | null;
+  co_leader_1_user_id: string | null;
+  co_leader_1_name: string | null;
+  co_leader_2_user_id: string | null;
+  co_leader_2_name: string | null;
   is_active: boolean;
 };
 
 export function DepartmentRowCard({
   dept,
   leaders,
+  coLeaderCandidates,
   lang,
 }: {
   dept: DepartmentRow;
   leaders: LeaderOption[];
+  coLeaderCandidates: LeaderOption[];
   lang: AppLanguage;
 }) {
   const router = useRouter();
@@ -68,8 +74,11 @@ export function DepartmentRowCard({
             icon: dept.icon,
             description: dept.description,
             leader_user_id: dept.leader_user_id,
+            co_leader_1_user_id: dept.co_leader_1_user_id,
+            co_leader_2_user_id: dept.co_leader_2_user_id,
           }}
           leaders={leaders}
+          coLeaderCandidates={coLeaderCandidates}
           lang={lang}
           onDone={() => setEditing(false)}
         />
@@ -77,9 +86,13 @@ export function DepartmentRowCard({
     );
   }
 
+  const coHeads = [dept.co_leader_1_name, dept.co_leader_2_name].filter(
+    (n): n is string => !!n,
+  );
+
   return (
-    <li className="card flex items-center gap-4">
-      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-brand-50 text-brand-700">
+    <li className="card flex items-start gap-4">
+      <div className="mt-1 flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-brand-50 text-brand-700">
         {Icon ? (
           <Icon className="h-5 w-5" aria-hidden="true" />
         ) : (
@@ -91,9 +104,18 @@ export function DepartmentRowCard({
         {dept.description && (
           <p className="truncate text-xs text-muted">{dept.description}</p>
         )}
-        <p className="mt-0.5 text-xs text-muted">
-          {t('dept.leaderLabel', lang)}: {dept.leader_name ?? t('dept.leaderUnassigned', lang)}
+        <p className="mt-1 text-xs text-muted">
+          {t('dept.leaderLabel', lang)}:{' '}
+          <span className="text-body">
+            {dept.leader_name ?? t('dept.leaderUnassigned', lang)}
+          </span>
         </p>
+        {coHeads.length > 0 && (
+          <p className="mt-0.5 text-xs text-muted">
+            {t('dept.coLeadersLabel', lang)}:{' '}
+            <span className="text-body">{coHeads.join(', ')}</span>
+          </p>
+        )}
         {error && (
           <p role="alert" className="mt-1 text-xs text-red-700">
             {error}

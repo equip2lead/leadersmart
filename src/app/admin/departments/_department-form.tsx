@@ -15,18 +15,28 @@ export type DepartmentFormInitial = {
   icon: string | null;
   description: string | null;
   leader_user_id: string | null;
+  co_leader_1_user_id: string | null;
+  co_leader_2_user_id: string | null;
 };
+
+const NONE = '__none__';
 
 export function DepartmentForm({
   mode,
   initial,
   leaders,
+  coLeaderCandidates,
   lang,
   onDone,
 }: {
   mode: 'create' | 'edit';
   initial: DepartmentFormInitial;
+  // All active users in the church — head can be any of them.
   leaders: LeaderOption[];
+  // Restricted pool for co-heads: admin_pastor + department_head (+ legacy
+  // pastor / department_leader). Passed separately so we don't duplicate
+  // the filter logic across pages.
+  coLeaderCandidates: LeaderOption[];
   lang: AppLanguage;
   onDone?: () => void;
 }) {
@@ -34,7 +44,9 @@ export function DepartmentForm({
   const [name, setName] = useState(initial.name);
   const [icon, setIcon] = useState<string>(initial.icon ?? '');
   const [description, setDescription] = useState(initial.description ?? '');
-  const [leader, setLeader] = useState<string>(initial.leader_user_id ?? '__none__');
+  const [leader, setLeader] = useState<string>(initial.leader_user_id ?? NONE);
+  const [co1, setCo1] = useState<string>(initial.co_leader_1_user_id ?? NONE);
+  const [co2, setCo2] = useState<string>(initial.co_leader_2_user_id ?? NONE);
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
 
@@ -46,6 +58,8 @@ export function DepartmentForm({
     fd.set('icon', icon);
     fd.set('description', description);
     fd.set('leader_user_id', leader);
+    fd.set('co_leader_1_user_id', co1);
+    fd.set('co_leader_2_user_id', co2);
 
     startTransition(async () => {
       const res =
@@ -61,7 +75,9 @@ export function DepartmentForm({
         setName('');
         setIcon('');
         setDescription('');
-        setLeader('__none__');
+        setLeader(NONE);
+        setCo1(NONE);
+        setCo2(NONE);
       }
       router.refresh();
       onDone?.();
@@ -69,6 +85,12 @@ export function DepartmentForm({
   }
 
   const IconPreview = getDepartmentIcon(icon);
+  // Prevent picking the same person twice: filter each co-head dropdown
+  // to exclude anyone already selected in another slot.
+  const takenBy = (self: string) =>
+    new Set(
+      [leader, co1, co2].filter((v) => v !== NONE && v !== self),
+    );
 
   return (
     <form onSubmit={onSubmit} className="mt-4 space-y-3">
@@ -132,12 +154,65 @@ export function DepartmentForm({
           value={leader}
           onChange={(e) => setLeader(e.target.value)}
         >
-          <option value="__none__">{t('dept.form.leaderNone', lang)}</option>
-          {leaders.map((l) => (
-            <option key={l.id} value={l.id}>
-              {l.full_name}
-            </option>
-          ))}
+          <option value={NONE}>{t('dept.form.leaderNone', lang)}</option>
+          {leaders.map((l) => {
+            const taken = takenBy(leader).has(l.id);
+            return (
+              <option key={l.id} value={l.id} disabled={taken}>
+                {l.full_name}
+                {taken ? ` (${t('dept.form.alreadyAssigned', lang)})` : ''}
+              </option>
+            );
+          })}
+        </select>
+      </div>
+
+      <div>
+        <label className="label" htmlFor={`dept-co1-${mode}`}>
+          {t('dept.form.coLeader1', lang)}
+        </label>
+        <select
+          id={`dept-co1-${mode}`}
+          className="input"
+          value={co1}
+          onChange={(e) => setCo1(e.target.value)}
+        >
+          <option value={NONE}>{t('dept.form.coLeaderNone', lang)}</option>
+          {coLeaderCandidates.map((l) => {
+            const taken = takenBy(co1).has(l.id);
+            return (
+              <option key={l.id} value={l.id} disabled={taken}>
+                {l.full_name}
+                {taken ? ` (${t('dept.form.alreadyAssigned', lang)})` : ''}
+              </option>
+            );
+          })}
+        </select>
+        <p className="mt-1 text-xs text-muted">
+          {t('dept.form.coLeaderHint', lang)}
+        </p>
+      </div>
+
+      <div>
+        <label className="label" htmlFor={`dept-co2-${mode}`}>
+          {t('dept.form.coLeader2', lang)}
+        </label>
+        <select
+          id={`dept-co2-${mode}`}
+          className="input"
+          value={co2}
+          onChange={(e) => setCo2(e.target.value)}
+        >
+          <option value={NONE}>{t('dept.form.coLeaderNone', lang)}</option>
+          {coLeaderCandidates.map((l) => {
+            const taken = takenBy(co2).has(l.id);
+            return (
+              <option key={l.id} value={l.id} disabled={taken}>
+                {l.full_name}
+                {taken ? ` (${t('dept.form.alreadyAssigned', lang)})` : ''}
+              </option>
+            );
+          })}
         </select>
       </div>
 
@@ -161,5 +236,6 @@ export function DepartmentForm({
 function errorMessage(code: string, lang: AppLanguage): string {
   if (code === 'name_required') return t('dept.error.nameRequired', lang);
   if (code === 'not_found') return t('dept.error.notFound', lang);
+  if (code === 'duplicate_assignments') return t('dept.error.duplicateAssignments', lang);
   return code;
 }

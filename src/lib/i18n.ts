@@ -179,6 +179,13 @@ const en: Dictionary = {
   'dept.reactivate': 'Reactivate',
   'dept.error.nameRequired': 'Please enter a department name.',
   'dept.error.notFound': 'Department not found.',
+  'dept.error.duplicateAssignments': 'The head and co-heads must be three different people.',
+  'dept.form.coLeader1': 'Co-Head 1 (optional)',
+  'dept.form.coLeader2': 'Co-Head 2 (optional)',
+  'dept.form.coLeaderNone': '— No co-head —',
+  'dept.form.coLeaderHint': 'Co-heads can create schedules, mark attendance, and submit weekly reports for this department. Admin Pastors and Department Heads are eligible.',
+  'dept.form.alreadyAssigned': 'already assigned',
+  'dept.coLeadersLabel': 'Co-heads',
 
   // Users + invite
   'users.subtitle': 'Manage who can sign in to your LeaderSmart workspace.',
@@ -729,6 +736,13 @@ const fr: Dictionary = {
   'dept.reactivate': 'Réactiver',
   'dept.error.nameRequired': 'Veuillez saisir un nom de département.',
   'dept.error.notFound': 'Département introuvable.',
+  'dept.error.duplicateAssignments': 'Le chef et les co-chefs doivent être trois personnes différentes.',
+  'dept.form.coLeader1': 'Co-Chef 1 (optionnel)',
+  'dept.form.coLeader2': 'Co-Chef 2 (optionnel)',
+  'dept.form.coLeaderNone': '— Aucun co-chef —',
+  'dept.form.coLeaderHint': 'Les co-chefs peuvent créer les plannings, marquer les présences et soumettre les rapports hebdomadaires de ce département. Les Pasteurs Administrateurs et les Chefs de Département sont éligibles.',
+  'dept.form.alreadyAssigned': 'déjà assigné',
+  'dept.coLeadersLabel': 'Co-chefs',
 
   // Utilisateurs + invitation
   'users.subtitle': 'Gérez qui peut se connecter à votre espace LeaderSmart.',
