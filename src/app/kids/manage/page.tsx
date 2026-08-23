@@ -1,4 +1,5 @@
 import { requireRole } from '@/lib/auth';
+import { KIDS_ROLES } from '@/lib/roles';
 import { createClient } from '@/lib/supabase/server';
 import { t } from '@/lib/i18n';
 import { PageHeading } from '@/components/page-heading';
@@ -24,11 +25,7 @@ type Classroom = {
 };
 
 export default async function KidsManagePage() {
-  const { user, church } = await requireRole([
-    'senior_pastor',
-    'admin',
-    'department_leader',
-  ]);
+  const { user, church } = await requireRole(KIDS_ROLES);
   const lang = user.preferred_language;
   const supabase = await createClient();
 

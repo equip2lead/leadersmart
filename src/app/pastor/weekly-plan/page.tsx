@@ -1,4 +1,5 @@
 import { requireRole } from '@/lib/auth';
+import { PASTOR_ROLES } from '@/lib/roles';
 import { createClient } from '@/lib/supabase/server';
 import { t } from '@/lib/i18n';
 import { PageHeading } from '@/components/page-heading';
@@ -17,7 +18,7 @@ export type PlanTask = {
 };
 
 export default async function WeeklyPlanPage() {
-  const { user, church } = await requireRole(['pastor']);
+  const { user, church } = await requireRole(PASTOR_ROLES);
   const lang = user.preferred_language;
   const supabase = await createClient();
 

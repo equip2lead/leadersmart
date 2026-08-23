@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { requireRole } from '@/lib/auth';
+import { LEADER_ROLES } from '@/lib/roles';
 import { createClient } from '@/lib/supabase/server';
 import { t } from '@/lib/i18n';
 import { PageHeading } from '@/components/page-heading';
@@ -20,7 +21,7 @@ export default async function AttendancePage({
   searchParams: Promise<{ schedule?: string }>;
 }) {
   const params = await searchParams;
-  const { user, church } = await requireRole(['department_leader']);
+  const { user, church } = await requireRole(LEADER_ROLES);
   const lang = user.preferred_language;
   const supabase = await createClient();
 

@@ -1,4 +1,5 @@
 import { requireRole } from '@/lib/auth';
+import { ADMIN_ROLES } from '@/lib/roles';
 import { createClient } from '@/lib/supabase/server';
 import { t } from '@/lib/i18n';
 import { PageHeading } from '@/components/page-heading';
@@ -10,7 +11,7 @@ export const dynamic = 'force-dynamic';
 const PAGE_LIMIT = 50;
 
 export default async function DepartmentsPage() {
-  const { user, church } = await requireRole(['senior_pastor', 'admin']);
+  const { user, church } = await requireRole(ADMIN_ROLES);
   const lang = user.preferred_language;
   const supabase = await createClient();
 

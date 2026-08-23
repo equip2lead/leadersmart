@@ -2,6 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import { requireRole } from '@/lib/auth';
+import { ADMIN_ROLES } from '@/lib/roles';
 import { createClient } from '@/lib/supabase/server';
 import { logAudit } from '@/lib/audit';
 import type { AssignmentStatus } from '@/lib/types';
@@ -25,7 +26,7 @@ function normalizeMonth(input: string): string | null {
 }
 
 export async function createAssignment(formData: FormData): Promise<ActionResult> {
-  const { user: me, church } = await requireRole(['senior_pastor', 'admin']);
+  const { user: me, church } = await requireRole(ADMIN_ROLES);
   const supabase = await createClient();
 
   const pastor_user_id = String(formData.get('pastor_user_id') ?? '').trim();
@@ -89,7 +90,7 @@ export async function updateAssignmentStatus(
   assignmentId: string,
   status: AssignmentStatus,
 ): Promise<ActionResult> {
-  const { user: me, church } = await requireRole(['senior_pastor', 'admin']);
+  const { user: me, church } = await requireRole(ADMIN_ROLES);
   const supabase = await createClient();
 
   if (!isStatus(status)) return { ok: false, error: 'invalid_status' };

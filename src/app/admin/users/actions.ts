@@ -2,6 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import { requireRole } from '@/lib/auth';
+import { ADMIN_ROLES, isOwner } from '@/lib/roles';
 import { createAdminClient, hasAdminKey } from '@/lib/supabase/admin';
 import { logAudit } from '@/lib/audit';
 import type { UserRole } from '@/lib/types';
@@ -10,18 +11,33 @@ export type InviteResult =
   | { ok: true; email: string }
   | { ok: false; error: string };
 
-const INVITABLE_ROLES: ReadonlyArray<Exclude<UserRole, 'senior_pastor'>> = [
-  'pastor',
-  'department_leader',
-  'admin',
+// The new-model roles an owner or admin_pastor can *ever* mint via invite.
+// 'owner' is deliberately excluded — becoming owner happens via the
+// Phase 3 transfer flow, never via invitation.
+type InvitableRole =
+  | 'admin_pastor'
+  | 'department_head'
+  | 'fire_kids_coordinator';
+
+const INVITABLE_ROLES: ReadonlyArray<InvitableRole> = [
+  'admin_pastor',
+  'department_head',
+  'fire_kids_coordinator',
 ];
 
-function isInvitableRole(v: string): v is Exclude<UserRole, 'senior_pastor'> {
+// Roles that can only be granted by the owner (per Section 17 decisions
+// #3 and #5): admin_pastor and fire_kids_coordinator.
+const OWNER_ONLY_ROLES: ReadonlyArray<InvitableRole> = [
+  'admin_pastor',
+  'fire_kids_coordinator',
+];
+
+function isInvitableRole(v: string): v is InvitableRole {
   return (INVITABLE_ROLES as readonly string[]).includes(v);
 }
 
 export async function inviteUser(formData: FormData): Promise<InviteResult> {
-  const { user: me, church } = await requireRole(['senior_pastor', 'admin']);
+  const { user: me, church } = await requireRole(ADMIN_ROLES);
 
   if (!hasAdminKey()) {
     return { ok: false, error: 'missing_service_key' };
@@ -38,13 +54,17 @@ export async function inviteUser(formData: FormData): Promise<InviteResult> {
   if (!isInvitableRole(roleRaw)) return { ok: false, error: 'invalid_role' };
   const role = roleRaw;
 
+  // Enforce owner-only grants server-side. Client hides these options
+  // when the caller isn't an owner, but never trust the UI alone.
+  if (
+    (OWNER_ONLY_ROLES as readonly string[]).includes(role) &&
+    !isOwner(me.role)
+  ) {
+    return { ok: false, error: 'owner_only_role' };
+  }
+
   const admin = createAdminClient();
 
-  // Priority: explicit APP_URL → SITE_URL → Vercel preview → prod default.
-  // redirectTo is where Supabase's built-in /verify endpoint (or a template
-  // that uses ConfirmationURL) sends the user after the token consumes.
-  // Templates that inline {{ .TokenHash }} into a URL themselves ignore this,
-  // but we still set it for defence-in-depth.
   const rawBase =
     process.env.NEXT_PUBLIC_APP_URL ||
     process.env.NEXT_PUBLIC_SITE_URL ||
@@ -74,7 +94,7 @@ export async function inviteUser(formData: FormData): Promise<InviteResult> {
   const { error: metaErr } = await admin.auth.admin.updateUserById(inviteData.user.id, {
     app_metadata: {
       inviting_church_id: church.id,
-      invited_role: role,
+      invited_role: role as UserRole,
       invited_full_name: fullName,
       invited_by: me.id,
     },

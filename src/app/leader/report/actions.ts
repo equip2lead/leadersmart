@@ -2,6 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import { requireRole } from '@/lib/auth';
+import { LEADER_ROLES } from '@/lib/roles';
 import { createClient } from '@/lib/supabase/server';
 import { logAudit } from '@/lib/audit';
 
@@ -22,7 +23,7 @@ export type SaveInput = {
 };
 
 export async function saveWeeklyReport(input: SaveInput): Promise<SaveResult> {
-  const { user, church } = await requireRole(['department_leader']);
+  const { user, church } = await requireRole(LEADER_ROLES);
   const supabase = await createClient();
 
   // Verify the leader owns this department.

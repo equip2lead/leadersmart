@@ -1,24 +1,44 @@
 'use client';
 
-import { useState, useTransition, type FormEvent } from 'react';
+import { useMemo, useState, useTransition, type FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import { t } from '@/lib/i18n';
 import type { AppLanguage } from '@/lib/types';
 import { inviteUser } from './actions';
 
-type Role = 'pastor' | 'department_leader' | 'admin';
+type InvitableRole =
+  | 'admin_pastor'
+  | 'department_head'
+  | 'fire_kids_coordinator';
 
 export function InviteUserForm({
   lang,
   serviceKeyAvailable,
+  callerIsOwner,
 }: {
   lang: AppLanguage;
   serviceKeyAvailable: boolean;
+  callerIsOwner: boolean;
 }) {
   const router = useRouter();
+
+  // Options depend on caller role: admin_pastor and fire_kids_coordinator
+  // are owner-only grants per Section 17 decisions #3 and #5. Non-owner
+  // admins only see department_head.
+  const options = useMemo<Array<{ value: InvitableRole; labelKey: string }>>(() => {
+    if (callerIsOwner) {
+      return [
+        { value: 'admin_pastor', labelKey: 'role.admin_pastor' },
+        { value: 'department_head', labelKey: 'role.department_head' },
+        { value: 'fire_kids_coordinator', labelKey: 'role.fire_kids_coordinator' },
+      ];
+    }
+    return [{ value: 'department_head', labelKey: 'role.department_head' }];
+  }, [callerIsOwner]);
+
   const [email, setEmail] = useState('');
   const [fullName, setFullName] = useState('');
-  const [role, setRole] = useState<Role>('department_leader');
+  const [role, setRole] = useState<InvitableRole>(options[0].value);
   const [notice, setNotice] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
@@ -42,7 +62,7 @@ export function InviteUserForm({
       setNotice(t('invite.sentTo', lang).replace('{email}', res.email));
       setEmail('');
       setFullName('');
-      setRole('department_leader');
+      setRole(options[0].value);
       router.refresh();
     });
   }
@@ -93,12 +113,17 @@ export function InviteUserForm({
           id="invite-role"
           className="input"
           value={role}
-          onChange={(e) => setRole(e.target.value as Role)}
+          onChange={(e) => setRole(e.target.value as InvitableRole)}
         >
-          <option value="pastor">{t('role.pastor', lang)}</option>
-          <option value="department_leader">{t('role.department_leader', lang)}</option>
-          <option value="admin">{t('role.admin', lang)}</option>
+          {options.map((o) => (
+            <option key={o.value} value={o.value}>
+              {t(o.labelKey, lang)}
+            </option>
+          ))}
         </select>
+        {!callerIsOwner && (
+          <p className="mt-1 text-xs text-muted">{t('invite.form.nonOwnerHint', lang)}</p>
+        )}
       </div>
 
       {error && (
@@ -129,6 +154,8 @@ function errorMessage(code: string, lang: AppLanguage): string {
       return t('invite.error.nameRequired', lang);
     case 'invalid_role':
       return t('invite.error.invalidRole', lang);
+    case 'owner_only_role':
+      return t('invite.error.ownerOnly', lang);
     case 'invite_failed':
       return t('invite.error.inviteFailed', lang);
     default:

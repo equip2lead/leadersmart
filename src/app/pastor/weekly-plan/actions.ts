@@ -2,6 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import { requireRole } from '@/lib/auth';
+import { PASTOR_ROLES } from '@/lib/roles';
 import { createClient } from '@/lib/supabase/server';
 import { logAudit } from '@/lib/audit';
 import type { TaskCategory } from '@/lib/types';
@@ -59,7 +60,7 @@ export async function addWeeklyTask(
   text: string,
   category: string,
 ): Promise<AddTaskResult> {
-  const { user, church } = await requireRole(['pastor']);
+  const { user, church } = await requireRole(PASTOR_ROLES);
   const supabase = await createClient();
 
   const trimmed = text.trim();
@@ -119,7 +120,7 @@ export async function addWeeklyTask(
 }
 
 export async function toggleWeeklyTask(taskId: string): Promise<ToggleResult> {
-  const { user, church } = await requireRole(['pastor']);
+  const { user, church } = await requireRole(PASTOR_ROLES);
   const supabase = await createClient();
 
   const { data: task } = await supabase

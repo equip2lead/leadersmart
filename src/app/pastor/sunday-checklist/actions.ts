@@ -2,6 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import { requireRole } from '@/lib/auth';
+import { PASTOR_ROLES } from '@/lib/roles';
 import { createClient } from '@/lib/supabase/server';
 import { logAudit } from '@/lib/audit';
 
@@ -22,7 +23,7 @@ export type SaveInput = {
 };
 
 export async function saveChecklist(input: SaveInput): Promise<SaveResult> {
-  const { user, church } = await requireRole(['pastor']);
+  const { user, church } = await requireRole(PASTOR_ROLES);
   const supabase = await createClient();
 
   // Verify assignment belongs to this pastor + church.

@@ -2,6 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import { requireRole } from '@/lib/auth';
+import { ADMIN_ROLES } from '@/lib/roles';
 import { createClient } from '@/lib/supabase/server';
 import { logAudit } from '@/lib/audit';
 import { DEPARTMENT_ICONS } from '@/lib/icons';
@@ -14,7 +15,7 @@ function cleanIcon(icon: string | null): string | null {
 }
 
 export async function createDepartment(formData: FormData): Promise<ActionResult> {
-  const { user, church } = await requireRole(['senior_pastor', 'admin']);
+  const { user, church } = await requireRole(ADMIN_ROLES);
   const supabase = await createClient();
 
   const name = String(formData.get('name') ?? '').trim();
@@ -60,7 +61,7 @@ export async function updateDepartment(
   departmentId: string,
   formData: FormData,
 ): Promise<ActionResult> {
-  const { user, church } = await requireRole(['senior_pastor', 'admin']);
+  const { user, church } = await requireRole(ADMIN_ROLES);
   const supabase = await createClient();
 
   const { data: before } = await supabase
@@ -108,7 +109,7 @@ export async function setDepartmentActive(
   departmentId: string,
   active: boolean,
 ): Promise<ActionResult> {
-  const { user, church } = await requireRole(['senior_pastor', 'admin']);
+  const { user, church } = await requireRole(ADMIN_ROLES);
   const supabase = await createClient();
 
   const { data: before } = await supabase

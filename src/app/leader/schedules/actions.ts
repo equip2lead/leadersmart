@@ -2,6 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import { requireRole } from '@/lib/auth';
+import { LEADER_ROLES } from '@/lib/roles';
 import { createClient } from '@/lib/supabase/server';
 import { logAudit } from '@/lib/audit';
 
@@ -48,7 +49,7 @@ export async function createSchedule(
     notes: string | null;
   },
 ): Promise<ActionResult> {
-  const { user, church } = await requireRole(['department_leader']);
+  const { user, church } = await requireRole(LEADER_ROLES);
   const supabase = await createClient();
 
   if (!(await assertDepartmentOwned(supabase, departmentId, user.id, church.id))) {
@@ -101,7 +102,7 @@ export async function setSchedulePublished(
   scheduleId: string,
   published: boolean,
 ): Promise<ActionResult> {
-  const { user, church } = await requireRole(['department_leader']);
+  const { user, church } = await requireRole(LEADER_ROLES);
   const supabase = await createClient();
 
   const { data: before } = await supabase

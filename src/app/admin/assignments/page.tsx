@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { Star } from 'lucide-react';
 import { requireRole } from '@/lib/auth';
+import { ADMIN_ROLES } from '@/lib/roles';
 import { createClient } from '@/lib/supabase/server';
 import { t } from '@/lib/i18n';
 import { PageHeading } from '@/components/page-heading';
@@ -24,7 +25,7 @@ const statusStyles: Record<AssignmentRow['status'], string> = {
 };
 
 export default async function AssignmentsPage() {
-  const { user, church } = await requireRole(['senior_pastor', 'admin']);
+  const { user, church } = await requireRole(ADMIN_ROLES);
   const lang = user.preferred_language;
   const supabase = await createClient();
 
@@ -40,7 +41,10 @@ export default async function AssignmentsPage() {
       .select('id, full_name')
       .eq('church_id', church.id)
       .eq('is_active', true)
-      .eq('role', 'pastor')
+      // Pool for Pastor of the Month assignments: the new 'admin_pastor'
+      // role plus the legacy 'pastor' role for accounts provisioned
+      // before the Phase 1 migration.
+      .in('role', ['admin_pastor', 'pastor'])
       .order('full_name'),
   ]);
 

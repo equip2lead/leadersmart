@@ -1,14 +1,8 @@
 import { redirect } from 'next/navigation';
 import { Flame } from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
+import { homeForRole } from '@/lib/roles';
 import type { AppLanguage, UserRole } from '@/lib/types';
-
-const ROLE_HOME: Record<UserRole, string> = {
-  senior_pastor: '/admin',
-  admin: '/admin',
-  pastor: '/pastor',
-  department_leader: '/leader',
-};
 
 export const dynamic = 'force-dynamic';
 
@@ -55,7 +49,7 @@ export default async function DashboardRouter() {
     .maybeSingle();
 
   if (existing?.role) {
-    redirect(ROLE_HOME[existing.role as UserRole] ?? '/admin');
+    redirect(homeForRole(existing.role as UserRole));
   }
 
   // Recovery: auth user exists, no user row. Provision from metadata.
@@ -102,5 +96,5 @@ export default async function DashboardRouter() {
     .select('role')
     .eq('id', user.id)
     .maybeSingle();
-  redirect(ROLE_HOME[(fresh?.role as UserRole) ?? 'senior_pastor'] ?? '/admin');
+  redirect(homeForRole((fresh?.role as UserRole) ?? 'owner'));
 }

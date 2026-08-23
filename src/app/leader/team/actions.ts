@@ -2,6 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import { requireRole } from '@/lib/auth';
+import { LEADER_ROLES } from '@/lib/roles';
 import { createClient } from '@/lib/supabase/server';
 import { logAudit } from '@/lib/audit';
 
@@ -35,7 +36,7 @@ export async function createTeamMember(
   departmentId: string,
   formData: FormData,
 ): Promise<ActionResult> {
-  const { user, church } = await requireRole(['department_leader']);
+  const { user, church } = await requireRole(LEADER_ROLES);
   const supabase = await createClient();
 
   if (!(await assertDepartmentOwned(supabase, departmentId, user.id, church.id))) {
@@ -85,7 +86,7 @@ export async function updateTeamMember(
   memberId: string,
   formData: FormData,
 ): Promise<ActionResult> {
-  const { user, church } = await requireRole(['department_leader']);
+  const { user, church } = await requireRole(LEADER_ROLES);
   const supabase = await createClient();
 
   const { data: before } = await supabase
@@ -133,7 +134,7 @@ export async function setTeamMemberActive(
   memberId: string,
   active: boolean,
 ): Promise<ActionResult> {
-  const { user, church } = await requireRole(['department_leader']);
+  const { user, church } = await requireRole(LEADER_ROLES);
   const supabase = await createClient();
 
   const { data: before } = await supabase

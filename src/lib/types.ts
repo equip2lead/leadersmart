@@ -1,7 +1,23 @@
 // LeaderSmart database types
 // Matches the schema in Supabase project oisrzurefglwiaeqedyp
 
-export type UserRole = 'senior_pastor' | 'pastor' | 'department_leader' | 'admin';
+// Role naming lives at two layers:
+//   - Legacy: 'senior_pastor' | 'pastor' | 'department_leader' | 'admin'
+//   - Current: 'owner' | 'admin_pastor' | 'department_head' | 'fire_kids_coordinator'
+// The DB enum carries all eight values during Phase 2 transition. Every
+// existing user was migrated to a current-name value; the legacy names
+// remain in the enum only so a rollback path exists (dropped in a later
+// cleanup migration). Auth checks group both via ADMIN_ROLES etc. in
+// src/lib/roles.ts — do not gate on individual role strings elsewhere.
+export type UserRole =
+  | 'owner'
+  | 'admin_pastor'
+  | 'department_head'
+  | 'fire_kids_coordinator'
+  | 'senior_pastor'
+  | 'pastor'
+  | 'department_leader'
+  | 'admin';
 export type AppLanguage = 'en' | 'fr';
 export type AssignmentStatus = 'upcoming' | 'active' | 'completed';
 export type ScheduleStatus = 'draft' | 'published';

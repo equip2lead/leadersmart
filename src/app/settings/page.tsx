@@ -1,4 +1,5 @@
 import { getMe } from '@/lib/auth';
+import { isAdmin } from '@/lib/roles';
 import { t } from '@/lib/i18n';
 import { PageHeading } from '@/components/page-heading';
 import { ChurchProfileForm } from './_church-form';
@@ -10,7 +11,7 @@ export const dynamic = 'force-dynamic';
 export default async function SettingsPage() {
   const { user, church, authEmail } = await getMe();
   const lang = user.preferred_language;
-  const canEditChurch = user.role === 'senior_pastor' || user.role === 'admin';
+  const canEditChurch = isAdmin(user.role);
 
   return (
     <div className="px-4 py-6 sm:px-8 sm:py-8">

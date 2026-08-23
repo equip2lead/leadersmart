@@ -48,7 +48,7 @@ export async function getMe(): Promise<Me> {
   };
 }
 
-export async function requireRole(allowed: UserRole[]): Promise<Me> {
+export async function requireRole(allowed: readonly UserRole[]): Promise<Me> {
   const me = await getMe();
   if (!allowed.includes(me.user.role)) {
     // Send them to /dashboard — it'll redirect to their correct home.

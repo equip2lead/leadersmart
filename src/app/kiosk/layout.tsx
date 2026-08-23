@@ -1,4 +1,5 @@
 import { requireRole } from '@/lib/auth';
+import { KIDS_ROLES } from '@/lib/roles';
 
 export default async function KioskLayout({
   children,
@@ -6,6 +7,6 @@ export default async function KioskLayout({
   children: React.ReactNode;
 }) {
   // Auth-only. RLS enforces data isolation to this church.
-  await requireRole(['senior_pastor', 'admin', 'department_leader']);
+  await requireRole(KIDS_ROLES);
   return <>{children}</>;
 }

@@ -2,13 +2,14 @@
 
 import { revalidatePath } from 'next/cache';
 import { requireRole } from '@/lib/auth';
+import { PASTOR_ROLES } from '@/lib/roles';
 import { createClient } from '@/lib/supabase/server';
 import { logAudit } from '@/lib/audit';
 
 export type ActionResult = { ok: true; is_complete: boolean } | { ok: false; error: string };
 
 export async function togglePastorTask(taskId: string): Promise<ActionResult> {
-  const { user, church } = await requireRole(['pastor']);
+  const { user, church } = await requireRole(PASTOR_ROLES);
   const supabase = await createClient();
 
   // Load current state + verify ownership via the assignment join.

@@ -7,6 +7,7 @@ import {
   type LucideIcon,
 } from 'lucide-react';
 import { requireRole } from '@/lib/auth';
+import { ADMIN_ROLES } from '@/lib/roles';
 import { createClient } from '@/lib/supabase/server';
 import { t } from '@/lib/i18n';
 import { PageHeading } from '@/components/page-heading';
@@ -80,7 +81,7 @@ function statusStyle(s: DeptStatus): { dot: string; label: string; bg: string } 
 }
 
 export default async function AdminDashboard() {
-  const { user, church } = await requireRole(['senior_pastor', 'admin']);
+  const { user, church } = await requireRole(ADMIN_ROLES);
   const lang = user.preferred_language;
   const supabase = await createClient();
 
