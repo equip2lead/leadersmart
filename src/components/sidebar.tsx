@@ -21,25 +21,67 @@ import {
   ArrowRightLeft,
   AlertTriangle,
   History,
+  BarChart3,
   type LucideIcon,
 } from 'lucide-react';
 import { cn } from '@/lib/cn';
 import { t } from '@/lib/i18n';
-import { isAdmin, isPastor, isLeader, isOwner } from '@/lib/roles';
+import { isAdmin, isLeader, isOwner } from '@/lib/roles';
 import type { AppLanguage, UserRole } from '@/lib/types';
 
 type NavItem = { href: string; labelKey: string; icon: LucideIcon };
+type NavSection = { titleKey: string; items: NavItem[] };
 
-const ADMIN_NAV: NavItem[] = [
-  { href: '/admin', labelKey: 'nav.dashboard', icon: LayoutDashboard },
-  { href: '/admin/assignments', labelKey: 'nav.pastors', icon: Star },
-  { href: '/admin/departments', labelKey: 'admin.departments.page', icon: Building2 },
-  { href: '/admin/users', labelKey: 'nav.users', icon: UserCog },
-  { href: '/kids/manage', labelKey: 'nav.kids', icon: Baby },
-  { href: '/kiosk', labelKey: 'nav.kiosk', icon: Monitor },
-  { href: '/settings', labelKey: 'nav.settings', icon: Settings },
+// Admin nav — 5 grouped sections. Both Owner and Admin Pastor see all
+// of them; the Owner Tools section below is layered on top for Owner
+// only. Legacy 'senior_pastor' + 'admin' also route here.
+const ADMIN_SECTIONS: NavSection[] = [
+  {
+    titleKey: 'nav.section.overview',
+    items: [
+      { href: '/admin', labelKey: 'nav.dashboard', icon: LayoutDashboard },
+      { href: '/admin/assignments', labelKey: 'nav.pastors', icon: Star },
+      { href: '/admin/departments', labelKey: 'admin.departments.page', icon: Building2 },
+      { href: '/admin/users', labelKey: 'nav.users', icon: UserCog },
+      { href: '/admin/analytics', labelKey: 'nav.reportsAnalytics', icon: BarChart3 },
+    ],
+  },
+  {
+    titleKey: 'nav.section.pastor',
+    items: [
+      { href: '/pastor/sunday-checklist', labelKey: 'nav.sunday', icon: ClipboardCheck },
+      { href: '/pastor/weekly-plan', labelKey: 'nav.plan', icon: CalendarCheck },
+      { href: '/pastor/monthly-report', labelKey: 'nav.report', icon: FileText },
+      { href: '/pastor/evaluations', labelKey: 'nav.evaluations', icon: Star },
+    ],
+  },
+  {
+    titleKey: 'nav.section.department',
+    items: [
+      { href: '/admin/schedules', labelKey: 'nav.allSchedules', icon: CalendarDays },
+      { href: '/admin/attendance', labelKey: 'nav.allAttendance', icon: ClipboardCheck },
+      { href: '/admin/weekly-reports', labelKey: 'nav.allReports', icon: FileText },
+    ],
+  },
+  {
+    titleKey: 'nav.section.kids',
+    items: [
+      { href: '/kids/manage', labelKey: 'nav.kids', icon: Baby },
+      { href: '/kiosk', labelKey: 'nav.kiosk', icon: Monitor },
+    ],
+  },
+  {
+    titleKey: 'nav.section.settings',
+    items: [
+      { href: '/settings', labelKey: 'nav.settings', icon: Settings },
+    ],
+  },
 ];
 
+// Legacy dedicated pastor sidebar — kept for the rare pre-migration
+// account that still carries role='pastor' without being invited via
+// the current model. Any account with the current 'admin_pastor' role
+// gets the full ADMIN_SECTIONS view instead.
 const PASTOR_NAV: NavItem[] = [
   { href: '/pastor', labelKey: 'nav.dashboard', icon: LayoutDashboard },
   { href: '/pastor/sunday-checklist', labelKey: 'nav.sunday', icon: ClipboardCheck },
@@ -49,6 +91,8 @@ const PASTOR_NAV: NavItem[] = [
   { href: '/settings', labelKey: 'nav.settings', icon: Settings },
 ];
 
+// Department Head sidebar — scoped to their own department; unchanged
+// per the course-correction spec.
 const LEADER_NAV: NavItem[] = [
   { href: '/leader', labelKey: 'nav.dashboard', icon: LayoutDashboard },
   { href: '/leader/team', labelKey: 'nav.team', icon: Users },
@@ -58,25 +102,15 @@ const LEADER_NAV: NavItem[] = [
   { href: '/settings', labelKey: 'nav.settings', icon: Settings },
 ];
 
-// Owner-only tools rendered as a separate labelled section at the bottom
-// of the sidebar. Pages themselves are Phase 3 stubs.
+// Owner-only tools rendered as a separate labelled section under the
+// admin sections. Pages are Phase 3 stubs (billing/transfer/danger)
+// plus the working audit log.
 const OWNER_TOOLS: NavItem[] = [
   { href: '/admin/audit-log', labelKey: 'nav.owner.auditLog', icon: History },
   { href: '/settings/billing', labelKey: 'nav.owner.billing', icon: CreditCard },
   { href: '/settings/transfer-ownership', labelKey: 'nav.owner.transfer', icon: ArrowRightLeft },
   { href: '/settings/danger', labelKey: 'nav.owner.danger', icon: AlertTriangle },
 ];
-
-function navForRole(role: UserRole): NavItem[] {
-  // isAdmin covers owner + admin_pastor + legacy senior_pastor + legacy admin.
-  if (isAdmin(role)) return ADMIN_NAV;
-  if (isPastor(role)) return PASTOR_NAV;
-  if (isLeader(role)) return LEADER_NAV;
-  // Fire Kids Coordinator falls back to admin sidebar until a dedicated
-  // dashboard is built (Phase 3+); their DB permissions still gate what
-  // they can actually read/write.
-  return ADMIN_NAV;
-}
 
 function NavList({
   items,
@@ -115,6 +149,14 @@ function NavList({
   );
 }
 
+function SectionHeader({ title }: { title: string }) {
+  return (
+    <p className="mt-4 mb-2 px-3 text-[10px] font-semibold uppercase tracking-wider text-muted first:mt-0">
+      {title}
+    </p>
+  );
+}
+
 export function Sidebar({
   role,
   userName,
@@ -127,8 +169,11 @@ export function Sidebar({
   lang: AppLanguage;
 }) {
   const pathname = usePathname();
-  const items = navForRole(role);
   const showOwnerTools = isOwner(role);
+  const showAdminSidebar = isAdmin(role); // Owner + admin_pastor + legacy admins
+  const showLeaderSidebar = !showAdminSidebar && isLeader(role);
+  // Legacy accounts still on role='pastor' (never invited via the
+  // current model) fall through to the pastor-only sidebar.
 
   return (
     <aside className="hidden w-64 shrink-0 flex-col border-r border-gray-100 bg-white md:flex">
@@ -153,15 +198,25 @@ export function Sidebar({
       </div>
 
       <nav className="flex-1 overflow-y-auto p-3">
-        <NavList items={items} pathname={pathname} lang={lang} />
-
-        {showOwnerTools && (
-          <div className="mt-6 border-t border-gray-100 pt-4">
-            <p className="mb-2 px-3 text-[10px] font-semibold uppercase tracking-wider text-muted">
-              {t('nav.owner.section', lang)}
-            </p>
-            <NavList items={OWNER_TOOLS} pathname={pathname} lang={lang} />
-          </div>
+        {showAdminSidebar ? (
+          <>
+            {ADMIN_SECTIONS.map((section) => (
+              <div key={section.titleKey}>
+                <SectionHeader title={t(section.titleKey, lang)} />
+                <NavList items={section.items} pathname={pathname} lang={lang} />
+              </div>
+            ))}
+            {showOwnerTools && (
+              <div className="mt-6 border-t border-gray-100 pt-4">
+                <SectionHeader title={t('nav.owner.section', lang)} />
+                <NavList items={OWNER_TOOLS} pathname={pathname} lang={lang} />
+              </div>
+            )}
+          </>
+        ) : showLeaderSidebar ? (
+          <NavList items={LEADER_NAV} pathname={pathname} lang={lang} />
+        ) : (
+          <NavList items={PASTOR_NAV} pathname={pathname} lang={lang} />
         )}
       </nav>
 

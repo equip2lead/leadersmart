@@ -7,11 +7,12 @@ import {
   type LucideIcon,
 } from 'lucide-react';
 import { requireRole } from '@/lib/auth';
-import { PASTOR_ROLES } from '@/lib/roles';
+import { PASTOR_PAGE_ACCESS } from '@/lib/roles';
 import { createClient } from '@/lib/supabase/server';
 import { t } from '@/lib/i18n';
 import { PageHeading } from '@/components/page-heading';
 import { WeeklyTaskList, type DashboardTask } from './_task-list';
+import { loadPastorPageContext } from './_context';
 
 export const dynamic = 'force-dynamic';
 
@@ -58,8 +59,6 @@ function QuickAction({
   );
 }
 
-// Given an "assignment_month" (YYYY-MM-01 date), compute which of weeks 1-5
-// today falls into. Anything before the month → week 1. Anything after → 5.
 function computeCurrentWeek(assignmentMonth: string): number {
   const [y, m] = assignmentMonth.split('-').map(Number);
   if (!y || !m) return 1;
@@ -74,24 +73,17 @@ function computeCurrentWeek(assignmentMonth: string): number {
 }
 
 export default async function PastorDashboard() {
-  const { user, church } = await requireRole(PASTOR_ROLES);
+  const { user, church } = await requireRole(PASTOR_PAGE_ACCESS);
   const lang = user.preferred_language;
   const supabase = await createClient();
+  const ctx = await loadPastorPageContext(user, church.id);
 
-  const { data: active } = await supabase
-    .from('pastor_assignments')
-    .select('id, assignment_month')
-    .eq('church_id', church.id)
-    .eq('pastor_user_id', user.id)
-    .eq('status', 'active')
-    .maybeSingle();
-
-  if (!active) {
+  if (ctx.kind === 'no_active') {
     return (
       <div className="px-4 py-6 sm:px-8 sm:py-8">
         <PageHeading
-          title={`${t('pastor.welcomeBack', lang)}, ${user.full_name.split(' ')[0]}`}
-          subtitle={t('pastor.notAssigned', lang)}
+          title={t('pastor.dashboard.title', lang)}
+          subtitle={t('pastor.noActiveAssignment', lang)}
         />
       </div>
     );
@@ -101,41 +93,42 @@ export default async function PastorDashboard() {
     supabase
       .from('weekly_execution_tasks')
       .select('id, week_number, task_text, is_complete')
-      .eq('pastor_assignment_id', active.id)
+      .eq('pastor_assignment_id', ctx.assignmentId)
       .order('week_number')
       .order('display_order'),
     supabase
       .from('sunday_checklists')
       .select('id, is_draft, submitted_at')
-      .eq('pastor_assignment_id', active.id),
+      .eq('pastor_assignment_id', ctx.assignmentId),
   ]);
 
   const tasks = (tasksRes.data ?? []) as DashboardTask[];
   const checklists = checklistsRes.data ?? [];
 
-  const currentWeek = computeCurrentWeek(active.assignment_month);
+  const currentWeek = computeCurrentWeek(ctx.assignmentMonth);
   const submittedChecklists = checklists.filter((c) => !c.is_draft && c.submitted_at).length;
+
+  const title = ctx.isOnBehalf
+    ? t('pastor.dashboard.onBehalfTitle', lang).replace('{name}', ctx.pastorName)
+    : `${t('pastor.welcomeBack', lang)}, ${user.full_name.split(' ')[0]}`;
 
   return (
     <div className="px-4 py-6 sm:px-8 sm:py-8">
       <PageHeading
-        title={`${t('pastor.welcomeBack', lang)}, ${user.full_name.split(' ')[0]}`}
-        subtitle={`${t('pastor.potm', lang)} — ${active.assignment_month}`}
+        title={title}
+        subtitle={`${t('pastor.potm', lang)} — ${ctx.assignmentMonth}`}
       />
 
+      {ctx.isOnBehalf && (
+        <div className="mt-4 rounded-lg bg-brand-50 px-4 py-3 text-sm text-brand-800">
+          {t('pastor.onBehalfBanner', lang).replace('{name}', ctx.pastorName)}
+        </div>
+      )}
+
       <div className="mt-6 grid grid-cols-2 gap-4 lg:grid-cols-3">
-        <StatCard
-          label={t('pastor.card.month', lang)}
-          value={active.assignment_month}
-        />
-        <StatCard
-          label={t('pastor.card.currentWeek', lang)}
-          value={`${currentWeek}/5`}
-        />
-        <StatCard
-          label={t('pastor.card.checklists', lang)}
-          value={String(submittedChecklists)}
-        />
+        <StatCard label={t('pastor.card.month', lang)} value={ctx.assignmentMonth} />
+        <StatCard label={t('pastor.card.currentWeek', lang)} value={`${currentWeek}/5`} />
+        <StatCard label={t('pastor.card.checklists', lang)} value={String(submittedChecklists)} />
       </div>
 
       <section className="mt-8">

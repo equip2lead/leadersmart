@@ -38,11 +38,15 @@ export function MonthlyReportForm({
   existingId,
   initial,
   lang,
+  canSubmit = true,
 }: {
   assignmentId: string;
   existingId: string | null;
   initial: InitialState;
   lang: AppLanguage;
+  // False when an admin is drafting on behalf of the assigned pastor —
+  // Section 17 says only the assigned pastor signs the final submission.
+  canSubmit?: boolean;
 }) {
   const router = useRouter();
   const locked = initial.submitted;
@@ -197,14 +201,20 @@ export function MonthlyReportForm({
           >
             {t('monthly.saveDraft', lang)}
           </button>
-          <button
-            type="button"
-            onClick={() => void onSubmit()}
-            disabled={saving}
-            className="btn-primary"
-          >
-            {t('monthly.submit', lang)}
-          </button>
+          {canSubmit ? (
+            <button
+              type="button"
+              onClick={() => void onSubmit()}
+              disabled={saving}
+              className="btn-primary"
+            >
+              {t('monthly.submit', lang)}
+            </button>
+          ) : (
+            <p className="rounded-lg bg-amber-50 px-4 py-2 text-xs text-amber-900 sm:self-center">
+              {t('monthly.onlyPastorSubmits', lang)}
+            </p>
+          )}
         </div>
       )}
     </div>

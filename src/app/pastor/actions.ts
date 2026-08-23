@@ -2,17 +2,16 @@
 
 import { revalidatePath } from 'next/cache';
 import { requireRole } from '@/lib/auth';
-import { PASTOR_ROLES } from '@/lib/roles';
+import { PASTOR_PAGE_ACCESS, isAdmin } from '@/lib/roles';
 import { createClient } from '@/lib/supabase/server';
 import { logAudit } from '@/lib/audit';
 
 export type ActionResult = { ok: true; is_complete: boolean } | { ok: false; error: string };
 
 export async function togglePastorTask(taskId: string): Promise<ActionResult> {
-  const { user, church } = await requireRole(PASTOR_ROLES);
+  const { user, church } = await requireRole(PASTOR_PAGE_ACCESS);
   const supabase = await createClient();
 
-  // Load current state + verify ownership via the assignment join.
   const { data: task } = await supabase
     .from('weekly_execution_tasks')
     .select(
@@ -27,9 +26,11 @@ export async function togglePastorTask(taskId: string): Promise<ActionResult> {
     | undefined;
   const ownedRow = Array.isArray(owned) ? owned[0] : owned;
 
-  if (!task || !ownedRow || ownedRow.pastor_user_id !== user.id || ownedRow.church_id !== church.id) {
+  if (!task || !ownedRow || ownedRow.church_id !== church.id) {
     return { ok: false, error: 'not_found' };
   }
+  const canEdit = ownedRow.pastor_user_id === user.id || isAdmin(user.role);
+  if (!canEdit) return { ok: false, error: 'not_found' };
 
   const nextDone = !task.is_complete;
   const { error } = await supabase
@@ -37,6 +38,7 @@ export async function togglePastorTask(taskId: string): Promise<ActionResult> {
     .update({
       is_complete: nextDone,
       completed_at: nextDone ? new Date().toISOString() : null,
+      completed_by_user_id: nextDone ? user.id : null,
     })
     .eq('id', taskId);
 
@@ -49,7 +51,11 @@ export async function togglePastorTask(taskId: string): Promise<ActionResult> {
     entityType: 'weekly_execution_task',
     entityId: taskId,
     beforeValue: { is_complete: task.is_complete },
-    afterValue: { is_complete: nextDone },
+    afterValue: {
+      is_complete: nextDone,
+      on_behalf_of:
+        ownedRow.pastor_user_id === user.id ? null : ownedRow.pastor_user_id,
+    },
   });
 
   revalidatePath('/pastor');

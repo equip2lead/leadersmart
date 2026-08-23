@@ -41,6 +41,23 @@ export const FIRE_KIDS_ROLES: readonly UserRole[] = [
   'fire_kids_coordinator',
 ];
 
+// Roles allowed to load the Pastor-of-the-Month pages (Sunday checklist,
+// weekly plan, monthly report, evaluations). Admins get access so they
+// can act on behalf of the current PoM; the page decides whether to
+// render the "you are helping X" attribution banner or the normal flow.
+export const PASTOR_PAGE_ACCESS: readonly UserRole[] = [
+  ...ADMIN_ROLES,
+  ...PASTOR_ROLES,
+];
+
+// Roles allowed to load the department pages (leader dashboard, team,
+// schedules, attendance, weekly report). Admins get access for the same
+// on-behalf-of reason.
+export const LEADER_PAGE_ACCESS: readonly UserRole[] = [
+  ...ADMIN_ROLES,
+  ...LEADER_ROLES,
+];
+
 export function isOwner(role: UserRole): boolean {
   return role === 'owner';
 }

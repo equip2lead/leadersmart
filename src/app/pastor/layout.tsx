@@ -1,5 +1,5 @@
 import { requireRole } from '@/lib/auth';
-import { PASTOR_ROLES } from '@/lib/roles';
+import { PASTOR_PAGE_ACCESS } from '@/lib/roles';
 import { AppShell } from '@/components/app-shell';
 
 export default async function PastorLayout({
@@ -7,7 +7,7 @@ export default async function PastorLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { user, church } = await requireRole(PASTOR_ROLES);
+  const { user, church } = await requireRole(PASTOR_PAGE_ACCESS);
   return (
     <AppShell user={user} church={church}>
       {children}

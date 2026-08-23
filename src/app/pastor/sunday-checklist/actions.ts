@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import { requireRole } from '@/lib/auth';
-import { PASTOR_ROLES } from '@/lib/roles';
+import { PASTOR_PAGE_ACCESS, isAdmin } from '@/lib/roles';
 import { createClient } from '@/lib/supabase/server';
 import { logAudit } from '@/lib/audit';
 
@@ -23,20 +23,21 @@ export type SaveInput = {
 };
 
 export async function saveChecklist(input: SaveInput): Promise<SaveResult> {
-  const { user, church } = await requireRole(PASTOR_ROLES);
+  const { user, church } = await requireRole(PASTOR_PAGE_ACCESS);
   const supabase = await createClient();
 
-  // Verify assignment belongs to this pastor + church.
+  // Assignment must belong to this church. Owner + admin_pastor can act
+  // on behalf of anyone; the assigned pastor can act on their own.
   const { data: assignment } = await supabase
     .from('pastor_assignments')
     .select('id, pastor_user_id, church_id')
     .eq('id', input.assignmentId)
     .maybeSingle();
-  if (
-    !assignment ||
-    assignment.pastor_user_id !== user.id ||
-    assignment.church_id !== church.id
-  ) {
+  if (!assignment || assignment.church_id !== church.id) {
+    return { ok: false, error: 'unauthorized' };
+  }
+  const isOwnAssignment = assignment.pastor_user_id === user.id;
+  if (!isOwnAssignment && !isAdmin(user.role)) {
     return { ok: false, error: 'unauthorized' };
   }
 
@@ -50,6 +51,9 @@ export async function saveChecklist(input: SaveInput): Promise<SaveResult> {
     issues_text: input.issuesText,
     is_draft: input.isDraft,
     submitted_at: input.isDraft ? null : new Date().toISOString(),
+    // Always stamp the caller. Records who actually clicked "save" or
+    // "submit" — separate from the pastor_assignment.pastor_user_id.
+    submitted_by_user_id: user.id,
   };
 
   let rowId: string;
@@ -85,6 +89,7 @@ export async function saveChecklist(input: SaveInput): Promise<SaveResult> {
       afterValue: {
         service_date: input.serviceDate,
         is_draft: input.isDraft,
+        on_behalf_of: isOwnAssignment ? null : assignment.pastor_user_id,
       },
     });
   }

@@ -172,6 +172,10 @@ type ChecklistProps = {
   initialVisitors: number | null;
   initialIssues: string;
   lang: AppLanguage;
+  // Non-null when the caller is an admin acting on behalf of the PoM;
+  // replaces the default "Submit checklist" label with something like
+  // "Submit on behalf of Pastor Emmanuel".
+  submitLabelOverride?: string | null;
 };
 
 export function ChecklistForm({
@@ -184,6 +188,7 @@ export function ChecklistForm({
   initialVisitors,
   initialIssues,
   lang,
+  submitLabelOverride,
 }: ChecklistProps) {
   const router = useRouter();
   const [items, setItems] = useState<Record<string, boolean>>(initialItems);
@@ -426,7 +431,7 @@ export function ChecklistForm({
           disabled={saving}
           className="btn-primary"
         >
-          {t('sunday.submit', lang)}
+          {submitLabelOverride ?? t('sunday.submit', lang)}
         </button>
       </div>
     </div>

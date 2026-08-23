@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import { requireRole } from '@/lib/auth';
-import { PASTOR_ROLES } from '@/lib/roles';
+import { PASTOR_PAGE_ACCESS, isAdmin } from '@/lib/roles';
 import { createClient } from '@/lib/supabase/server';
 import { logAudit } from '@/lib/audit';
 import type { TaskCategory } from '@/lib/types';
@@ -38,10 +38,13 @@ export type AddTaskResult =
 
 export type ToggleResult = { ok: true; is_complete: boolean } | { ok: false; error: string };
 
-async function assertAssignmentOwned(
+// Verifies the assignment belongs to the caller's church AND that the
+// caller is either the assigned pastor or an admin acting on behalf.
+async function assertCanEditAssignment(
   supabase: Awaited<ReturnType<typeof createClient>>,
   assignmentId: string,
   userId: string,
+  userRole: string,
   churchId: string,
 ): Promise<boolean> {
   const { data } = await supabase
@@ -49,9 +52,9 @@ async function assertAssignmentOwned(
     .select('id, pastor_user_id, church_id')
     .eq('id', assignmentId)
     .maybeSingle();
-  return (
-    !!data && data.pastor_user_id === userId && data.church_id === churchId
-  );
+  if (!data || data.church_id !== churchId) return false;
+  if (data.pastor_user_id === userId) return true;
+  return isAdmin(userRole as never);
 }
 
 export async function addWeeklyTask(
@@ -60,7 +63,7 @@ export async function addWeeklyTask(
   text: string,
   category: string,
 ): Promise<AddTaskResult> {
-  const { user, church } = await requireRole(PASTOR_ROLES);
+  const { user, church } = await requireRole(PASTOR_PAGE_ACCESS);
   const supabase = await createClient();
 
   const trimmed = text.trim();
@@ -68,7 +71,9 @@ export async function addWeeklyTask(
   if (week < 1 || week > 5) return { ok: false, error: 'invalid_week' };
   if (!isCategory(category)) return { ok: false, error: 'invalid_category' };
 
-  if (!(await assertAssignmentOwned(supabase, assignmentId, user.id, church.id))) {
+  if (
+    !(await assertCanEditAssignment(supabase, assignmentId, user.id, user.role, church.id))
+  ) {
     return { ok: false, error: 'unauthorized' };
   }
 
@@ -120,7 +125,7 @@ export async function addWeeklyTask(
 }
 
 export async function toggleWeeklyTask(taskId: string): Promise<ToggleResult> {
-  const { user, church } = await requireRole(PASTOR_ROLES);
+  const { user, church } = await requireRole(PASTOR_PAGE_ACCESS);
   const supabase = await createClient();
 
   const { data: task } = await supabase
@@ -137,9 +142,11 @@ export async function toggleWeeklyTask(taskId: string): Promise<ToggleResult> {
     | undefined;
   const ownedRow = Array.isArray(owned) ? owned[0] : owned;
 
-  if (!task || !ownedRow || ownedRow.pastor_user_id !== user.id || ownedRow.church_id !== church.id) {
+  if (!task || !ownedRow || ownedRow.church_id !== church.id) {
     return { ok: false, error: 'not_found' };
   }
+  const canEdit = ownedRow.pastor_user_id === user.id || isAdmin(user.role);
+  if (!canEdit) return { ok: false, error: 'not_found' };
 
   const nextDone = !task.is_complete;
   const { error } = await supabase
@@ -147,6 +154,7 @@ export async function toggleWeeklyTask(taskId: string): Promise<ToggleResult> {
     .update({
       is_complete: nextDone,
       completed_at: nextDone ? new Date().toISOString() : null,
+      completed_by_user_id: nextDone ? user.id : null,
     })
     .eq('id', taskId);
   if (error) return { ok: false, error: error.message };

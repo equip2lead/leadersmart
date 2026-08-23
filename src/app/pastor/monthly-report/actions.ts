@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import { requireRole } from '@/lib/auth';
-import { PASTOR_ROLES } from '@/lib/roles';
+import { PASTOR_PAGE_ACCESS, isAdmin } from '@/lib/roles';
 import { createClient } from '@/lib/supabase/server';
 import { logAudit } from '@/lib/audit';
 
@@ -29,7 +29,7 @@ export type SaveInput = {
 };
 
 export async function saveMonthlyReport(input: SaveInput): Promise<SaveResult> {
-  const { user, church } = await requireRole(PASTOR_ROLES);
+  const { user, church } = await requireRole(PASTOR_PAGE_ACCESS);
   const supabase = await createClient();
 
   const { data: assignment } = await supabase
@@ -37,12 +37,18 @@ export async function saveMonthlyReport(input: SaveInput): Promise<SaveResult> {
     .select('id, pastor_user_id, church_id')
     .eq('id', input.assignmentId)
     .maybeSingle();
-  if (
-    !assignment ||
-    assignment.pastor_user_id !== user.id ||
-    assignment.church_id !== church.id
-  ) {
+  if (!assignment || assignment.church_id !== church.id) {
     return { ok: false, error: 'unauthorized' };
+  }
+  const isOwnAssignment = assignment.pastor_user_id === user.id;
+  if (!isOwnAssignment && !isAdmin(user.role)) {
+    return { ok: false, error: 'unauthorized' };
+  }
+
+  // Section 17 rule: admins can save drafts on behalf, but only the
+  // assigned pastor signs the final submission.
+  if (input.submit && !isOwnAssignment) {
+    return { ok: false, error: 'submit_requires_own_assignment' };
   }
 
   // Guard against overwriting a submitted (locked) report from a stale client.
@@ -71,6 +77,7 @@ export async function saveMonthlyReport(input: SaveInput): Promise<SaveResult> {
     handover_notes: input.handoverNotes,
     is_draft: !input.submit,
     submitted_at: input.submit ? new Date().toISOString() : null,
+    last_edited_by_user_id: user.id,
   };
 
   let rowId: string;
@@ -101,7 +108,10 @@ export async function saveMonthlyReport(input: SaveInput): Promise<SaveResult> {
       action,
       entityType: 'monthly_report',
       entityId: rowId,
-      afterValue: { submitted: input.submit },
+      afterValue: {
+        submitted: input.submit,
+        on_behalf_of: isOwnAssignment ? null : assignment.pastor_user_id,
+      },
     });
   }
 
