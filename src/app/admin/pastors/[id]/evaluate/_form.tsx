@@ -3,115 +3,113 @@
 import { useState, type FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
-import type { Evaluation, OverallRecommendation } from '@/lib/types';
+import { t } from '@/lib/i18n';
+import type { AppLanguage, Evaluation, OverallRecommendation } from '@/lib/types';
 
-// 8 criteria from the LeaderSmart brief. Each has 4 sub-criteria.
-// Sub-criteria labels are placeholders until the project specification is shared —
-// they should be replaced with the exact wording from the spec doc.
-const CRITERIA: Array<{ key: string; title: string; subs: string[] }> = [
+// 8 criteria, each with 4 sub-criteria. Data keys are stable (c1_sub1..c8_sub4)
+// so historical `ratings` JSONB remains queryable if labels ever change.
+const CRITERIA: Array<{ key: string; titleKey: string; subs: Array<{ key: string; labelKey: string }> }> = [
   {
     key: 'c1',
-    title: 'Leadership and Team Management',
+    titleKey: 'eval.c1.title',
     subs: [
-      'Delegation and empowerment',
-      'Team morale and conflict resolution',
-      'Meeting quality and follow-through',
-      'Consistency of direction',
+      { key: 'c1_sub1', labelKey: 'eval.c1_sub1' },
+      { key: 'c1_sub2', labelKey: 'eval.c1_sub2' },
+      { key: 'c1_sub3', labelKey: 'eval.c1_sub3' },
+      { key: 'c1_sub4', labelKey: 'eval.c1_sub4' },
     ],
   },
   {
     key: 'c2',
-    title: 'Relationship with Senior Leadership',
+    titleKey: 'eval.c2.title',
     subs: [
-      'Communication cadence',
-      'Receiving feedback',
-      'Alignment with church vision',
-      'Respect for authority',
+      { key: 'c2_sub1', labelKey: 'eval.c2_sub1' },
+      { key: 'c2_sub2', labelKey: 'eval.c2_sub2' },
+      { key: 'c2_sub3', labelKey: 'eval.c2_sub3' },
+      { key: 'c2_sub4', labelKey: 'eval.c2_sub4' },
     ],
   },
   {
     key: 'c3',
-    title: 'Department Oversight',
+    titleKey: 'eval.c3.title',
     subs: [
-      'Coverage of departments',
-      'Quality of on-site presence',
-      'Addressing issues promptly',
-      'Building department leaders',
+      { key: 'c3_sub1', labelKey: 'eval.c3_sub1' },
+      { key: 'c3_sub2', labelKey: 'eval.c3_sub2' },
+      { key: 'c3_sub3', labelKey: 'eval.c3_sub3' },
+      { key: 'c3_sub4', labelKey: 'eval.c3_sub4' },
     ],
   },
   {
     key: 'c4',
-    title: 'Spiritual Follow-Up',
+    titleKey: 'eval.c4.title',
     subs: [
-      'Care for members in need',
-      'Prayer and visitation',
-      'Discipleship focus',
-      'Pastoral sensitivity',
+      { key: 'c4_sub1', labelKey: 'eval.c4_sub1' },
+      { key: 'c4_sub2', labelKey: 'eval.c4_sub2' },
+      { key: 'c4_sub3', labelKey: 'eval.c4_sub3' },
+      { key: 'c4_sub4', labelKey: 'eval.c4_sub4' },
     ],
   },
   {
     key: 'c5',
-    title: 'Communication and Transparency',
+    titleKey: 'eval.c5.title',
     subs: [
-      'Clarity of announcements',
-      'Timeliness of updates',
-      'Honesty and openness',
-      'Handling of concerns',
+      { key: 'c5_sub1', labelKey: 'eval.c5_sub1' },
+      { key: 'c5_sub2', labelKey: 'eval.c5_sub2' },
+      { key: 'c5_sub3', labelKey: 'eval.c5_sub3' },
+      { key: 'c5_sub4', labelKey: 'eval.c5_sub4' },
     ],
   },
   {
     key: 'c6',
-    title: 'Organization of Services',
+    titleKey: 'eval.c6.title',
     subs: [
-      'Service flow',
-      'Preparation quality',
-      'Punctuality',
-      'Congregation experience',
+      { key: 'c6_sub1', labelKey: 'eval.c6_sub1' },
+      { key: 'c6_sub2', labelKey: 'eval.c6_sub2' },
+      { key: 'c6_sub3', labelKey: 'eval.c6_sub3' },
+      { key: 'c6_sub4', labelKey: 'eval.c6_sub4' },
     ],
   },
   {
     key: 'c7',
-    title: 'Evangelism and Community Impact',
+    titleKey: 'eval.c7.title',
     subs: [
-      'Outreach activity',
-      'New visitors engaged',
-      'Community partnerships',
-      'Follow-up with visitors',
+      { key: 'c7_sub1', labelKey: 'eval.c7_sub1' },
+      { key: 'c7_sub2', labelKey: 'eval.c7_sub2' },
+      { key: 'c7_sub3', labelKey: 'eval.c7_sub3' },
+      { key: 'c7_sub4', labelKey: 'eval.c7_sub4' },
     ],
   },
   {
     key: 'c8',
-    title: 'Final Report Clarity',
+    titleKey: 'eval.c8.title',
     subs: [
-      'Completeness of report',
-      'Quality of financial summary',
-      'Handover notes',
-      'Supporting documentation',
+      { key: 'c8_sub1', labelKey: 'eval.c8_sub1' },
+      { key: 'c8_sub2', labelKey: 'eval.c8_sub2' },
+      { key: 'c8_sub3', labelKey: 'eval.c8_sub3' },
+      { key: 'c8_sub4', labelKey: 'eval.c8_sub4' },
     ],
   },
 ];
 
-const RECOMMENDATIONS: Array<{ value: OverallRecommendation; label: string }> = [
-  { value: 'excellent', label: 'Excellent' },
-  { value: 'good', label: 'Good' },
-  { value: 'needs_improvement', label: 'Needs improvement' },
+const RECOMMENDATIONS: Array<{ value: OverallRecommendation; labelKey: string }> = [
+  { value: 'excellent', labelKey: 'eval.rec.excellent' },
+  { value: 'good', labelKey: 'eval.rec.good' },
+  { value: 'needs_improvement', labelKey: 'eval.rec.needsImprovement' },
 ];
 
 type Ratings = Record<string, number>;
 type Comments = Record<string, string>;
 
-function subKey(criterionKey: string, subIndex: number) {
-  return `${criterionKey}.${subIndex + 1}`;
-}
-
 export function EvaluationForm({
   assignmentId,
   evaluatorId,
   existing,
+  lang,
 }: {
   assignmentId: string;
   evaluatorId: string;
   existing: Evaluation | null;
+  lang: AppLanguage;
 }) {
   const router = useRouter();
   const alreadySigned = !!existing?.signed_at;
@@ -171,20 +169,31 @@ export function EvaluationForm({
     <form className="mt-6 space-y-6" onSubmit={(e) => save(false, e)}>
       {alreadySigned && (
         <p className="rounded-lg bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
-          This evaluation is signed and visible to the pastor.
+          {t('eval.signed.notice', lang)}
         </p>
       )}
 
+      <div className="card">
+        <p className="text-sm font-medium text-ink">{t('eval.bands.title', lang)}</p>
+        <ul className="mt-2 space-y-1 text-xs text-muted">
+          <li>{t('eval.band.outstanding', lang)}</li>
+          <li>{t('eval.band.exceeds', lang)}</li>
+          <li>{t('eval.band.meets', lang)}</li>
+          <li>{t('eval.band.needs', lang)}</li>
+          <li>{t('eval.band.unsatisfactory', lang)}</li>
+        </ul>
+        <p className="mt-3 text-xs text-muted">{t('eval.scale.hint', lang)}</p>
+      </div>
+
       {CRITERIA.map((c) => (
         <fieldset key={c.key} className="card">
-          <legend className="text-base font-semibold text-ink">{c.title}</legend>
+          <legend className="text-base font-semibold text-ink">{t(c.titleKey, lang)}</legend>
           <div className="mt-4 space-y-4">
-            {c.subs.map((label, idx) => {
-              const key = subKey(c.key, idx);
-              const value = ratings[key] ?? 0;
+            {c.subs.map((sub) => {
+              const value = ratings[sub.key] ?? 0;
               return (
-                <div key={key}>
-                  <p className="text-sm text-body">{label}</p>
+                <div key={sub.key}>
+                  <p className="text-sm text-body">{t(sub.labelKey, lang)}</p>
                   <div className="mt-2 flex gap-2">
                     {[1, 2, 3, 4, 5].map((n) => (
                       <button
@@ -192,14 +201,14 @@ export function EvaluationForm({
                         type="button"
                         disabled={alreadySigned}
                         onClick={() =>
-                          setRatings((r) => ({ ...r, [key]: n }))
+                          setRatings((r) => ({ ...r, [sub.key]: n }))
                         }
                         className={`flex h-10 w-10 items-center justify-center rounded-lg border text-sm font-semibold transition ${
                           value === n
                             ? 'border-brand-700 bg-brand-700 text-white'
                             : 'border-gray-200 bg-white text-body hover:border-brand-500'
                         } disabled:cursor-not-allowed disabled:opacity-50`}
-                        aria-label={`Rate ${n}`}
+                        aria-label={`${t('eval.rate', lang)} ${n}`}
                       >
                         {n}
                       </button>
@@ -209,7 +218,7 @@ export function EvaluationForm({
               );
             })}
             <div>
-              <label className="label">Comments for {c.title}</label>
+              <label className="label">{t('eval.comments.label', lang)}</label>
               <textarea
                 disabled={alreadySigned}
                 rows={2}
@@ -227,7 +236,7 @@ export function EvaluationForm({
       <div className="card space-y-4">
         <div>
           <label className="label" htmlFor="strengths">
-            Strengths
+            {t('eval.strengths', lang)}
           </label>
           <textarea
             id="strengths"
@@ -240,7 +249,7 @@ export function EvaluationForm({
         </div>
         <div>
           <label className="label" htmlFor="development">
-            Development areas
+            {t('eval.development', lang)}
           </label>
           <textarea
             id="development"
@@ -253,7 +262,7 @@ export function EvaluationForm({
         </div>
         <div>
           <label className="label" htmlFor="action">
-            Action plan
+            {t('eval.action', lang)}
           </label>
           <textarea
             id="action"
@@ -266,7 +275,7 @@ export function EvaluationForm({
         </div>
         <div>
           <label className="label" htmlFor="recommendation">
-            Overall recommendation
+            {t('eval.overallRec', lang)}
           </label>
           <select
             id="recommendation"
@@ -277,10 +286,10 @@ export function EvaluationForm({
               setRecommendation(e.target.value as OverallRecommendation)
             }
           >
-            <option value="">— Select —</option>
+            <option value="">{t('eval.select', lang)}</option>
             {RECOMMENDATIONS.map((r) => (
               <option key={r.value} value={r.value}>
-                {r.label}
+                {t(r.labelKey, lang)}
               </option>
             ))}
           </select>
@@ -301,7 +310,7 @@ export function EvaluationForm({
             disabled={saving}
             className="btn-secondary"
           >
-            Save draft
+            {t('eval.saveDraft', lang)}
           </button>
           <button
             type="button"
@@ -309,7 +318,7 @@ export function EvaluationForm({
             disabled={saving}
             className="btn-primary"
           >
-            Sign &amp; submit
+            {t('eval.sign', lang)}
           </button>
         </div>
       )}

@@ -3,36 +3,53 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
+import { t } from '@/lib/i18n';
+import type { AppLanguage } from '@/lib/types';
 
-const QUESTIONS: Array<{ key: string; prompt: string }> = [
-  { key: 'wins', prompt: 'What went well this week?' },
-  { key: 'challenges', prompt: 'What challenges did your team face?' },
-  { key: 'attendance_notes', prompt: 'Notes on attendance or absences' },
-  { key: 'prayer_requests', prompt: 'Prayer requests from the team' },
-  { key: 'next_week_focus', prompt: 'What is your focus for next week?' },
-];
-
-type Existing = Record<string, unknown> | null;
+type Initial = {
+  showed_up_count: number | null;
+  absent_count: number | null;
+  went_well_text: string | null;
+  went_wrong_text: string | null;
+  help_needed_text: string | null;
+};
 
 export function WeeklyReportForm({
   departmentId,
   weekStart,
   existingId,
+  userId,
   initial,
+  suggestedShowed,
+  suggestedAbsent,
+  hasAttendance,
+  lang,
 }: {
   departmentId: string;
   weekStart: string;
   existingId: string | null;
-  initial: Existing;
+  userId: string;
+  initial: Initial | null;
+  suggestedShowed: number;
+  suggestedAbsent: number;
+  hasAttendance: boolean;
+  lang: AppLanguage;
 }) {
   const router = useRouter();
-  const [answers, setAnswers] = useState<Record<string, string>>({
-    wins: (initial?.wins_text as string | undefined) ?? '',
-    challenges: (initial?.challenges_text as string | undefined) ?? '',
-    attendance_notes: (initial?.attendance_notes as string | undefined) ?? '',
-    prayer_requests: (initial?.prayer_requests as string | undefined) ?? '',
-    next_week_focus: (initial?.next_week_focus as string | undefined) ?? '',
-  });
+  const [showedUp, setShowedUp] = useState<string>(
+    initial?.showed_up_count !== null && initial?.showed_up_count !== undefined
+      ? String(initial.showed_up_count)
+      : String(suggestedShowed),
+  );
+  const [absent, setAbsent] = useState<string>(
+    initial?.absent_count !== null && initial?.absent_count !== undefined
+      ? String(initial.absent_count)
+      : String(suggestedAbsent),
+  );
+  const [wentWell, setWentWell] = useState<string>(initial?.went_well_text ?? '');
+  const [wentWrong, setWentWrong] = useState<string>(initial?.went_wrong_text ?? '');
+  const [helpNeeded, setHelpNeeded] = useState<string>(initial?.help_needed_text ?? '');
+
   const [rowId, setRowId] = useState<string | null>(existingId);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -45,12 +62,12 @@ export function WeeklyReportForm({
       const payload = {
         department_id: departmentId,
         week_start_date: weekStart,
-        wins_text: answers.wins || null,
-        challenges_text: answers.challenges || null,
-        attendance_notes: answers.attendance_notes || null,
-        prayer_requests: answers.prayer_requests || null,
-        next_week_focus: answers.next_week_focus || null,
-        is_draft: !submit,
+        showed_up_count: showedUp === '' ? null : Number(showedUp),
+        absent_count: absent === '' ? null : Number(absent),
+        went_well_text: wentWell || null,
+        went_wrong_text: wentWrong || null,
+        help_needed_text: helpNeeded || null,
+        submitted_by_user_id: submit ? userId : null,
         submitted_at: submit ? new Date().toISOString() : null,
       };
 
@@ -87,22 +104,81 @@ export function WeeklyReportForm({
 
   return (
     <div className="mt-6 space-y-4">
-      {QUESTIONS.map((q) => (
-        <div key={q.key} className="card">
-          <label className="label" htmlFor={q.key}>
-            {q.prompt}
+      {hasAttendance && (
+        <p className="rounded-lg bg-brand-50 px-4 py-3 text-sm text-brand-800">
+          {t('report.autofillNotice', lang)}
+        </p>
+      )}
+
+      <div className="card grid gap-4 sm:grid-cols-2">
+        <div>
+          <label className="label" htmlFor="showed">
+            {t('report.q1.label', lang)}
           </label>
-          <textarea
-            id={q.key}
-            rows={3}
+          <input
+            id="showed"
+            type="number"
+            min={0}
             className="input"
-            value={answers[q.key]}
-            onChange={(e) =>
-              setAnswers((prev) => ({ ...prev, [q.key]: e.target.value }))
-            }
+            value={showedUp}
+            onChange={(e) => setShowedUp(e.target.value)}
           />
+          <p className="mt-1 text-xs text-muted">{t('report.q1.hint', lang)}</p>
         </div>
-      ))}
+        <div>
+          <label className="label" htmlFor="absent">
+            {t('report.q2.label', lang)}
+          </label>
+          <input
+            id="absent"
+            type="number"
+            min={0}
+            className="input"
+            value={absent}
+            onChange={(e) => setAbsent(e.target.value)}
+          />
+          <p className="mt-1 text-xs text-muted">{t('report.q2.hint', lang)}</p>
+        </div>
+      </div>
+
+      <div className="card">
+        <label className="label" htmlFor="went_well">
+          {t('report.q3.label', lang)}
+        </label>
+        <textarea
+          id="went_well"
+          rows={3}
+          className="input"
+          value={wentWell}
+          onChange={(e) => setWentWell(e.target.value)}
+        />
+      </div>
+
+      <div className="card">
+        <label className="label" htmlFor="went_wrong">
+          {t('report.q4.label', lang)}
+        </label>
+        <textarea
+          id="went_wrong"
+          rows={3}
+          className="input"
+          value={wentWrong}
+          onChange={(e) => setWentWrong(e.target.value)}
+        />
+      </div>
+
+      <div className="card">
+        <label className="label" htmlFor="help_needed">
+          {t('report.q5.label', lang)}
+        </label>
+        <textarea
+          id="help_needed"
+          rows={3}
+          className="input"
+          value={helpNeeded}
+          onChange={(e) => setHelpNeeded(e.target.value)}
+        />
+      </div>
 
       {error && (
         <p role="alert" className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">
@@ -117,7 +193,7 @@ export function WeeklyReportForm({
           disabled={saving}
           className="btn-secondary"
         >
-          Save draft
+          {t('report.saveDraft', lang)}
         </button>
         <button
           type="button"
@@ -125,7 +201,7 @@ export function WeeklyReportForm({
           disabled={saving}
           className="btn-primary"
         >
-          Submit report
+          {t('report.submit', lang)}
         </button>
       </div>
     </div>

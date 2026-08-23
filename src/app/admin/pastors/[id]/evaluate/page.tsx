@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import { requireRole } from '@/lib/auth';
 import { createClient } from '@/lib/supabase/server';
+import { t } from '@/lib/i18n';
 import { PageHeading } from '@/components/page-heading';
 import { EvaluationForm } from './_form';
 
@@ -13,6 +14,7 @@ export default async function EvaluatePage({
 }) {
   const { id } = await params;
   const { user, church } = await requireRole(['senior_pastor', 'admin']);
+  const lang = user.preferred_language;
   const supabase = await createClient();
 
   const { data: assignment } = await supabase
@@ -39,13 +41,14 @@ export default async function EvaluatePage({
   return (
     <div className="px-4 py-6 sm:px-8 sm:py-8">
       <PageHeading
-        title="Pastor Evaluation"
-        subtitle={`${pastor?.full_name ?? 'Pastor'} — ${assignment.assignment_month}`}
+        title={t('eval.title', lang)}
+        subtitle={`${pastor?.full_name ?? ''} — ${assignment.assignment_month}`}
       />
       <EvaluationForm
         assignmentId={id}
         evaluatorId={user.id}
         existing={existing ?? null}
+        lang={lang}
       />
     </div>
   );

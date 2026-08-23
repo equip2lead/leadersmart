@@ -52,6 +52,7 @@ export default async function SundayChecklistPage() {
         initialOffering={existing?.offering_total ?? null}
         initialVisitors={existing?.new_visitors_count ?? null}
         initialIssues={existing?.issues_text ?? ''}
+        lang={lang}
       />
     </div>
   );
