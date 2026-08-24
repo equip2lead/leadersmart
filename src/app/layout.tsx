@@ -10,25 +10,27 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: 'LeaderSmart — Ministry Operations Platform for African Churches',
+    default: 'LeaderSmart — Transform Your Ministry Operations',
     template: '%s | LeaderSmart',
   },
   description:
-    'The platform African churches use to run Sunday operations, schedule volunteers on WhatsApp, check in kids safely, and turn pastoral excellence into a measurable discipline.',
+    'Everything senior pastors, department heads, and volunteers need to run a ministry in excellence — Sunday after Sunday. Pastoral accountability platform for churches worldwide.',
   keywords: [
     'church management',
     'pastor evaluation',
     'ministry operations',
-    'African church software',
+    'church software',
     'WhatsApp church',
     'kids check-in',
+    'pastoral accountability',
   ],
   authors: [{ name: 'DigiSmart Africa' }],
   creator: 'DigiSmart Africa',
   openGraph: {
     type: 'website',
-    title: 'LeaderSmart',
-    description: 'Ministry operations and pastoral accountability platform for African churches.',
+    title: 'LeaderSmart — Transform Your Ministry Operations',
+    description:
+      'Pastoral accountability platform for churches worldwide. Sunday checklists, weekly plans, department coordination, WhatsApp native.',
     siteName: 'LeaderSmart',
   },
 };

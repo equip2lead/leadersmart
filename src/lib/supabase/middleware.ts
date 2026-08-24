@@ -1,5 +1,6 @@
 import { createServerClient, type CookieOptions } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
+import { currencyForCountry } from '@/lib/currency';
 
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request });
@@ -50,6 +51,21 @@ export async function updateSession(request: NextRequest) {
     const url = request.nextUrl.clone();
     url.pathname = '/dashboard';
     return NextResponse.redirect(url);
+  }
+
+  // Geo-detect currency on first visit and set a long-lived cookie the
+  // landing page reads server-side. Skip when the visitor has already
+  // chosen (either via first visit or the manual dropdown) so we never
+  // clobber their preference. x-vercel-ip-country is populated by
+  // Vercel's edge network in production; missing in local dev.
+  if (!request.cookies.get('preferred_currency')) {
+    const country = request.headers.get('x-vercel-ip-country');
+    const currency = currencyForCountry(country ?? null);
+    supabaseResponse.cookies.set('preferred_currency', currency, {
+      path: '/',
+      maxAge: 60 * 60 * 24 * 365,
+      sameSite: 'lax',
+    });
   }
 
   return supabaseResponse;

@@ -6,41 +6,183 @@ import type { AppLanguage } from './types';
 type Dictionary = Record<string, string>;
 
 const en: Dictionary = {
-  // Landing
-  'landing.hero.badge': 'Pastor of the Month Program',
-  'landing.hero.title': 'Lead Every Team. Develop Every Pastor.',
+  // ─────────────────────────────────────────────────────────────
+  // Marketing landing page (public homepage). Every string used
+  // on / is in this block. Interpolation tokens use {name} syntax.
+  // ─────────────────────────────────────────────────────────────
+
+  // Global brand strings
+  'landing.tagline': 'Where Ministry Runs on Rhythm',
+
+  // Header
+  'landing.nav.features': 'Features',
+  'landing.nav.pricing': 'Pricing',
+  'landing.nav.why': 'Why LeaderSmart',
+  'landing.nav.contact': 'Contact',
+  'landing.nav.signIn': 'Sign in',
+  'landing.nav.startTrial': 'Start Free Trial',
+  'landing.nav.menuOpen': 'Open menu',
+  'landing.nav.menuClose': 'Close menu',
+
+  // Hero
+  'landing.hero.pill': 'For senior pastors and their teams',
+  'landing.hero.title': 'Transform Your Ministry Operations',
   'landing.hero.subtitle':
-    'The platform African churches use to run Sunday operations, schedule volunteers on WhatsApp, check in kids safely, and turn pastoral excellence into a measurable discipline.',
-  'landing.hero.cta': 'Start Free',
-  'landing.hero.demo': 'View Demo',
+    'LeaderSmart gives senior pastors, department heads, and volunteers everything they need to run a ministry in excellence — Sunday after Sunday, month after month.',
+  'landing.hero.ctaPrimary': 'Start 30-Day Free Trial',
+  'landing.hero.ctaSecondary': 'See how it works',
+  'landing.hero.ctaFine': 'No credit card required. Setup in 5 minutes.',
+  'landing.hero.mockAlt': 'LeaderSmart admin dashboard preview',
 
-  'landing.features.title': 'Everything You Need to Run a Ministry Team',
+  // Social proof
+  'landing.social.title': 'Trusted by churches worldwide',
+
+  // Problem
+  'landing.problem.title': 'We know Sunday morning.',
+  'landing.problem.p1':
+    "Sunday after Sunday, the same problem. Ushers don't show up. The children's ministry is short-staffed. The Pastor of the Month feels alone. And by Monday morning, no one really knows what happened yesterday.",
+  'landing.problem.p2':
+    "Every growing church has felt this. The training exists. The commitment exists. What's missing is a platform that turns intention into rhythm.",
+  'landing.problem.p3': 'That platform is LeaderSmart.',
+  'landing.problem.imageAlt': 'A congregation lifting hands in worship',
+
+  // Features
+  'landing.features.title':
+    'Everything you need to run a ministry in excellence',
   'landing.features.subtitle':
-    'Five integrated modules designed for the African church reality — WhatsApp-first, bilingual, offline-tolerant.',
-
-  'landing.feature.pastor.title': 'Pastor of the Month',
+    'Six modules, one platform. Every leader on the same page.',
+  'landing.features.comingSoon': 'Coming soon',
+  'landing.feature.pastor.title': 'Pastor of the Month Workflow',
   'landing.feature.pastor.desc':
-    'Sunday checklists, 5-week execution plans, end-of-month reports, structured evaluations.',
-
-  'landing.feature.dept.title': 'Department Leaders',
+    "Assign monthly leadership. Track Sunday checklists, weekly plans, and end-of-month reports. Every pastor knows what to do and when it's due.",
+  'landing.feature.eval.title': 'Peer Evaluation',
+  'landing.feature.eval.desc':
+    'Admin pastors evaluate the current Pastor of the Month. Structured, honest, private until signed — no personality contests, just growth.',
+  'landing.feature.dept.title': 'Department Coordination',
   'landing.feature.dept.desc':
-    'Team rosters, weekly schedules, WhatsApp broadcasts, one-tap attendance, weekly reports.',
-
-  'landing.feature.kids.title': 'Kids Check-In',
+    'Ushering, Welcome, Media, Cleaning — each department has its own head, its own schedule, its own weekly report. Nothing falls through the cracks.',
+  'landing.feature.rotation.title': 'Volunteer Rotation',
+  'landing.feature.rotation.desc':
+    'Sunday-by-Sunday rotation with Groups A, B, C, D. Every volunteer knows the exact Sunday they serve — no more chasing, no more empty stations.',
+  'landing.feature.kids.title': 'Kids Ministry, Safely',
   'landing.feature.kids.desc':
-    'Safety labels with pickup codes, allergy tracking, parent WhatsApp confirmations. Three print options.',
-
-  'landing.feature.whatsapp.title': 'WhatsApp Engine',
+    "Screened volunteer pipeline for children's ministry. Background checks, training, and dedicated coordination — because kids deserve the highest standard.",
+  'landing.feature.whatsapp.title': 'WhatsApp Native',
   'landing.feature.whatsapp.desc':
-    'Every schedule, reminder, and check-in flows through WhatsApp — where your team already lives.',
+    'Notifications, confirmations, reminders — all through WhatsApp, the way your team already communicates. 1,000 messages per month included.',
 
-  'landing.feature.dashboard.title': 'Leadership Dashboard',
-  'landing.feature.dashboard.desc':
-    'Senior pastors see every department at a glance. Early warnings. Evaluation trends. One screen.',
+  // How it works
+  'landing.how.title': 'From signup to Sunday in three steps',
+  'landing.how.step1.title': 'Sign Up in 5 Minutes',
+  'landing.how.step1.desc':
+    'Create your church account. Add your admin pastors, departments, and first Pastor of the Month. Guided setup wizard walks you through everything.',
+  'landing.how.step2.title': 'Your Team Gets to Work',
+  'landing.how.step2.desc':
+    "Pastors submit Sunday checklists. Department heads build schedules. Volunteers get WhatsApp reminders. Everyone knows what they're doing.",
+  'landing.how.step3.title': 'Leadership Sees Everything',
+  'landing.how.step3.desc':
+    "Real-time dashboard shows what's done, what's missing, and where to focus. Every leader, from senior pastor to volunteer, is on the same page.",
 
-  'landing.cta.title': 'Ready to Transform Your Ministry Operations?',
-  'landing.cta.subtitle': 'Free for churches under 50 members. No setup fees. Get started in under 10 minutes.',
-  'landing.cta.button': 'Start Your Journey',
+  // Pricing
+  'landing.pricing.title': 'One plan. Everything included.',
+  'landing.pricing.subtitle': 'No tiers. No feature gating. No surprise fees.',
+  'landing.pricing.perMonth': '/ month',
+  'landing.pricing.equivPrefix': '≈',
+  'landing.pricing.equivBased':
+    ' (based on your location — change below if you\'d like)',
+  'landing.pricing.changeCurrency': 'Currency',
+  'landing.pricing.includes.members':
+    'Unlimited team members (Owner, Admin Pastors, Department Heads, Volunteers)',
+  'landing.pricing.includes.features': 'All features included — no tier gating',
+  'landing.pricing.includes.whatsapp': '1,000 WhatsApp messages per month',
+  'landing.pricing.includes.languages': 'English and French interface',
+  'landing.pricing.includes.hosting':
+    'Data hosted in EU (Paris), backed up daily',
+  'landing.pricing.includes.support': 'Priority support in your timezone',
+  'landing.pricing.cta': 'Start 30-Day Free Trial',
+  'landing.pricing.ctaFine':
+    'No credit card required. Cancel anytime during trial with no charge.',
+  'landing.pricing.footnote':
+    "Need more than 1,000 WhatsApp messages per month? Contact us — we'll set you up with the right pack.",
+
+  // Why LeaderSmart
+  'landing.why.title': 'Built by pastors, for pastors.',
+  'landing.why.p1.title': 'We understand Sunday',
+  'landing.why.p1.body':
+    'LeaderSmart was designed by pastors who live it. The Sunday Checklist has 17 items — because we counted them ourselves.',
+  'landing.why.p2.title': 'We speak your languages',
+  'landing.why.p2.body':
+    'English and French at launch. Additional languages coming as your church needs them.',
+  'landing.why.p3.title': 'We charge fairly',
+  'landing.why.p3.body':
+    'One price, everything included. No fine print, no bait-and-switch tiers.',
+  'landing.why.quote':
+    'For years I carried our leadership team on my own back. LeaderSmart lets me delegate without losing accountability. I sleep better.',
+  'landing.why.attribution':
+    'Dr. Denis Ekobena, Senior Pastor · Fire Church · Cameroon',
+  'landing.why.since':
+    'Fire Church has been using LeaderSmart since 2026.',
+
+  // FAQ
+  'landing.faq.title': 'Frequently asked questions',
+  'landing.faq.q1':
+    'Do I need to install anything?',
+  'landing.faq.a1':
+    'No. LeaderSmart works in any web browser and sends WhatsApp messages from any phone. No downloads, no IT setup.',
+  'landing.faq.q2':
+    'What if my church has multiple branches?',
+  'landing.faq.a2':
+    'V1 supports one church per account. Multi-branch and network features are on our roadmap for 2027.',
+  'landing.faq.q3':
+    'Can I try it without paying?',
+  'landing.faq.a3':
+    'Yes. 30 days free, no credit card required, full access to all features.',
+  'landing.faq.q4':
+    'What happens after the free trial?',
+  'landing.faq.a4':
+    "We'll reach out with a simple invoice. Pay via mobile money, bank transfer, credit card, or however works for you.",
+  'landing.faq.q5':
+    'What if I need help getting set up?',
+  'landing.faq.a5':
+    'We personally onboard every church for the first 30 days. Reply to any email and you get a real human.',
+  'landing.faq.q6':
+    'Is my church data safe?',
+  'landing.faq.a6':
+    'Yes. Data is hosted in the EU (Paris) with encryption in transit and at rest. Backed up daily. You own your data and can export it anytime.',
+  'landing.faq.q7':
+    'What if I need to change plan or cancel?',
+  'landing.faq.a7':
+    'Cancel anytime with one email. No lock-in contracts, no cancellation fees.',
+  'landing.faq.q8':
+    'Which languages do you support?',
+  'landing.faq.a8':
+    'English and French at launch. If your church needs another language, tell us — we add languages based on real church demand.',
+
+  // Final CTA
+  'landing.finalCta.title': 'Ready for a rhythm-driven Sunday?',
+  'landing.finalCta.subtitle':
+    'Join the churches turning ministry chaos into pastoral excellence.',
+  'landing.finalCta.button': 'Start 30-Day Free Trial',
+  'landing.finalCta.fine':
+    '5-minute setup. No credit card. English or French.',
+
+  // Footer
+  'landing.footer.product': 'Product',
+  'landing.footer.company': 'Company',
+  'landing.footer.legal': 'Legal',
+  'landing.footer.features': 'Features',
+  'landing.footer.pricing': 'Pricing',
+  'landing.footer.signIn': 'Sign in',
+  'landing.footer.startTrial': 'Start Trial',
+  'landing.footer.about': 'About',
+  'landing.footer.contact': 'Contact',
+  'landing.footer.support': 'Support',
+  'landing.footer.privacy': 'Privacy Policy',
+  'landing.footer.terms': 'Terms of Service',
+  'landing.footer.dpa': 'Data Processing',
+  'landing.footer.copyright': '© 2026 DigiSmart Africa',
+  'landing.footer.bottomBar':
+    'Made with care from Cameroon 🇨🇲 for churches worldwide.',
 
   // Auth
   'auth.login.title': 'Welcome Back',
@@ -675,42 +817,174 @@ const en: Dictionary = {
 };
 
 const fr: Dictionary = {
-  // Landing
-  'landing.hero.badge': 'Programme Pasteur du Mois',
-  'landing.hero.title': 'Dirigez Chaque Équipe. Développez Chaque Pasteur.',
+  // ─────────────────────────────────────────────────────────────
+  // Page marketing (accueil public). Français pastoral — jamais
+  // traduit à la machine. Les jetons d\'interpolation utilisent
+  // la syntaxe {name}.
+  // ─────────────────────────────────────────────────────────────
+
+  'landing.tagline': 'Là où le ministère avance au rythme juste',
+
+  'landing.nav.features': 'Fonctionnalités',
+  'landing.nav.pricing': 'Tarifs',
+  'landing.nav.why': 'Pourquoi LeaderSmart',
+  'landing.nav.contact': 'Contact',
+  'landing.nav.signIn': 'Se connecter',
+  'landing.nav.startTrial': 'Essai gratuit',
+  'landing.nav.menuOpen': 'Ouvrir le menu',
+  'landing.nav.menuClose': 'Fermer le menu',
+
+  'landing.hero.pill': 'Pour les pasteurs principaux et leurs équipes',
+  'landing.hero.title': 'Transformez vos opérations ministérielles',
   'landing.hero.subtitle':
-    'La plateforme utilisée par les églises africaines pour gérer les opérations dominicales, planifier les bénévoles via WhatsApp, accueillir les enfants en toute sécurité et faire de l\'excellence pastorale une discipline mesurable.',
-  'landing.hero.cta': 'Commencer Gratuitement',
-  'landing.hero.demo': 'Voir la Démo',
+    'LeaderSmart offre aux pasteurs principaux, chefs de département et bénévoles tout ce qu\'il faut pour conduire un ministère avec excellence — dimanche après dimanche, mois après mois.',
+  'landing.hero.ctaPrimary': 'Commencer l\'essai gratuit de 30 jours',
+  'landing.hero.ctaSecondary': 'Voir comment ça marche',
+  'landing.hero.ctaFine':
+    'Sans carte bancaire. Mise en place en 5 minutes.',
+  'landing.hero.mockAlt':
+    'Aperçu du tableau de bord administrateur LeaderSmart',
 
-  'landing.features.title': 'Tout ce qu\'il Faut pour Diriger une Équipe Ministérielle',
+  'landing.social.title': 'Choisi par des églises dans le monde entier',
+
+  'landing.problem.title': 'Nous connaissons le dimanche matin.',
+  'landing.problem.p1':
+    "Dimanche après dimanche, le même casse-tête. Les placeurs ne viennent pas. Le ministère des enfants manque de bras. Le Pasteur du Mois se sent seul. Et le lundi matin, personne ne sait vraiment ce qui s\'est passé la veille.",
+  'landing.problem.p2':
+    'Toute église qui grandit connaît cela. La formation est là. L\'engagement est là. Ce qui manque, c\'est une plateforme qui transforme l\'intention en rythme.',
+  'landing.problem.p3': 'Cette plateforme, c\'est LeaderSmart.',
+  'landing.problem.imageAlt':
+    'Une assemblée en adoration, mains levées',
+
+  'landing.features.title':
+    'Tout ce qu\'il faut pour conduire un ministère avec excellence',
   'landing.features.subtitle':
-    'Cinq modules intégrés conçus pour la réalité de l\'église africaine — WhatsApp d\'abord, bilingue, tolérant hors ligne.',
-
-  'landing.feature.pastor.title': 'Pasteur du Mois',
+    'Six modules, une seule plateforme. Chaque responsable au même diapason.',
+  'landing.features.comingSoon': 'Bientôt disponible',
+  'landing.feature.pastor.title': 'Parcours du Pasteur du Mois',
   'landing.feature.pastor.desc':
-    'Listes du dimanche, plans d\'exécution sur 5 semaines, rapports de fin de mois, évaluations structurées.',
-
-  'landing.feature.dept.title': 'Chefs de Département',
+    'Assignez le leadership mensuel. Suivez les listes du dimanche, les plans hebdomadaires et les rapports de fin de mois. Chaque pasteur sait quoi faire et pour quand.',
+  'landing.feature.eval.title': 'Évaluation par les pairs',
+  'landing.feature.eval.desc':
+    'Les pasteurs administrateurs évaluent le Pasteur du Mois. Cadré, honnête, confidentiel jusqu\'à signature — aucune rivalité de personnalités, seulement la croissance.',
+  'landing.feature.dept.title': 'Coordination des départements',
   'landing.feature.dept.desc':
-    'Listes d\'équipe, plannings hebdomadaires, diffusions WhatsApp, présence en un clic, rapports hebdomadaires.',
-
-  'landing.feature.kids.title': 'Enregistrement des Enfants',
+    'Placeurs, accueil, média, entretien — chaque département a son chef, son planning, son rapport hebdomadaire. Rien ne passe à travers les mailles.',
+  'landing.feature.rotation.title': 'Rotation des bénévoles',
+  'landing.feature.rotation.desc':
+    'Rotation dimanche par dimanche avec les groupes A, B, C, D. Chaque bénévole connaît le dimanche exact où il sert — plus de course-poursuite, plus de postes vides.',
+  'landing.feature.kids.title': 'Ministère des enfants, en toute sécurité',
   'landing.feature.kids.desc':
-    'Étiquettes de sécurité avec codes de retrait, suivi des allergies, confirmations WhatsApp aux parents. Trois options d\'impression.',
-
-  'landing.feature.whatsapp.title': 'Moteur WhatsApp',
+    'Un vivier de bénévoles pour les enfants, avec vérifications, formation et coordination dédiée — parce que les enfants méritent le plus haut standard.',
+  'landing.feature.whatsapp.title': 'WhatsApp natif',
   'landing.feature.whatsapp.desc':
-    'Chaque planning, rappel et enregistrement passe par WhatsApp — là où votre équipe vit déjà.',
+    'Notifications, confirmations, rappels — tout par WhatsApp, là où votre équipe communique déjà. 1 000 messages par mois inclus.',
 
-  'landing.feature.dashboard.title': 'Tableau de Bord Leadership',
-  'landing.feature.dashboard.desc':
-    'Les pasteurs principaux voient chaque département d\'un coup d\'œil. Alertes précoces. Tendances d\'évaluation. Un seul écran.',
+  'landing.how.title': 'De l\'inscription au dimanche en trois étapes',
+  'landing.how.step1.title': 'Inscrivez-vous en 5 minutes',
+  'landing.how.step1.desc':
+    'Créez le compte de votre église. Ajoutez vos pasteurs administrateurs, vos départements et votre premier Pasteur du Mois. Un assistant guidé vous accompagne.',
+  'landing.how.step2.title': 'Votre équipe se met à l\'œuvre',
+  'landing.how.step2.desc':
+    'Les pasteurs remettent leurs listes du dimanche. Les chefs de département créent les plannings. Les bénévoles reçoivent leurs rappels WhatsApp. Chacun sait ce qu\'il a à faire.',
+  'landing.how.step3.title': 'La direction voit tout',
+  'landing.how.step3.desc':
+    'Un tableau de bord en temps réel montre ce qui est fait, ce qui manque, et où concentrer l\'attention. Du pasteur principal au bénévole, tout le monde est aligné.',
 
-  'landing.cta.title': 'Prêt à Transformer Vos Opérations Ministérielles ?',
-  'landing.cta.subtitle':
-    'Gratuit pour les églises de moins de 50 membres. Pas de frais d\'installation. Démarrez en moins de 10 minutes.',
-  'landing.cta.button': 'Commencer',
+  'landing.pricing.title': 'Une seule offre. Tout est inclus.',
+  'landing.pricing.subtitle':
+    'Pas de paliers. Pas de fonctionnalités verrouillées. Aucun frais surprise.',
+  'landing.pricing.perMonth': '/ mois',
+  'landing.pricing.equivPrefix': '≈',
+  'landing.pricing.equivBased':
+    ' (d\'après votre région — modifiez ci-dessous si besoin)',
+  'landing.pricing.changeCurrency': 'Devise',
+  'landing.pricing.includes.members':
+    'Membres d\'équipe illimités (Pasteur Principal, Pasteurs Administrateurs, Chefs de Département, bénévoles)',
+  'landing.pricing.includes.features':
+    'Toutes les fonctionnalités incluses — aucune limitation par palier',
+  'landing.pricing.includes.whatsapp': '1 000 messages WhatsApp par mois',
+  'landing.pricing.includes.languages': 'Interface en français et en anglais',
+  'landing.pricing.includes.hosting':
+    'Données hébergées en UE (Paris), sauvegardées chaque jour',
+  'landing.pricing.includes.support':
+    'Support prioritaire dans votre fuseau horaire',
+  'landing.pricing.cta': 'Commencer l\'essai gratuit de 30 jours',
+  'landing.pricing.ctaFine':
+    'Sans carte bancaire. Annulable à tout moment pendant l\'essai, sans frais.',
+  'landing.pricing.footnote':
+    'Besoin de plus de 1 000 messages WhatsApp par mois ? Écrivez-nous — nous vous proposerons le forfait qui convient.',
+
+  'landing.why.title': 'Bâti par des pasteurs, pour des pasteurs.',
+  'landing.why.p1.title': 'Nous connaissons le dimanche',
+  'landing.why.p1.body':
+    'LeaderSmart a été conçu par des pasteurs qui vivent ce quotidien. La liste du dimanche contient 17 points — parce que nous les avons comptés nous-mêmes.',
+  'landing.why.p2.title': 'Nous parlons vos langues',
+  'landing.why.p2.body':
+    'Anglais et français au lancement. D\'autres langues suivront selon les besoins de votre église.',
+  'landing.why.p3.title': 'Nous facturons juste',
+  'landing.why.p3.body':
+    'Un seul prix, tout est inclus. Pas de petits caractères, pas de paliers déguisés.',
+  'landing.why.quote':
+    'Pendant des années, j\'ai porté seul mon équipe de direction. LeaderSmart me permet de déléguer sans perdre la responsabilité. Je dors mieux.',
+  'landing.why.attribution':
+    'Dr. Denis Ekobena, Pasteur Principal · Fire Church · Cameroun',
+  'landing.why.since': 'Fire Church utilise LeaderSmart depuis 2026.',
+
+  'landing.faq.title': 'Questions fréquentes',
+  'landing.faq.q1': 'Faut-il installer quelque chose ?',
+  'landing.faq.a1':
+    'Non. LeaderSmart fonctionne dans tout navigateur web et envoie les messages WhatsApp depuis n\'importe quel téléphone. Aucun téléchargement, aucune installation IT.',
+  'landing.faq.q2':
+    'Que se passe-t-il si mon église a plusieurs branches ?',
+  'landing.faq.a2':
+    'La v1 gère une église par compte. Les fonctionnalités multi-branches et réseau sont prévues pour 2027.',
+  'landing.faq.q3': 'Puis-je essayer sans payer ?',
+  'landing.faq.a3':
+    'Oui. 30 jours d\'essai gratuit, sans carte bancaire, avec accès complet à toutes les fonctionnalités.',
+  'landing.faq.q4': 'Que se passe-t-il après l\'essai gratuit ?',
+  'landing.faq.a4':
+    'Nous vous contactons avec une facture simple. Vous payez par mobile money, virement bancaire, carte de crédit ou tout moyen qui vous convient.',
+  'landing.faq.q5':
+    'Que faire si j\'ai besoin d\'aide pour la mise en place ?',
+  'landing.faq.a5':
+    'Nous accompagnons personnellement chaque église pendant les 30 premiers jours. Répondez à n\'importe quel e-mail : c\'est un vrai humain qui vous répond.',
+  'landing.faq.q6':
+    'Les données de mon église sont-elles en sécurité ?',
+  'landing.faq.a6':
+    'Oui. Les données sont hébergées en UE (Paris) avec chiffrement en transit et au repos. Sauvegardées quotidiennement. Vous restez propriétaire et pouvez tout exporter à tout moment.',
+  'landing.faq.q7':
+    'Que faire si je veux changer d\'offre ou annuler ?',
+  'landing.faq.a7':
+    'Annulation à tout moment par un simple e-mail. Aucun engagement, aucun frais d\'annulation.',
+  'landing.faq.q8': 'Quelles langues prenez-vous en charge ?',
+  'landing.faq.a8':
+    'Anglais et français au lancement. Si votre église a besoin d\'une autre langue, dites-le nous — nous les ajoutons selon la demande réelle des églises.',
+
+  'landing.finalCta.title':
+    'Prêt(e) pour un dimanche conduit au bon rythme ?',
+  'landing.finalCta.subtitle':
+    'Rejoignez les églises qui transforment le chaos ministériel en excellence pastorale.',
+  'landing.finalCta.button': 'Commencer l\'essai gratuit de 30 jours',
+  'landing.finalCta.fine':
+    'Mise en place en 5 minutes. Sans carte bancaire. En français ou en anglais.',
+
+  'landing.footer.product': 'Produit',
+  'landing.footer.company': 'Entreprise',
+  'landing.footer.legal': 'Mentions légales',
+  'landing.footer.features': 'Fonctionnalités',
+  'landing.footer.pricing': 'Tarifs',
+  'landing.footer.signIn': 'Se connecter',
+  'landing.footer.startTrial': 'Essai gratuit',
+  'landing.footer.about': 'À propos',
+  'landing.footer.contact': 'Contact',
+  'landing.footer.support': 'Support',
+  'landing.footer.privacy': 'Politique de confidentialité',
+  'landing.footer.terms': 'Conditions d\'utilisation',
+  'landing.footer.dpa': 'Traitement des données',
+  'landing.footer.copyright': '© 2026 DigiSmart Africa',
+  'landing.footer.bottomBar':
+    'Conçu avec soin depuis le Cameroun 🇨🇲 pour les églises du monde entier.',
 
   // Auth
   'auth.login.title': 'Bon Retour',
