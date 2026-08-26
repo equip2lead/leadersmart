@@ -1,23 +1,15 @@
 import type { Metadata, Viewport } from 'next';
-import { Fraunces, Inter } from 'next/font/google';
+import { Inter } from 'next/font/google';
 import './globals.css';
 
+// Inter is the sole typeface across the marketing landing and the
+// authenticated app. Loaded as a variable font so every weight 100–900
+// is available without additional payload.
 const inter = Inter({
   subsets: ['latin'],
   variable: '--font-sans',
   display: 'swap',
-});
-
-// Fraunces powers hero + section headlines. Loaded as a variable font
-// so every weight 100–900 is available without extra downloads, plus
-// the SOFT optical axis for dialling down crispness on display text
-// via font-variation-settings when we want that later.
-const fraunces = Fraunces({
-  subsets: ['latin'],
-  variable: '--font-fraunces',
   weight: 'variable',
-  axes: ['SOFT'],
-  display: 'swap',
 });
 
 export const metadata: Metadata = {
@@ -59,7 +51,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${inter.variable} ${fraunces.variable}`}>
+    <html lang="en" className={inter.variable}>
       <body>{children}</body>
     </html>
   );

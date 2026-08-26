@@ -15,25 +15,77 @@ const en: Dictionary = {
   'landing.tagline': 'Where Ministry Runs on Rhythm',
 
   // Header
-  'landing.nav.features': 'Features',
+  'landing.nav.product': 'Product',
+  'landing.nav.resources': 'Resources',
   'landing.nav.pricing': 'Pricing',
+  'landing.nav.download': 'Download',
+  'landing.nav.signIn': 'Sign in',
+  'landing.nav.signUp': 'Sign Up',
+  // Legacy keys — kept so older components (mobile menu / mega-menu)
+  // that still import from i18n don't collapse; unused by the rebuilt
+  // header itself.
+  'landing.nav.features': 'Features',
   'landing.nav.why': 'Why LeaderSmart',
   'landing.nav.contact': 'Contact',
-  'landing.nav.signIn': 'Sign in',
   'landing.nav.startTrial': 'Start Free Trial',
   'landing.nav.menuOpen': 'Open menu',
   'landing.nav.menuClose': 'Close menu',
 
-  // Hero
-  'landing.hero.pill':
-    'For pastors, ministry leaders, and everyone building teams that serve',
-  'landing.hero.title': 'The Operating System for Ministry Excellence',
+  // Hero — rebuilt copy for the indigo landing.
+  'landing.hero.pill': 'Trusted by pastors on 3 continents',
+  'landing.hero.titleLine1': 'Empower Your Pastoral Leadership,',
+  'landing.hero.titleLine2': 'Manage Your Ministry',
   'landing.hero.subtitle':
-    'LeaderSmart gives pastors, department heads, and ministry teams everything they need to run a ministry in excellence — Sunday after Sunday, month after month.',
-  'landing.hero.ctaPrimary': 'Start 30-Day Free Trial',
-  'landing.hero.ctaSecondary': 'See how it works',
+    'Take control of your ministry operations with our intuitive platform. Track pastoral workflows, coordinate teams, and empower every leader — Sunday after Sunday.',
+  'landing.hero.ctaPrimary': 'Request a Demo',
+  'landing.hero.ctaSecondary': 'Watch Demo',
   'landing.hero.ctaFine': 'No credit card required. Setup in 5 minutes.',
-  'landing.hero.mockAlt': 'LeaderSmart admin dashboard preview',
+  'landing.hero.mockAlt': 'Pastoral dashboard preview showing weekly attendance',
+  // Labels used inside the placeholder hero mockup composition.
+  'landing.hero.mock.title': 'Sunday Attendance',
+  'landing.hero.mock.week1': 'Week 1',
+  'landing.hero.mock.week2': 'Week 2',
+  'landing.hero.mock.week3': 'Week 3',
+  'landing.hero.mock.week4': 'Week 4',
+  'landing.hero.mock.multiple': 'Handle multiple ministries',
+  'landing.hero.mock.sundayService': 'Sunday Service',
+  'landing.hero.mock.sundaySize': '240 people',
+  'landing.hero.mock.wednesdayPrayer': 'Wednesday Prayer',
+  'landing.hero.mock.wednesdaySize': '85 people',
+
+  // Trust strip below hero.
+  'landing.trust.label':
+    'Trusted by 500+ pastors and ministry leaders like',
+
+  // "Streamline Your Ministry Operations" — 3-card services section.
+  'landing.streamline.eyebrow': 'SERVICES',
+  'landing.streamline.title': 'Streamline Your Ministry Operations',
+  'landing.streamline.subtitle':
+    'Unlock the full potential of your ministry with tools to automate workflows, deliver insights, and centralize data. Simplify processes and focus on growth.',
+  'landing.streamline.card1.title': 'Automated workflows',
+  'landing.streamline.card1.body':
+    'The Sunday Checklist runs itself. 11 checkpoints before service, 6 during, 5 after — every leader knows exactly where they are.',
+  'landing.streamline.card2.title': 'Pastoral reporting',
+  'landing.streamline.card2.body':
+    'End-of-month reports write themselves as your team works. Attendance, giving, and pastoral notes captured for the review conversation.',
+  'landing.streamline.card3.title': 'Ministry-wide insights',
+  'landing.streamline.card3.body':
+    'One dashboard, every ministry. See at a glance which departments are firing, which are quiet, and where a leader needs backup.',
+  'landing.streamline.cta': 'Request a Demo',
+  // Placeholder labels inside the three streamline mockups.
+  'landing.streamline.mock1.title': 'Sunday Checklist',
+  'landing.streamline.mock1.beforeCount': '11 before',
+  'landing.streamline.mock1.duringCount': '6 during',
+  'landing.streamline.mock1.afterCount': '5 after',
+  'landing.streamline.mock2.title': 'Pastoral Report',
+  'landing.streamline.mock2.month': 'August 2026',
+  'landing.streamline.mock2.sundaysServed': 'Sundays served',
+  'landing.streamline.mock2.attendanceUp': 'Attendance +12%',
+  'landing.streamline.mock3.title': 'Ministry Insights',
+  'landing.streamline.mock3.ushering': 'Ushering',
+  'landing.streamline.mock3.usheringSize': '40 volunteers active',
+  'landing.streamline.mock3.welcome': 'Welcome Team',
+  'landing.streamline.mock3.welcomeSize': '25 volunteers active',
 
   // Features section (9-card 3×3 grid).
   'landing.features.eyebrow': 'EVERYTHING YOU NEED',
@@ -243,7 +295,7 @@ const en: Dictionary = {
     'English and French at launch. If your ministry needs another language, tell us — we add languages based on real ministry demand.',
 
   // Final CTA
-  'landing.finalCta.title': 'Ready for a rhythm-driven Sunday?',
+  'landing.finalCta.title': 'Ready to empower your ministry?',
   'landing.finalCta.subtitle':
     'Join the ministries turning chaos into pastoral excellence.',
   'landing.finalCta.button': 'Start 30-Day Free Trial',
@@ -916,27 +968,76 @@ const fr: Dictionary = {
 
   'landing.tagline': 'Là où le ministère avance au rythme juste',
 
-  'landing.nav.features': 'Fonctionnalités',
+  'landing.nav.product': 'Produit',
+  'landing.nav.resources': 'Ressources',
   'landing.nav.pricing': 'Tarifs',
+  'landing.nav.download': 'Télécharger',
+  'landing.nav.signIn': 'Se connecter',
+  'landing.nav.signUp': 'S\'inscrire',
+  // Clés héritées — conservées pour éviter de casser d\'anciens
+  // composants qui les importent encore ; non utilisées par le nouveau
+  // header.
+  'landing.nav.features': 'Fonctionnalités',
   'landing.nav.why': 'Pourquoi LeaderSmart',
   'landing.nav.contact': 'Contact',
-  'landing.nav.signIn': 'Se connecter',
   'landing.nav.startTrial': 'Essai gratuit',
   'landing.nav.menuOpen': 'Ouvrir le menu',
   'landing.nav.menuClose': 'Fermer le menu',
 
   'landing.hero.pill':
-    'Pour les pasteurs, les leaders ministériels et ceux qui bâtissent des équipes qui servent',
-  'landing.hero.title':
-    'Le système d\'exploitation pour l\'excellence ministérielle',
+    'Choisi par des pasteurs sur 3 continents',
+  'landing.hero.titleLine1': 'Renforcez votre leadership pastoral,',
+  'landing.hero.titleLine2': 'gérez votre ministère',
   'landing.hero.subtitle':
-    'LeaderSmart offre aux pasteurs, chefs de département et équipes ministérielles tout ce qu\'il faut pour conduire un ministère avec excellence — dimanche après dimanche, mois après mois.',
-  'landing.hero.ctaPrimary': 'Commencer l\'essai gratuit de 30 jours',
-  'landing.hero.ctaSecondary': 'Voir comment ça fonctionne',
+    'Prenez le contrôle de vos opérations ministérielles grâce à une plateforme intuitive. Suivez les parcours pastoraux, coordonnez les équipes et renforcez chaque responsable — dimanche après dimanche.',
+  'landing.hero.ctaPrimary': 'Demander une démo',
+  'landing.hero.ctaSecondary': 'Voir la démo',
   'landing.hero.ctaFine':
     'Sans carte bancaire. Mise en place en 5 minutes.',
   'landing.hero.mockAlt':
-    'Aperçu du tableau de bord administrateur LeaderSmart',
+    'Aperçu du tableau de bord pastoral, présences hebdomadaires',
+  'landing.hero.mock.title': 'Présence dominicale',
+  'landing.hero.mock.week1': 'Semaine 1',
+  'landing.hero.mock.week2': 'Semaine 2',
+  'landing.hero.mock.week3': 'Semaine 3',
+  'landing.hero.mock.week4': 'Semaine 4',
+  'landing.hero.mock.multiple': 'Gérez plusieurs ministères',
+  'landing.hero.mock.sundayService': 'Culte du dimanche',
+  'landing.hero.mock.sundaySize': '240 personnes',
+  'landing.hero.mock.wednesdayPrayer': 'Prière du mercredi',
+  'landing.hero.mock.wednesdaySize': '85 personnes',
+
+  'landing.trust.label':
+    'Choisi par plus de 500 pasteurs et responsables ministériels, dont',
+
+  'landing.streamline.eyebrow': 'SERVICES',
+  'landing.streamline.title':
+    'Simplifiez vos opérations ministérielles',
+  'landing.streamline.subtitle':
+    'Libérez tout le potentiel de votre ministère avec des outils qui automatisent les flux, révèlent les tendances et centralisent les données. Simplifiez les processus et concentrez-vous sur la croissance.',
+  'landing.streamline.card1.title': 'Parcours automatisés',
+  'landing.streamline.card1.body':
+    'La Liste du dimanche se pilote toute seule. 11 points avant le culte, 6 pendant, 5 après — chaque responsable sait exactement où il en est.',
+  'landing.streamline.card2.title': 'Reporting pastoral',
+  'landing.streamline.card2.body':
+    'Les rapports de fin de mois se rédigent au fil de l\'action. Présence, offrandes et notes pastorales rassemblés pour la revue.',
+  'landing.streamline.card3.title': 'Vue d\'ensemble du ministère',
+  'landing.streamline.card3.body':
+    'Un tableau de bord, tous les départements. Voyez d\'un coup d\'œil ce qui avance, ce qui ralentit et où un responsable a besoin de renfort.',
+  'landing.streamline.cta': 'Demander une démo',
+  'landing.streamline.mock1.title': 'Liste du dimanche',
+  'landing.streamline.mock1.beforeCount': '11 avant',
+  'landing.streamline.mock1.duringCount': '6 pendant',
+  'landing.streamline.mock1.afterCount': '5 après',
+  'landing.streamline.mock2.title': 'Rapport pastoral',
+  'landing.streamline.mock2.month': 'Août 2026',
+  'landing.streamline.mock2.sundaysServed': 'Dimanches servis',
+  'landing.streamline.mock2.attendanceUp': 'Présence +12 %',
+  'landing.streamline.mock3.title': 'Vue d\'ensemble',
+  'landing.streamline.mock3.ushering': 'Placeurs',
+  'landing.streamline.mock3.usheringSize': '40 bénévoles actifs',
+  'landing.streamline.mock3.welcome': 'Équipe d\'accueil',
+  'landing.streamline.mock3.welcomeSize': '25 bénévoles actifs',
 
   'landing.features.eyebrow': 'TOUT CE DONT VOUS AVEZ BESOIN',
   'landing.features.title': 'Renforcez votre leadership pastoral.',
@@ -1145,7 +1246,7 @@ const fr: Dictionary = {
   'landing.faq.a8':
     'Anglais et français au lancement. Si votre ministère a besoin d\'une autre langue, dites-le nous — nous les ajoutons selon la demande réelle.',
 
-  'landing.finalCta.title': 'Prêt pour un dimanche rythmé ?',
+  'landing.finalCta.title': 'Prêt(e) à renforcer votre ministère ?',
   'landing.finalCta.subtitle':
     'Rejoignez les ministères qui transforment le chaos en excellence pastorale.',
   'landing.finalCta.button': 'Commencer l\'essai gratuit de 30 jours',
