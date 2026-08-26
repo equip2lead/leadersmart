@@ -84,8 +84,14 @@ export default async function LandingPage() {
 
 function Hero({ lang }: { lang: AppLanguage }) {
   return (
-    <section className="relative overflow-hidden bg-[#f8fafc]">
-      <div className="mx-auto grid min-h-[85vh] max-w-7xl grid-cols-1 items-center gap-12 px-4 py-16 sm:px-6 lg:grid-cols-5 lg:gap-16 lg:py-24">
+    <section className="relative overflow-hidden bg-gradient-to-br from-[#eef2ff] via-[#f5f3ff] to-[#faf5ff]">
+      {/* Warm blob accent — bottom-left flame tint peeks out to break
+          the cool lavender monotony. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -bottom-24 -right-24 h-96 w-96 rounded-full bg-flame-200/25 blur-3xl"
+      />
+      <div className="relative mx-auto grid min-h-[85vh] max-w-7xl grid-cols-1 items-center gap-12 px-4 py-16 sm:px-6 lg:grid-cols-5 lg:gap-16 lg:py-24">
         <div className="lg:col-span-3">
           <span className="inline-flex max-w-full items-center rounded-full border border-flame-200 bg-flame-100 px-3 py-1 text-xs font-semibold text-flame-700">
             <span className="whitespace-normal">
@@ -258,7 +264,10 @@ function Features({ lang }: { lang: AppLanguage }) {
 
 function Problem({ lang }: { lang: AppLanguage }) {
   return (
-    <section className="bg-[#fafaf9] py-20 sm:py-24">
+    // #fef9e7 is the full-opacity twin of #fef3c7/50 — same honey tint
+    // but stable across browsers that render alpha inconsistently on
+    // long scrolls. Body text at gray-700 hits ~11:1 against it.
+    <section className="bg-[#fef9e7] py-20 sm:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <div className="grid items-center gap-12 lg:grid-cols-5">
           <div className="lg:col-span-3">
@@ -306,8 +315,13 @@ function HowItWorks({ lang }: { lang: AppLanguage }) {
     { n: '03', titleKey: 'landing.how.step3.title', bodyKey: 'landing.how.step3.body' },
   ];
   return (
-    <section className="bg-[#f9fafb] py-20 sm:py-24">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6">
+    <section className="relative overflow-hidden bg-gradient-to-b from-[#ecfdf5] to-[#f0fdf4] py-20 sm:py-24">
+      {/* Cool mint blob accent, top-right. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -top-24 -right-24 h-80 w-80 rounded-full bg-emerald-200/30 blur-3xl"
+      />
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
         <div className="mx-auto max-w-3xl text-center">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gray-500">
             {t('landing.how.eyebrow', lang)}
@@ -370,7 +384,9 @@ type ShowcaseBlock = {
 const SHOWCASE_BLOCKS: ShowcaseBlock[] = [
   {
     id: 'showcase-a',
-    sectionBg: 'bg-white',
+    // Very pale lavender stage — echoes the mockup's darker lavender
+    // gradient without competing for attention.
+    sectionBg: 'bg-[#faf5ff]',
     side: 'left-content',
     gradient: 'bg-gradient-to-br from-[#e9d5ff] to-[#d8b4fe]',
     rotate: 'rotate-1',
@@ -387,7 +403,8 @@ const SHOWCASE_BLOCKS: ShowcaseBlock[] = [
   },
   {
     id: 'showcase-b',
-    sectionBg: 'bg-[#f8fafc]',
+    // Pale peach stage — echoes the peach mockup.
+    sectionBg: 'bg-[#fff7ed]',
     side: 'right-content',
     gradient: 'bg-gradient-to-br from-[#fed7aa] to-[#fdba74]',
     rotate: '-rotate-1',
@@ -404,7 +421,8 @@ const SHOWCASE_BLOCKS: ShowcaseBlock[] = [
   },
   {
     id: 'showcase-c',
-    sectionBg: 'bg-white',
+    // Pale sky stage — echoes the sky mockup.
+    sectionBg: 'bg-[#eff6ff]',
     side: 'left-content',
     gradient: 'bg-gradient-to-br from-[#dbeafe] to-[#bfdbfe]',
     rotate: 'rotate-1',
@@ -520,7 +538,14 @@ function Pricing({
     'landing.pricing.includes.support',
   ];
   return (
-    <section id="pricing" className="bg-[#fafaf9] py-24 sm:py-28">
+    // Honey wash at the top and bottom of the section, near-white
+    // through the middle where the pricing card actually sits — so the
+    // card reads as a spotlight rather than a shape floating on a solid
+    // tint. /50 alpha keeps the honey readable-but-warm.
+    <section
+      id="pricing"
+      className="bg-gradient-to-b from-[#fef3c7]/40 via-white to-[#fef3c7]/40 py-24 sm:py-28"
+    >
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <div className="mx-auto max-w-3xl text-center">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-flame-600">
@@ -600,7 +625,7 @@ function Why({ lang }: { lang: AppLanguage }) {
     { titleKey: 'landing.why.p3.title', bodyKey: 'landing.why.p3.body' },
   ];
   return (
-    <section id="why" className="bg-white py-24 sm:py-28">
+    <section id="why" className="bg-[#fef2f2] py-24 sm:py-28">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <div className="grid items-start gap-12 lg:grid-cols-2 lg:gap-16">
           <div>
@@ -624,7 +649,7 @@ function Why({ lang }: { lang: AppLanguage }) {
             </div>
           </div>
 
-          <figure className="rounded-3xl bg-gray-50 p-10">
+          <figure className="rounded-3xl border border-rose-100 bg-white p-10 shadow-lg shadow-rose-900/5">
             <Quote
               className="h-16 w-16 text-flame-600"
               aria-hidden="true"
@@ -663,7 +688,7 @@ function Why({ lang }: { lang: AppLanguage }) {
 function FAQ({ lang }: { lang: AppLanguage }) {
   const items = [1, 2, 3, 4, 5, 6, 7, 8];
   return (
-    <section className="bg-[#f9fafb] py-24 sm:py-28">
+    <section className="bg-[#f5f3ff] py-24 sm:py-28">
       <div className="mx-auto max-w-3xl px-4 sm:px-6">
         <div className="text-center">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-flame-600">
@@ -709,6 +734,11 @@ function FinalCta({ lang }: { lang: AppLanguage }) {
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 opacity-[0.05] [background-image:radial-gradient(circle_at_1px_1px,white_1px,transparent_0)] [background-size:24px_24px]"
+      />
+      {/* Flame blob top-left — warm counter-note against the navy. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -top-32 -left-32 h-96 w-96 rounded-full bg-flame-500/20 blur-3xl"
       />
       <div className="relative mx-auto max-w-4xl px-4 sm:px-6">
         <h2 className="font-fraunces text-4xl font-medium leading-tight tracking-tight sm:text-6xl lg:text-7xl">
