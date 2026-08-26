@@ -84,7 +84,7 @@ export default async function LandingPage() {
 
 function Hero({ lang }: { lang: AppLanguage }) {
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-white via-white to-[#f5f3ff]">
+    <section className="relative overflow-hidden bg-[#f8fafc]">
       <div className="mx-auto grid min-h-[85vh] max-w-7xl grid-cols-1 items-center gap-12 px-4 py-16 sm:px-6 lg:grid-cols-5 lg:gap-16 lg:py-24">
         <div className="lg:col-span-3">
           <span className="inline-flex max-w-full items-center rounded-full border border-flame-200 bg-flame-100 px-3 py-1 text-xs font-semibold text-flame-700">
@@ -160,7 +160,7 @@ function SocialProof({ lang }: { lang: AppLanguage }) {
     'Living Waters · Nigeria',
   ];
   return (
-    <section className="border-b border-gray-100 bg-gray-50 py-16">
+    <section className="border-b border-gray-100 bg-white py-16">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <p className="text-center text-xs font-semibold uppercase tracking-[0.2em] text-muted">
           {t('landing.social.label', lang)}
@@ -258,7 +258,7 @@ function Features({ lang }: { lang: AppLanguage }) {
 
 function Problem({ lang }: { lang: AppLanguage }) {
   return (
-    <section className="bg-white py-20 sm:py-24">
+    <section className="bg-[#fafaf9] py-20 sm:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <div className="grid items-center gap-12 lg:grid-cols-5">
           <div className="lg:col-span-3">
@@ -306,7 +306,7 @@ function HowItWorks({ lang }: { lang: AppLanguage }) {
     { n: '03', titleKey: 'landing.how.step3.title', bodyKey: 'landing.how.step3.body' },
   ];
   return (
-    <section className="bg-gray-50 py-20 sm:py-24">
+    <section className="bg-[#f9fafb] py-20 sm:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <div className="mx-auto max-w-3xl text-center">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gray-500">
@@ -352,6 +352,10 @@ function HowItWorks({ lang }: { lang: AppLanguage }) {
 
 type ShowcaseBlock = {
   id: string;
+  // Per-block section background — alternating tints for visual rhythm
+  // between the deeper product blocks. Mockup pastel gradients are
+  // separate (see `gradient` below) and unaffected.
+  sectionBg: string;
   side: 'left-content' | 'right-content';
   gradient: string;
   rotate: string;
@@ -366,6 +370,7 @@ type ShowcaseBlock = {
 const SHOWCASE_BLOCKS: ShowcaseBlock[] = [
   {
     id: 'showcase-a',
+    sectionBg: 'bg-white',
     side: 'left-content',
     gradient: 'bg-gradient-to-br from-[#e9d5ff] to-[#d8b4fe]',
     rotate: 'rotate-1',
@@ -382,6 +387,7 @@ const SHOWCASE_BLOCKS: ShowcaseBlock[] = [
   },
   {
     id: 'showcase-b',
+    sectionBg: 'bg-[#f8fafc]',
     side: 'right-content',
     gradient: 'bg-gradient-to-br from-[#fed7aa] to-[#fdba74]',
     rotate: '-rotate-1',
@@ -398,6 +404,7 @@ const SHOWCASE_BLOCKS: ShowcaseBlock[] = [
   },
   {
     id: 'showcase-c',
+    sectionBg: 'bg-white',
     side: 'left-content',
     gradient: 'bg-gradient-to-br from-[#dbeafe] to-[#bfdbfe]',
     rotate: 'rotate-1',
@@ -417,14 +424,12 @@ const SHOWCASE_BLOCKS: ShowcaseBlock[] = [
 
 function ProductShowcase({ lang }: { lang: AppLanguage }) {
   return (
-    <section id="product-showcase" className="bg-white">
-      {SHOWCASE_BLOCKS.map((block, idx) => (
-        <div
+    <div id="product-showcase">
+      {SHOWCASE_BLOCKS.map((block) => (
+        <section
           key={block.id}
           id={block.id}
-          className={
-            idx > 0 ? 'border-t border-gray-100 py-24 sm:py-28' : 'py-24 sm:py-28'
-          }
+          className={`${block.sectionBg} py-24 sm:py-28`}
         >
           <div className="mx-auto max-w-7xl px-4 sm:px-6">
             <div
@@ -485,9 +490,9 @@ function ProductShowcase({ lang }: { lang: AppLanguage }) {
               </div>
             </div>
           </div>
-        </div>
+        </section>
       ))}
-    </section>
+    </div>
   );
 }
 
@@ -515,7 +520,7 @@ function Pricing({
     'landing.pricing.includes.support',
   ];
   return (
-    <section id="pricing" className="bg-gray-50 py-24 sm:py-28">
+    <section id="pricing" className="bg-[#fafaf9] py-24 sm:py-28">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <div className="mx-auto max-w-3xl text-center">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-flame-600">
@@ -658,7 +663,7 @@ function Why({ lang }: { lang: AppLanguage }) {
 function FAQ({ lang }: { lang: AppLanguage }) {
   const items = [1, 2, 3, 4, 5, 6, 7, 8];
   return (
-    <section className="bg-gray-50 py-24 sm:py-28">
+    <section className="bg-[#f9fafb] py-24 sm:py-28">
       <div className="mx-auto max-w-3xl px-4 sm:px-6">
         <div className="text-center">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-flame-600">
