@@ -39,6 +39,10 @@ const config: Config = {
       fontFamily: {
         sans: ['var(--font-sans)', 'system-ui', 'sans-serif'],
         display: ['var(--font-display)', 'var(--font-sans)', 'system-ui', 'sans-serif'],
+        // Fraunces serif for landing-page hero + section headlines.
+        // Falls back to a broadly-available system serif so hydration
+        // never renders in the wrong font family.
+        fraunces: ['var(--font-fraunces)', 'Georgia', 'ui-serif', 'serif'],
       },
       boxShadow: {
         card: '0 1px 2px 0 rgb(0 0 0 / 0.04), 0 1px 3px 0 rgb(0 0 0 / 0.06)',

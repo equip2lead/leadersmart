@@ -40,7 +40,7 @@ export function LandingHeader({ lang }: { lang: AppLanguage }) {
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 sm:px-6">
         <Link href="/" className="flex items-center gap-2">
           <Flame className="h-5 w-5 text-flame-600" aria-hidden="true" />
-          <span className="text-lg font-bold tracking-tight text-brand-700">
+          <span className="font-fraunces text-2xl font-semibold tracking-tight text-brand-700">
             LeaderSmart
           </span>
         </Link>

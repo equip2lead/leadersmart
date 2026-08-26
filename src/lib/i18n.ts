@@ -25,10 +25,11 @@ const en: Dictionary = {
   'landing.nav.menuClose': 'Close menu',
 
   // Hero
-  'landing.hero.pill': 'For senior pastors and their teams',
-  'landing.hero.title': 'Transform Your Ministry Operations',
+  'landing.hero.pill':
+    'For pastors, ministry leaders, and everyone building teams that serve',
+  'landing.hero.title': 'The Operating System for Ministry Excellence',
   'landing.hero.subtitle':
-    'LeaderSmart gives senior pastors, department heads, and volunteers everything they need to run a ministry in excellence — Sunday after Sunday, month after month.',
+    'LeaderSmart gives pastors, department heads, and ministry teams everything they need to run a ministry in excellence — Sunday after Sunday, month after month.',
   'landing.hero.ctaPrimary': 'Start 30-Day Free Trial',
   'landing.hero.ctaSecondary': 'See how it works',
   'landing.hero.ctaFine': 'No credit card required. Setup in 5 minutes.',
@@ -46,30 +47,42 @@ const en: Dictionary = {
   'landing.problem.p3': 'That platform is LeaderSmart.',
   'landing.problem.imageAlt': 'A congregation lifting hands in worship',
 
-  // Features
-  'landing.features.title':
-    'Everything you need to run a ministry in excellence',
+  // Features section (9-card 3×3 grid).
+  'landing.features.eyebrow': 'EVERYTHING YOU NEED',
+  'landing.features.title': 'Empower your pastoral leadership.',
   'landing.features.subtitle':
-    'Six modules, one platform. Every leader on the same page.',
+    "Nine modules, one platform. Everyone knows what to do and when it's due.",
   'landing.features.comingSoon': 'Coming soon',
-  'landing.feature.pastor.title': 'Pastor of the Month Workflow',
-  'landing.feature.pastor.desc':
-    "Assign monthly leadership. Track Sunday checklists, weekly plans, and end-of-month reports. Every pastor knows what to do and when it's due.",
+  // Row 1 — Pastor Workflow
+  'landing.feature.sunday.title': 'Sunday Checklist',
+  'landing.feature.sunday.desc':
+    'Every Sunday, seventeen checkpoints. From pre-service prayer to post-service debrief. Nothing forgotten, nothing left to memory.',
+  'landing.feature.weekly.title': 'Weekly Checklist',
+  'landing.feature.weekly.desc':
+    "Your pastoral week planned out. Track execution day by day, mark tasks complete, know what's coming next.",
+  'landing.feature.monthly.title': 'Monthly Reports',
+  'landing.feature.monthly.desc':
+    'End-of-month reflection built in. Wins, misses, next-month goals — captured and signed, ready for review.',
+  // Row 2 — Team & Leadership
+  'landing.feature.potm.title': 'Pastor of the Month',
+  'landing.feature.potm.desc':
+    'Rotate monthly leadership among your pastoral team. Every pastor gets their turn — and the platform tracks their run.',
   'landing.feature.eval.title': 'Peer Evaluation',
   'landing.feature.eval.desc':
-    'Admin pastors evaluate the current Pastor of the Month. Structured, honest, private until signed — no personality contests, just growth.',
+    'Structured feedback among admin pastors. Ratings stay private until signed. Growth conversations, not personality contests.',
+  'landing.feature.team.title': 'Team Management',
+  'landing.feature.team.desc':
+    'Invite pastors, department heads, and volunteers. Set roles, assign responsibilities, delegate with confidence.',
+  // Row 3 — Operations & Insight
   'landing.feature.dept.title': 'Department Coordination',
   'landing.feature.dept.desc':
-    'Ushering, Welcome, Media, Cleaning — each department has its own head, its own schedule, its own weekly report. Nothing falls through the cracks.',
+    'Every department has its own head, schedule, and weekly report. Ushering, Welcome, Media, Cleaning — all coordinated.',
+  'landing.feature.insights.title': 'Performance Insights',
+  'landing.feature.insights.desc':
+    "Dashboard analytics show ministry health at a glance. See what's done, what's missing, and where to focus.",
   'landing.feature.rotation.title': 'Volunteer Rotation',
   'landing.feature.rotation.desc':
-    'Sunday-by-Sunday rotation with Groups A, B, C, D. Every volunteer knows the exact Sunday they serve — no more chasing, no more empty stations.',
-  'landing.feature.kids.title': 'Kids Ministry, Safely',
-  'landing.feature.kids.desc':
-    "Screened volunteer pipeline for children's ministry. Background checks, training, and dedicated coordination — because kids deserve the highest standard.",
-  'landing.feature.whatsapp.title': 'WhatsApp Native',
-  'landing.feature.whatsapp.desc':
-    'Notifications, confirmations, reminders — all through WhatsApp, the way your team already communicates. 1,000 messages per month included.',
+    'Sunday-by-Sunday rotation with Groups A, B, C, D. Every volunteer knows exactly when they serve. No more empty stations.',
 
   // How it works
   'landing.how.title': 'From signup to Sunday in three steps',
@@ -183,6 +196,9 @@ const en: Dictionary = {
   'landing.footer.copyright': '© 2026 DigiSmart Africa',
   'landing.footer.bottomBar':
     'Made with care from Cameroon 🇨🇲 for churches worldwide.',
+  // Minimal-footer single line for Phase 1.
+  'landing.footer.minimal':
+    '© 2026 DigiSmart Africa · Where Ministry Runs on Rhythm · Made from Cameroon for churches worldwide',
 
   // Auth
   'auth.login.title': 'Welcome Back',
@@ -834,12 +850,14 @@ const fr: Dictionary = {
   'landing.nav.menuOpen': 'Ouvrir le menu',
   'landing.nav.menuClose': 'Fermer le menu',
 
-  'landing.hero.pill': 'Pour les pasteurs principaux et leurs équipes',
-  'landing.hero.title': 'Transformez vos opérations ministérielles',
+  'landing.hero.pill':
+    'Pour les pasteurs, les leaders ministériels et ceux qui bâtissent des équipes qui servent',
+  'landing.hero.title':
+    'Le système d\'exploitation pour l\'excellence ministérielle',
   'landing.hero.subtitle':
-    'LeaderSmart offre aux pasteurs principaux, chefs de département et bénévoles tout ce qu\'il faut pour conduire un ministère avec excellence — dimanche après dimanche, mois après mois.',
+    'LeaderSmart offre aux pasteurs, chefs de département et équipes ministérielles tout ce qu\'il faut pour conduire un ministère avec excellence — dimanche après dimanche, mois après mois.',
   'landing.hero.ctaPrimary': 'Commencer l\'essai gratuit de 30 jours',
-  'landing.hero.ctaSecondary': 'Voir comment ça marche',
+  'landing.hero.ctaSecondary': 'Voir comment ça fonctionne',
   'landing.hero.ctaFine':
     'Sans carte bancaire. Mise en place en 5 minutes.',
   'landing.hero.mockAlt':
@@ -856,29 +874,41 @@ const fr: Dictionary = {
   'landing.problem.imageAlt':
     'Une assemblée en adoration, mains levées',
 
-  'landing.features.title':
-    'Tout ce qu\'il faut pour conduire un ministère avec excellence',
+  'landing.features.eyebrow': 'TOUT CE DONT VOUS AVEZ BESOIN',
+  'landing.features.title': 'Renforcez votre leadership pastoral.',
   'landing.features.subtitle':
-    'Six modules, une seule plateforme. Chaque responsable au même diapason.',
+    'Neuf modules, une seule plateforme. Chacun sait quoi faire et pour quand.',
   'landing.features.comingSoon': 'Bientôt disponible',
-  'landing.feature.pastor.title': 'Parcours du Pasteur du Mois',
-  'landing.feature.pastor.desc':
-    'Assignez le leadership mensuel. Suivez les listes du dimanche, les plans hebdomadaires et les rapports de fin de mois. Chaque pasteur sait quoi faire et pour quand.',
+  // Ligne 1 — Ministère pastoral
+  'landing.feature.sunday.title': 'Liste du dimanche',
+  'landing.feature.sunday.desc':
+    'Chaque dimanche, dix-sept points de contrôle. De la prière d\'avant-culte au débriefing d\'après-culte. Rien n\'est oublié, rien n\'est laissé à la mémoire.',
+  'landing.feature.weekly.title': 'Plan hebdomadaire',
+  'landing.feature.weekly.desc':
+    'Votre semaine pastorale planifiée. Suivez l\'exécution jour après jour, cochez les tâches accomplies, sachez ce qui vient ensuite.',
+  'landing.feature.monthly.title': 'Rapports mensuels',
+  'landing.feature.monthly.desc':
+    'Bilan de fin de mois intégré. Réussites, manques, objectifs pour le mois suivant — consignés, signés, prêts à être examinés.',
+  // Ligne 2 — Équipe et leadership
+  'landing.feature.potm.title': 'Pasteur du Mois',
+  'landing.feature.potm.desc':
+    'Faites tourner le leadership mensuel au sein de votre équipe pastorale. Chaque pasteur a son tour — et la plateforme suit sa gestion.',
   'landing.feature.eval.title': 'Évaluation par les pairs',
   'landing.feature.eval.desc':
-    'Les pasteurs administrateurs évaluent le Pasteur du Mois. Cadré, honnête, confidentiel jusqu\'à signature — aucune rivalité de personnalités, seulement la croissance.',
+    'Retours structurés entre pasteurs administrateurs. Les notes restent confidentielles jusqu\'à signature. Des conversations de croissance, pas des concours de personnalités.',
+  'landing.feature.team.title': 'Gestion de l\'équipe',
+  'landing.feature.team.desc':
+    'Invitez pasteurs, chefs de département et bénévoles. Attribuez les rôles, confiez les responsabilités, déléguez en confiance.',
+  // Ligne 3 — Opérations et pilotage
   'landing.feature.dept.title': 'Coordination des départements',
   'landing.feature.dept.desc':
-    'Placeurs, accueil, média, entretien — chaque département a son chef, son planning, son rapport hebdomadaire. Rien ne passe à travers les mailles.',
+    'Chaque département a son chef, son planning et son rapport hebdomadaire. Placeurs, accueil, média, entretien — tout est coordonné.',
+  'landing.feature.insights.title': 'Analyses de performance',
+  'landing.feature.insights.desc':
+    'Les analyses du tableau de bord donnent l\'état du ministère d\'un coup d\'œil. Voyez ce qui est fait, ce qui manque et où concentrer l\'effort.',
   'landing.feature.rotation.title': 'Rotation des bénévoles',
   'landing.feature.rotation.desc':
-    'Rotation dimanche par dimanche avec les groupes A, B, C, D. Chaque bénévole connaît le dimanche exact où il sert — plus de course-poursuite, plus de postes vides.',
-  'landing.feature.kids.title': 'Ministère des enfants, en toute sécurité',
-  'landing.feature.kids.desc':
-    'Un vivier de bénévoles pour les enfants, avec vérifications, formation et coordination dédiée — parce que les enfants méritent le plus haut standard.',
-  'landing.feature.whatsapp.title': 'WhatsApp natif',
-  'landing.feature.whatsapp.desc':
-    'Notifications, confirmations, rappels — tout par WhatsApp, là où votre équipe communique déjà. 1 000 messages par mois inclus.',
+    'Rotation dimanche par dimanche avec les groupes A, B, C, D. Chaque bénévole sait précisément quand il sert. Plus de postes vides.',
 
   'landing.how.title': 'De l\'inscription au dimanche en trois étapes',
   'landing.how.step1.title': 'Inscrivez-vous en 5 minutes',
@@ -985,6 +1015,8 @@ const fr: Dictionary = {
   'landing.footer.copyright': '© 2026 DigiSmart Africa',
   'landing.footer.bottomBar':
     'Conçu avec soin depuis le Cameroun 🇨🇲 pour les églises du monde entier.',
+  'landing.footer.minimal':
+    '© 2026 DigiSmart Africa · Là où le ministère avance au rythme juste · Conçu depuis le Cameroun pour les églises du monde entier',
 
   // Auth
   'auth.login.title': 'Bon Retour',
