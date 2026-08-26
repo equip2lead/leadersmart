@@ -84,50 +84,58 @@ export default async function LandingPage() {
 
 function Hero({ lang }: { lang: AppLanguage }) {
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-[#eef2ff] via-[#f5f3ff] to-[#faf5ff]">
-      {/* Warm blob accent — bottom-left flame tint peeks out to break
-          the cool lavender monotony. */}
+    <section className="relative overflow-hidden bg-brand-700 text-white">
+      {/* Radial-dot grain overlay at ~4% opacity — Vercel/Stripe style
+          analog warmth on the deep navy field. Same recipe as the
+          Final CTA so the "navy bookend" reads as intentional. */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -bottom-24 -right-24 h-96 w-96 rounded-full bg-flame-200/25 blur-3xl"
+        className="pointer-events-none absolute inset-0 opacity-[0.05] [background-image:radial-gradient(circle_at_1px_1px,white_1px,transparent_0)] [background-size:24px_24px]"
+      />
+      {/* Flame blob top-right for warm counter-note against the navy. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -top-32 -right-32 h-[28rem] w-[28rem] rounded-full bg-flame-500/15 blur-3xl"
       />
       <div className="relative mx-auto grid min-h-[85vh] max-w-7xl grid-cols-1 items-center gap-12 px-4 py-16 sm:px-6 lg:grid-cols-5 lg:gap-16 lg:py-24">
         <div className="lg:col-span-3">
-          <span className="inline-flex max-w-full items-center rounded-full border border-flame-200 bg-flame-100 px-3 py-1 text-xs font-semibold text-flame-700">
+          <span className="inline-flex max-w-full items-center rounded-full border border-flame-400/30 bg-flame-500/20 px-3 py-1 text-xs font-semibold text-flame-200">
             <span className="whitespace-normal">
               {t('landing.hero.pill', lang)}
             </span>
           </span>
-          <h1 className="mt-6 font-fraunces text-5xl font-medium leading-[1.05] tracking-tight text-ink sm:text-6xl lg:text-7xl xl:text-[6rem]">
+          <h1 className="mt-6 font-fraunces text-5xl font-medium leading-[1.05] tracking-tight text-white sm:text-6xl lg:text-7xl xl:text-[6rem]">
             {t('landing.hero.title', lang)}
           </h1>
-          <p className="mt-6 max-w-xl text-base leading-relaxed text-gray-600 sm:text-xl">
+          <p className="mt-6 max-w-xl text-base leading-relaxed text-gray-300 sm:text-xl">
             {t('landing.hero.subtitle', lang)}
           </p>
           <div className="mt-10 flex flex-col gap-3 sm:flex-row">
             <Link
               href="/signup"
-              className="inline-flex items-center justify-center gap-2 rounded-xl bg-flame-600 px-6 py-4 text-base font-semibold text-white shadow-lg shadow-flame-600/20 transition hover:bg-flame-700"
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-flame-600 px-6 py-4 text-base font-semibold text-white shadow-lg shadow-flame-600/30 transition hover:bg-flame-700"
             >
               {t('landing.hero.ctaPrimary', lang)}
               <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </Link>
             <Link
               href="#features"
-              className="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-300 bg-white px-6 py-4 text-base font-semibold text-gray-700 transition hover:border-gray-400 hover:bg-gray-50"
+              className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/20 bg-white/10 px-6 py-4 text-base font-semibold text-white backdrop-blur-sm transition hover:bg-white/20"
             >
               {t('landing.hero.ctaSecondary', lang)}
             </Link>
           </div>
-          <p className="mt-4 text-sm text-gray-500">
+          <p className="mt-4 text-sm text-gray-400">
             {t('landing.hero.ctaFine', lang)}
           </p>
         </div>
 
-        {/* TODO: replace inner white block with a real admin dashboard
+        {/* Mint gradient container glows against the navy field. Larger
+            navy-tinted shadow adds lift.
+            TODO: replace inner white block with a real admin dashboard
             screenshot (light-mode variant since container is pastel). */}
         <div className="lg:col-span-2">
-          <div className="relative rounded-[32px] bg-gradient-to-br from-[#d1fae5] to-[#a7f3d0] p-6 sm:p-8">
+          <div className="relative rounded-[32px] bg-gradient-to-br from-[#d1fae5] to-[#a7f3d0] p-6 shadow-2xl shadow-brand-900/50 sm:p-8">
             <div
               className="aspect-[4/3] rotate-1 overflow-hidden rounded-2xl bg-white shadow-2xl shadow-emerald-900/10"
               role="img"
