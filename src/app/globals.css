@@ -11,6 +11,10 @@
   html {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: smooth;
+    /* Compensate for the sticky header + sticky category tabs so
+       anchor targets don't slide behind them. */
+    scroll-padding-top: 128px;
   }
 
   body {

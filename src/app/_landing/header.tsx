@@ -6,10 +6,11 @@ import { Flame, Menu, X } from 'lucide-react';
 import { t } from '@/lib/i18n';
 import type { AppLanguage } from '@/lib/types';
 import { LangToggle } from './lang-toggle';
+import { ProductsMegaMenu, ProductsMegaMenuMobile } from './mega-menu';
 
-// Sticky marketing header. Adds a subtle border once the page has
-// scrolled past a small threshold. Mobile menu opens as a full-width
-// dropdown; desktop lays out inline.
+// Sticky marketing header. Products link opens a mega-menu on desktop;
+// remaining links (Pricing / Why / Contact) are plain anchors. Mobile
+// hamburger reveals a flat menu with the mega-menu items inline.
 export function LandingHeader({ lang }: { lang: AppLanguage }) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -21,8 +22,7 @@ export function LandingHeader({ lang }: { lang: AppLanguage }) {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  const navLinks: Array<{ href: string; labelKey: string }> = [
-    { href: '#features', labelKey: 'landing.nav.features' },
+  const secondaryLinks: Array<{ href: string; labelKey: string }> = [
     { href: '#pricing', labelKey: 'landing.nav.pricing' },
     { href: '#why', labelKey: 'landing.nav.why' },
     { href: '#coming-soon', labelKey: 'landing.nav.contact' },
@@ -37,7 +37,7 @@ export function LandingHeader({ lang }: { lang: AppLanguage }) {
           : 'border-b border-transparent py-4')
       }
     >
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-4 sm:px-6">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6">
         <Link href="/" className="flex items-center gap-2">
           <Flame className="h-5 w-5 text-flame-600" aria-hidden="true" />
           <span className="font-fraunces text-2xl font-semibold tracking-tight text-brand-700">
@@ -46,7 +46,8 @@ export function LandingHeader({ lang }: { lang: AppLanguage }) {
         </Link>
 
         <nav className="hidden items-center gap-8 md:flex">
-          {navLinks.map((l) => (
+          <ProductsMegaMenu lang={lang} />
+          {secondaryLinks.map((l) => (
             <Link
               key={l.href}
               href={l.href}
@@ -87,18 +88,24 @@ export function LandingHeader({ lang }: { lang: AppLanguage }) {
 
       {menuOpen && (
         <div className="border-t border-gray-100 bg-white md:hidden">
-          <div className="mx-auto flex max-w-6xl flex-col gap-1 px-4 py-3">
-            {navLinks.map((l) => (
-              <Link
-                key={l.href}
-                href={l.href}
-                onClick={() => setMenuOpen(false)}
-                className="rounded-lg px-3 py-2 text-sm font-medium text-body hover:bg-gray-50"
-              >
-                {t(l.labelKey, lang)}
-              </Link>
-            ))}
-            <div className="mt-2 flex items-center justify-between border-t border-gray-100 pt-3">
+          <div className="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-4">
+            <ProductsMegaMenuMobile lang={lang} />
+            <div className="border-t border-gray-100 pt-3">
+              <ul className="space-y-0.5">
+                {secondaryLinks.map((l) => (
+                  <li key={l.href}>
+                    <Link
+                      href={l.href}
+                      onClick={() => setMenuOpen(false)}
+                      className="block rounded-lg px-3 py-1.5 text-sm font-medium text-body hover:bg-gray-50"
+                    >
+                      {t(l.labelKey, lang)}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="flex items-center justify-between border-t border-gray-100 pt-3">
               <LangToggle current={lang} />
               <div className="flex items-center gap-2">
                 <Link
