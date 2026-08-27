@@ -1,13 +1,25 @@
 import type { Metadata, Viewport } from 'next';
-import { Inter } from 'next/font/google';
+import { Inter, Manrope } from 'next/font/google';
 import './globals.css';
 
-// Inter is the sole typeface across the marketing landing and the
-// authenticated app. Loaded as a variable font so every weight 100–900
-// is available without additional payload.
+// Inter carries body copy everywhere, and headings everywhere except
+// the marketing landing. Loaded as a variable font so every weight
+// 100–900 is available without additional payload.
 const inter = Inter({
   subsets: ['latin'],
   variable: '--font-sans',
+  display: 'swap',
+  weight: 'variable',
+});
+
+// Manrope is the landing page's display face — the wordmark and every
+// headline. Exposed only through the `.font-manrope` utility so the
+// authenticated app keeps Inter headings untouched. Its variable axis
+// tops out at 800, so `font-black` renders as ExtraBold rather than a
+// synthesised 900; that is the intended weight for the wordmark.
+const manrope = Manrope({
+  subsets: ['latin'],
+  variable: '--font-manrope',
   display: 'swap',
   weight: 'variable',
 });
@@ -40,7 +52,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: '#1e3a8a',
+  themeColor: '#1A1E3F',
   width: 'device-width',
   initialScale: 1,
 };
@@ -51,7 +63,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang="en" className={`${inter.variable} ${manrope.variable}`}>
       <body>{children}</body>
     </html>
   );

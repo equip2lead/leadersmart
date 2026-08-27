@@ -26,6 +26,15 @@
   }
 }
 
+@layer utilities {
+  /* Landing-page display face. Deliberately a utility rather than a
+     `fontFamily` entry in tailwind.config so the authenticated app's
+     `font-display` headings stay on Inter. */
+  .font-manrope {
+    font-family: var(--font-manrope), 'Inter', system-ui, -apple-system, sans-serif;
+  }
+}
+
 @layer components {
   .btn-primary {
     @apply inline-flex items-center justify-center gap-2 rounded-lg bg-indigo-royal-700 px-5 py-3 text-sm font-semibold text-white shadow-sm transition-all hover:bg-indigo-royal-800 hover:shadow-card focus:outline-none focus:ring-2 focus:ring-indigo-royal-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
