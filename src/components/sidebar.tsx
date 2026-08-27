@@ -78,28 +78,62 @@ const ADMIN_SECTIONS: NavSection[] = [
   },
 ];
 
-// Legacy dedicated pastor sidebar — kept for the rare pre-migration
-// account that still carries role='pastor' without being invited via
-// the current model. Any account with the current 'admin_pastor' role
-// gets the full ADMIN_SECTIONS view instead.
-const PASTOR_NAV: NavItem[] = [
-  { href: '/pastor', labelKey: 'nav.dashboard', icon: LayoutDashboard },
-  { href: '/pastor/sunday-checklist', labelKey: 'nav.sunday', icon: ClipboardCheck },
-  { href: '/pastor/weekly-plan', labelKey: 'nav.plan', icon: CalendarCheck },
-  { href: '/pastor/monthly-report', labelKey: 'nav.report', icon: FileText },
-  { href: '/pastor/evaluations', labelKey: 'nav.evaluations', icon: Star },
-  { href: '/settings', labelKey: 'nav.settings', icon: Settings },
+// Pastor-of-the-Month sidebar. Historically a flat list; regrouped in
+// v2 Phase 2 to match ADMIN_SECTIONS' visual structure (uppercase small
+// label, then indented links). Structure:
+//   My Workflow: Sunday Checklist, Weekly Plan, Monthly Report
+//   My Growth:   Evaluations
+//   Settings:    My Account
+const PASTOR_SECTIONS: NavSection[] = [
+  {
+    titleKey: 'nav.section.myWorkflow',
+    items: [
+      { href: '/pastor/sunday-checklist', labelKey: 'nav.sunday', icon: ClipboardCheck },
+      { href: '/pastor/weekly-plan', labelKey: 'nav.plan', icon: CalendarCheck },
+      { href: '/pastor/monthly-report', labelKey: 'nav.report', icon: FileText },
+    ],
+  },
+  {
+    titleKey: 'nav.section.myGrowth',
+    items: [
+      { href: '/pastor/evaluations', labelKey: 'nav.evaluations', icon: Star },
+    ],
+  },
+  {
+    titleKey: 'nav.section.settings',
+    items: [
+      { href: '/settings', labelKey: 'nav.myAccount', icon: Settings },
+    ],
+  },
 ];
 
-// Department Head sidebar — scoped to their own department; unchanged
-// per the course-correction spec.
-const LEADER_NAV: NavItem[] = [
-  { href: '/leader', labelKey: 'nav.dashboard', icon: LayoutDashboard },
-  { href: '/leader/team', labelKey: 'nav.team', icon: Users },
-  { href: '/leader/schedules', labelKey: 'nav.schedules', icon: CalendarDays },
-  { href: '/leader/attendance', labelKey: 'nav.attendance', icon: ClipboardCheck },
-  { href: '/leader/report', labelKey: 'nav.weeklyReport', icon: FileText },
-  { href: '/settings', labelKey: 'nav.settings', icon: Settings },
+// Department Head sidebar — same regrouping treatment.
+// Structure:
+//   My Department: Dashboard, Team, Schedule, Attendance
+//   Reports:       Weekly Report
+//   Settings:      My Account
+const LEADER_SECTIONS: NavSection[] = [
+  {
+    titleKey: 'nav.section.myDepartment',
+    items: [
+      { href: '/leader', labelKey: 'nav.dashboard', icon: LayoutDashboard },
+      { href: '/leader/team', labelKey: 'nav.team', icon: Users },
+      { href: '/leader/schedules', labelKey: 'nav.schedules', icon: CalendarDays },
+      { href: '/leader/attendance', labelKey: 'nav.attendance', icon: ClipboardCheck },
+    ],
+  },
+  {
+    titleKey: 'nav.section.reports',
+    items: [
+      { href: '/leader/report', labelKey: 'nav.weeklyReport', icon: FileText },
+    ],
+  },
+  {
+    titleKey: 'nav.section.settings',
+    items: [
+      { href: '/settings', labelKey: 'nav.myAccount', icon: Settings },
+    ],
+  },
 ];
 
 // Owner-only tools rendered as a separate labelled section under the
@@ -214,9 +248,23 @@ export function Sidebar({
             )}
           </>
         ) : showLeaderSidebar ? (
-          <NavList items={LEADER_NAV} pathname={pathname} lang={lang} />
+          <>
+            {LEADER_SECTIONS.map((section) => (
+              <div key={section.titleKey}>
+                <SectionHeader title={t(section.titleKey, lang)} />
+                <NavList items={section.items} pathname={pathname} lang={lang} />
+              </div>
+            ))}
+          </>
         ) : (
-          <NavList items={PASTOR_NAV} pathname={pathname} lang={lang} />
+          <>
+            {PASTOR_SECTIONS.map((section) => (
+              <div key={section.titleKey}>
+                <SectionHeader title={t(section.titleKey, lang)} />
+                <NavList items={section.items} pathname={pathname} lang={lang} />
+              </div>
+            ))}
+          </>
         )}
       </nav>
 

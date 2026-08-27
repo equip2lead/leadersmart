@@ -524,6 +524,12 @@ const en: Dictionary = {
   'nav.section.department': 'Department Workflow',
   'nav.section.kids': 'Kids Ministry',
   'nav.section.settings': 'Settings',
+  // Grouped sidebar sections for Pastor + Leader (Phase 2 v2 pivot).
+  'nav.section.myWorkflow': 'My Workflow',
+  'nav.section.myGrowth': 'My Growth',
+  'nav.section.myDepartment': 'My Department',
+  'nav.section.reports': 'Reports',
+  'nav.myAccount': 'My Account',
 
   // Attribution — "submitted by X" / "on behalf of Y"
   'attribution.col.submittedBy': 'Submitted by',
@@ -1571,6 +1577,12 @@ const fr: Dictionary = {
   'nav.section.department': 'Espace des Départements',
   'nav.section.kids': 'Ministère des Enfants',
   'nav.section.settings': 'Paramètres',
+  // Regroupement Phase 2 pour Pasteur + Chef de Département.
+  'nav.section.myWorkflow': 'Mon Parcours',
+  'nav.section.myGrowth': 'Ma Croissance',
+  'nav.section.myDepartment': 'Mon Département',
+  'nav.section.reports': 'Rapports',
+  'nav.myAccount': 'Mon Compte',
 
   // Attribution
   'attribution.col.submittedBy': 'Soumis par',
