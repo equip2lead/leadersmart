@@ -89,6 +89,12 @@ export async function createDepartment(formData: FormData): Promise<ActionResult
     },
   });
 
+  // Clears the "you skipped this in onboarding" nudge on /admin.
+  await supabase
+    .from('user_onboarding_progress')
+    .update({ departments_skipped_at: null, updated_at: new Date().toISOString() })
+    .eq('user_id', user.id);
+
   revalidatePath('/admin/departments');
   revalidatePath('/admin');
   return { ok: true };

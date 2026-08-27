@@ -81,6 +81,12 @@ export async function createAssignment(formData: FormData): Promise<ActionResult
     afterValue: { pastor_user_id, assignment_month, status },
   });
 
+  // Clears the "you skipped Pastor of the Month" nudge on /admin.
+  await supabase
+    .from('user_onboarding_progress')
+    .update({ pom_skipped_at: null, updated_at: new Date().toISOString() })
+    .eq('user_id', me.id);
+
   revalidatePath('/admin/assignments');
   revalidatePath('/admin');
   return { ok: true };

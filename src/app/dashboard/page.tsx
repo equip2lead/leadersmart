@@ -44,11 +44,16 @@ export default async function DashboardRouter() {
 
   const { data: existing } = await supabase
     .from('users')
-    .select('role')
+    .select('role, onboarding_completed_at')
     .eq('id', user.id)
     .maybeSingle();
 
   if (existing?.role) {
+    // Owners are gated on the setup wizard the first time they hit the
+    // dashboard router. Invited users (any other role) skip the wizard.
+    if (existing.role === 'owner' && !existing.onboarding_completed_at) {
+      redirect('/onboarding');
+    }
     redirect(homeForRole(existing.role as UserRole));
   }
 
@@ -96,5 +101,8 @@ export default async function DashboardRouter() {
     .select('role')
     .eq('id', user.id)
     .maybeSingle();
-  redirect(homeForRole((fresh?.role as UserRole) ?? 'owner'));
+  const freshRole = (fresh?.role as UserRole) ?? 'owner';
+  // Brand-new owners always land in the wizard first.
+  if (freshRole === 'owner') redirect('/onboarding');
+  redirect(homeForRole(freshRole));
 }

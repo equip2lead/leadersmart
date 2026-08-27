@@ -114,7 +114,15 @@ export async function inviteUser(formData: FormData): Promise<InviteResult> {
     afterValue: { email, full_name: fullName, role },
   });
 
+  // Owner inviting after skipping the wizard clears the dashboard nudge.
+  const serverClient = await createClient();
+  await serverClient
+    .from('user_onboarding_progress')
+    .update({ admins_skipped_at: null, updated_at: new Date().toISOString() })
+    .eq('user_id', me.id);
+
   revalidatePath('/admin/users');
+  revalidatePath('/admin');
   return { ok: true, email };
 }
 

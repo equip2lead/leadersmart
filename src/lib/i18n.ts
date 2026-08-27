@@ -353,6 +353,102 @@ const en: Dictionary = {
   'auth.checkEmail': 'Check your email — we sent a confirmation link to finish setup.',
   'auth.error.generic': 'Something went wrong. Please try again.',
 
+  // ─────────────────────────────────────────────────────────────
+  // Onboarding wizard (owner-only, 4 steps)
+  // ─────────────────────────────────────────────────────────────
+  'onboarding.brandTag': 'Church setup',
+  'onboarding.progress.title': 'Setup progress',
+  'onboarding.saveContinue': 'Save & Continue',
+  'onboarding.skipForNow': 'Skip for now',
+  'onboarding.finish': 'Finish setup',
+  'onboarding.errNotOwner':
+    'This setup wizard is only available to the church owner.',
+  'onboarding.step1.navTitle': 'Church profile',
+  'onboarding.step1.navHint': 'Name, country, language, logo',
+  'onboarding.step2.navTitle': 'Admin pastors',
+  'onboarding.step2.navHint': 'Invite your team',
+  'onboarding.step3.navTitle': 'Departments',
+  'onboarding.step3.navHint': 'Ushering, Media, Welcome…',
+  'onboarding.step4.navTitle': 'Pastor of the Month',
+  'onboarding.step4.navHint': "Who's leading this month",
+
+  // Step 1
+  'onboarding.step1.title':
+    "Welcome to LeaderSmart! Let's get your ministry set up.",
+  'onboarding.step1.subtitle': 'This takes about 3 minutes.',
+  'onboarding.step1.nameLabel': 'Church name',
+  'onboarding.step1.countryLabel': 'Country',
+  'onboarding.step1.countryPlaceholder': 'Select a country',
+  'onboarding.step1.languageLabel': 'Primary language',
+  'onboarding.step1.logoLabel': 'Church logo (optional)',
+  'onboarding.step1.logoHint': 'PNG, JPG or SVG · up to 2 MB',
+  'onboarding.step1.logoUploading': 'Uploading…',
+  'onboarding.step1.logoUploaded': 'Logo uploaded',
+  'onboarding.step1.logoTooBig': 'Logo file is over 2 MB. Please choose a smaller image.',
+  'onboarding.step1.logoInvalidType': 'Logo must be a PNG, JPG or SVG file.',
+  'onboarding.step1.errNameRequired': 'Please enter your church name.',
+  'onboarding.step1.errNameTooLong': 'Church name must be 100 characters or fewer.',
+  'onboarding.step1.errCountry': 'Please pick a country from the list.',
+  'onboarding.step1.errLanguage': 'Please choose English or French.',
+
+  // Step 2
+  'onboarding.step2.title': 'Add your admin team',
+  'onboarding.step2.subtitle':
+    'Admin Pastors have full access except billing and adding other admins. You can add 1–5 now, or later. This step is optional.',
+  'onboarding.step2.info':
+    'Only you (the Owner) can add Admin Pastors after signup. This is a deliberate design decision to protect your church account.',
+  'onboarding.step2.serviceKeyMissing':
+    'Invites are temporarily unavailable — our team is fixing this. Skip for now and invite your team from Settings when you\'re in.',
+  'onboarding.step2.namePlaceholder': 'Full name',
+  'onboarding.step2.emailPlaceholder': 'name@church.org',
+  'onboarding.step2.addRow': 'Add another',
+  'onboarding.step2.partialSuccess':
+    '{ok} invitation(s) sent, {fail} could not be sent. You can retry the failed ones from Team Users later.',
+
+  // Step 3
+  'onboarding.step3.title': 'What departments does your ministry have?',
+  'onboarding.step3.subtitle':
+    "Departments are teams that serve on Sunday: Ushering, Media, Welcome, etc. Pick from the suggestions or add your own. This step is optional.",
+  'onboarding.step3.suggestionsLabel': 'Common departments',
+  'onboarding.step3.customLabel': 'Add a custom department',
+  'onboarding.step3.customPlaceholder': 'e.g. Prayer Warriors',
+  'onboarding.step3.count': "{n} department(s) will be created",
+  'onboarding.step3.suggest.ushering': 'Ushering',
+  'onboarding.step3.suggest.welcome': 'Welcome Team',
+  'onboarding.step3.suggest.children': "Children's Ministry",
+  'onboarding.step3.suggest.prayer': 'Prayer Team',
+  'onboarding.step3.suggest.media': 'Media & Sound',
+  'onboarding.step3.suggest.cleaning': 'Cleaning & Setup',
+  'onboarding.step3.suggest.worship': 'Worship Team',
+  'onboarding.step3.suggest.security': 'Security',
+
+  // Step 4
+  'onboarding.step4.title': "Who's leading this month?",
+  'onboarding.step4.subtitle':
+    'Pastor of the Month is a rotating role — one admin pastor takes lead for a month. They complete Sunday checklists, weekly plans, and monthly reports. You can assign yourself or an admin pastor you invited. This step is optional.',
+  'onboarding.step4.onlySelfNote':
+    "Your admin pastors haven't accepted their invites yet. You can assign yourself for now, or come back later.",
+  'onboarding.step4.pastorLabel': 'Assign to',
+  'onboarding.step4.monthLabel': 'Month',
+  'onboarding.step4.yourself': 'Yourself',
+  'onboarding.step4.errMonth': 'Please pick a valid month.',
+  'onboarding.step4.errPastor': 'Please choose a pastor to assign.',
+
+  // Skipped-onboarding prompts on /admin dashboard
+  'admin.onboardingSkipped.title': 'Finish setting up',
+  'admin.onboardingSkipped.admins.title': 'Add your admin team',
+  'admin.onboardingSkipped.admins.body':
+    'Admin Pastors share the workload with you. Invite peer pastors to help run your ministry.',
+  'admin.onboardingSkipped.admins.cta': 'Invite Admin Pastor',
+  'admin.onboardingSkipped.departments.title': 'Create your first department',
+  'admin.onboardingSkipped.departments.body':
+    'Departments are teams that serve on Sunday. Add Ushering, Welcome, Media, or any team your church has.',
+  'admin.onboardingSkipped.departments.cta': 'Create Department',
+  'admin.onboardingSkipped.pom.title': "Assign this month's Pastor of the Month",
+  'admin.onboardingSkipped.pom.body':
+    'Pastor of the Month is a rotating leadership role. Track Sunday checklists and monthly performance.',
+  'admin.onboardingSkipped.pom.cta': 'Assign Pastor',
+
   // Accept invite
   'accept.verifying': 'Verifying your invitation…',
   'accept.welcome.title': 'Welcome to LeaderSmart',
@@ -1302,6 +1398,103 @@ const fr: Dictionary = {
   'auth.signup.loginLink': 'Se connecter',
   'auth.checkEmail': 'Vérifiez votre e-mail — nous vous avons envoyé un lien de confirmation pour finaliser votre compte.',
   'auth.error.generic': 'Une erreur est survenue. Veuillez réessayer.',
+
+  // ─────────────────────────────────────────────────────────────
+  // Assistant d\'installation (Pasteur Principal uniquement, 4 étapes)
+  // ─────────────────────────────────────────────────────────────
+  'onboarding.brandTag': 'Mise en place',
+  'onboarding.progress.title': 'Progression',
+  'onboarding.saveContinue': 'Enregistrer et continuer',
+  'onboarding.skipForNow': 'Passer pour l\'instant',
+  'onboarding.finish': 'Terminer la mise en place',
+  'onboarding.errNotOwner':
+    "Cet assistant est réservé au Pasteur Principal de l\'église.",
+  'onboarding.step1.navTitle': 'Profil de l\'église',
+  'onboarding.step1.navHint': 'Nom, pays, langue, logo',
+  'onboarding.step2.navTitle': 'Pasteurs administrateurs',
+  'onboarding.step2.navHint': 'Invitez votre équipe',
+  'onboarding.step3.navTitle': 'Départements',
+  'onboarding.step3.navHint': 'Placeurs, média, accueil…',
+  'onboarding.step4.navTitle': 'Pasteur du Mois',
+  'onboarding.step4.navHint': 'Qui dirige ce mois-ci',
+
+  'onboarding.step1.title':
+    'Bienvenue sur LeaderSmart ! Configurons votre ministère.',
+  'onboarding.step1.subtitle': 'Cela prend environ 3 minutes.',
+  'onboarding.step1.nameLabel': 'Nom de l\'église',
+  'onboarding.step1.countryLabel': 'Pays',
+  'onboarding.step1.countryPlaceholder': 'Sélectionnez un pays',
+  'onboarding.step1.languageLabel': 'Langue principale',
+  'onboarding.step1.logoLabel': 'Logo de l\'église (optionnel)',
+  'onboarding.step1.logoHint': 'PNG, JPG ou SVG · jusqu\'à 2 Mo',
+  'onboarding.step1.logoUploading': 'Téléversement…',
+  'onboarding.step1.logoUploaded': 'Logo téléversé',
+  'onboarding.step1.logoTooBig':
+    'Le fichier dépasse 2 Mo. Choisissez une image plus légère.',
+  'onboarding.step1.logoInvalidType':
+    'Le logo doit être un fichier PNG, JPG ou SVG.',
+  'onboarding.step1.errNameRequired': 'Veuillez saisir le nom de votre église.',
+  'onboarding.step1.errNameTooLong':
+    'Le nom de l\'église doit contenir au plus 100 caractères.',
+  'onboarding.step1.errCountry': 'Veuillez choisir un pays dans la liste.',
+  'onboarding.step1.errLanguage': 'Veuillez choisir Français ou Anglais.',
+
+  'onboarding.step2.title': 'Ajoutez votre équipe pastorale',
+  'onboarding.step2.subtitle':
+    "Les Pasteurs Administrateurs ont accès à tout sauf la facturation et l\'ajout d\'autres administrateurs. Ajoutez-en 1 à 5 maintenant, ou plus tard. Cette étape est optionnelle.",
+  'onboarding.step2.info':
+    "Vous seul(e) (Pasteur Principal) pouvez ajouter des Pasteurs Administrateurs après l\'inscription. C\'est une décision volontaire pour protéger le compte de votre église.",
+  'onboarding.step2.serviceKeyMissing':
+    "Les invitations sont temporairement indisponibles — notre équipe corrige cela. Passez pour l\'instant et invitez votre équipe depuis les Paramètres une fois connecté(e).",
+  'onboarding.step2.namePlaceholder': 'Nom complet',
+  'onboarding.step2.emailPlaceholder': 'nom@eglise.org',
+  'onboarding.step2.addRow': 'Ajouter un autre',
+  'onboarding.step2.partialSuccess':
+    "{ok} invitation(s) envoyée(s), {fail} n\'ont pas pu être envoyées. Vous pourrez réessayer plus tard depuis Utilisateurs.",
+
+  'onboarding.step3.title':
+    'Quels sont les départements de votre ministère ?',
+  'onboarding.step3.subtitle':
+    "Les départements sont les équipes qui servent le dimanche : Placeurs, Média, Accueil, etc. Choisissez parmi les suggestions ou ajoutez les vôtres. Cette étape est optionnelle.",
+  'onboarding.step3.suggestionsLabel': 'Départements courants',
+  'onboarding.step3.customLabel': 'Ajouter un département personnalisé',
+  'onboarding.step3.customPlaceholder': 'ex : Guerriers de la prière',
+  'onboarding.step3.count': "{n} département(s) seront créés",
+  'onboarding.step3.suggest.ushering': 'Placeurs',
+  'onboarding.step3.suggest.welcome': 'Équipe d\'accueil',
+  'onboarding.step3.suggest.children': 'Ministère des enfants',
+  'onboarding.step3.suggest.prayer': 'Équipe de prière',
+  'onboarding.step3.suggest.media': 'Média et son',
+  'onboarding.step3.suggest.cleaning': 'Entretien et installation',
+  'onboarding.step3.suggest.worship': 'Équipe de louange',
+  'onboarding.step3.suggest.security': 'Sécurité',
+
+  'onboarding.step4.title': 'Qui dirige ce mois-ci ?',
+  'onboarding.step4.subtitle':
+    "Le Pasteur du Mois est un rôle tournant — un pasteur administrateur prend le lead pendant un mois. Il complète les listes du dimanche, les plans hebdomadaires et les rapports mensuels. Vous pouvez vous assigner vous-même ou un pasteur administrateur que vous avez invité. Cette étape est optionnelle.",
+  'onboarding.step4.onlySelfNote':
+    "Vos pasteurs administrateurs n\'ont pas encore accepté leurs invitations. Vous pouvez vous assigner pour l\'instant, ou revenir plus tard.",
+  'onboarding.step4.pastorLabel': 'Assigner à',
+  'onboarding.step4.monthLabel': 'Mois',
+  'onboarding.step4.yourself': 'Vous-même',
+  'onboarding.step4.errMonth': 'Veuillez choisir un mois valide.',
+  'onboarding.step4.errPastor': 'Veuillez choisir un pasteur à assigner.',
+
+  'admin.onboardingSkipped.title': 'Finaliser la mise en place',
+  'admin.onboardingSkipped.admins.title': 'Ajoutez votre équipe pastorale',
+  'admin.onboardingSkipped.admins.body':
+    "Les Pasteurs Administrateurs partagent la charge avec vous. Invitez des pasteurs pairs pour aider à conduire le ministère.",
+  'admin.onboardingSkipped.admins.cta': 'Inviter un Pasteur Administrateur',
+  'admin.onboardingSkipped.departments.title':
+    'Créez votre premier département',
+  'admin.onboardingSkipped.departments.body':
+    "Les départements sont des équipes qui servent le dimanche. Ajoutez Placeurs, Accueil, Média ou toute équipe de votre église.",
+  'admin.onboardingSkipped.departments.cta': 'Créer un département',
+  'admin.onboardingSkipped.pom.title':
+    'Assignez le Pasteur du Mois de ce mois-ci',
+  'admin.onboardingSkipped.pom.body':
+    "Le Pasteur du Mois est un rôle tournant. Suivez les listes du dimanche et la performance mensuelle.",
+  'admin.onboardingSkipped.pom.cta': 'Assigner le pasteur',
 
   // Acceptation d\'invitation
   'accept.verifying': 'Vérification de votre invitation…',

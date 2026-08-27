@@ -4,10 +4,14 @@ import {
   Building2,
   UserCog,
   ClipboardCheck,
+  Users,
+  LayoutGrid,
+  Award,
+  ArrowRight,
   type LucideIcon,
 } from 'lucide-react';
 import { requireRole } from '@/lib/auth';
-import { ADMIN_ROLES } from '@/lib/roles';
+import { ADMIN_ROLES, isOwner } from '@/lib/roles';
 import { createClient } from '@/lib/supabase/server';
 import { t } from '@/lib/i18n';
 import { PageHeading } from '@/components/page-heading';
@@ -88,6 +92,23 @@ export default async function AdminDashboard() {
   const thisWeek = currentWeekStart();
   const lastWeek = addDays(thisWeek, -7);
 
+  // Onboarding-skip prompts — only surface for the church owner. If
+  // they skipped a wizard step, we nudge them here until the
+  // corresponding _skipped_at is cleared (which happens automatically
+  // when they eventually invite / create / assign via the CTAs below).
+  const showSkipPrompts = isOwner(user.role);
+  const skipRes = showSkipPrompts
+    ? await supabase
+        .from('user_onboarding_progress')
+        .select('admins_skipped_at, departments_skipped_at, pom_skipped_at')
+        .eq('user_id', user.id)
+        .maybeSingle()
+    : { data: null };
+  const skipped = skipRes.data;
+  const anySkipped =
+    !!skipped &&
+    !!(skipped.admins_skipped_at || skipped.departments_skipped_at || skipped.pom_skipped_at);
+
   const [activeRes, deptCountRes, userCountRes, deptsRes, latestChecklistRes, reportsRes] =
     await Promise.all([
       supabase
@@ -166,6 +187,46 @@ export default async function AdminDashboard() {
   return (
     <div className="px-4 py-6 sm:px-8 sm:py-8">
       <PageHeading title={t('admin.title', lang)} subtitle={church.name} />
+
+      {anySkipped && skipped && (
+        <section className="mt-6 space-y-3">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted">
+            {t('admin.onboardingSkipped.title', lang)}
+          </p>
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {skipped.admins_skipped_at && (
+              <SkipCard
+                icon={Users}
+                titleKey="admin.onboardingSkipped.admins.title"
+                bodyKey="admin.onboardingSkipped.admins.body"
+                ctaKey="admin.onboardingSkipped.admins.cta"
+                href="/admin/users"
+                lang={lang}
+              />
+            )}
+            {skipped.departments_skipped_at && (
+              <SkipCard
+                icon={LayoutGrid}
+                titleKey="admin.onboardingSkipped.departments.title"
+                bodyKey="admin.onboardingSkipped.departments.body"
+                ctaKey="admin.onboardingSkipped.departments.cta"
+                href="/admin/departments"
+                lang={lang}
+              />
+            )}
+            {skipped.pom_skipped_at && (
+              <SkipCard
+                icon={Award}
+                titleKey="admin.onboardingSkipped.pom.title"
+                bodyKey="admin.onboardingSkipped.pom.body"
+                ctaKey="admin.onboardingSkipped.pom.cta"
+                href="/admin/assignments"
+                lang={lang}
+              />
+            )}
+          </div>
+        </section>
+      )}
 
       <div className="mt-6 grid grid-cols-2 gap-4 lg:grid-cols-4">
         <StatLink
@@ -247,5 +308,42 @@ export default async function AdminDashboard() {
         )}
       </section>
     </div>
+  );
+}
+
+// Inline empty-state card for a wizard step the owner skipped.
+// Auto-clears when they take the same action through the linked page
+// (see the corresponding server actions in admin/users, /departments,
+// /assignments — they null the _skipped_at flag on success).
+function SkipCard({
+  icon: Icon,
+  titleKey,
+  bodyKey,
+  ctaKey,
+  href,
+  lang,
+}: {
+  icon: LucideIcon;
+  titleKey: string;
+  bodyKey: string;
+  ctaKey: string;
+  href: string;
+  lang: 'en' | 'fr';
+}) {
+  return (
+    <Link
+      href={href}
+      className="group flex flex-col rounded-2xl border border-flame-100 bg-flame-50/40 p-5 transition hover:border-flame-200 hover:bg-flame-50"
+    >
+      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-flame-100 text-flame-700">
+        <Icon className="h-4 w-4" aria-hidden="true" />
+      </div>
+      <p className="mt-3 text-sm font-semibold text-ink">{t(titleKey, lang)}</p>
+      <p className="mt-1 text-xs text-body">{t(bodyKey, lang)}</p>
+      <p className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-flame-700 group-hover:gap-2">
+        {t(ctaKey, lang)}
+        <ArrowRight className="h-3 w-3" aria-hidden="true" />
+      </p>
+    </Link>
   );
 }

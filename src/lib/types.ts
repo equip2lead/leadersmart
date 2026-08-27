@@ -60,6 +60,9 @@ export interface User {
   preferred_language: AppLanguage;
   is_active: boolean;
   last_login_at: string | null;
+  // Set once the owner finishes (or skips through) the setup wizard.
+  // Null for everyone else — invited users never enter the wizard.
+  onboarding_completed_at: string | null;
   created_at: string;
   updated_at: string;
 }
