@@ -31,68 +31,55 @@ const en: Dictionary = {
   'landing.nav.menuOpen': 'Open menu',
   'landing.nav.menuClose': 'Close menu',
 
-  // Hero — rebuilt copy for the indigo landing.
-  'landing.hero.pill': 'Trusted by pastors on 3 continents',
-  'landing.hero.titleLine1': 'Empower Your Pastoral Leadership,',
-  'landing.hero.titleLine2': 'Manage Your Ministry',
+  // Hero — yellow rebrand copy. The headline is split so the two
+  // highlighted words ("mission", "system") can be wrapped in their own
+  // marker spans; both languages put the highlighted word at the end of
+  // its clause, so the same four-part split works for each.
+  'landing.hero.pill': 'Built for ministry leadership',
+  'landing.hero.title.pre1': 'Your ministry has a',
+  'landing.hero.title.mission': 'mission',
+  'landing.hero.title.pre2': 'Your leadership needs a',
+  'landing.hero.title.system': 'system',
   'landing.hero.subtitle':
-    'Take control of your ministry operations with our intuitive platform. Track pastoral workflows, coordinate teams, and empower every leader — Sunday after Sunday.',
-  'landing.hero.ctaPrimary': 'Request a Demo',
-  'landing.hero.ctaSecondary': 'Watch Demo',
-  'landing.hero.ctaFine': 'No credit card required. Setup in 5 minutes.',
-  'landing.hero.mockAlt': 'Pastoral dashboard preview showing weekly attendance',
-  // Labels used inside the placeholder hero mockup composition.
-  'landing.hero.mock.title': 'Sunday Attendance',
-  'landing.hero.mock.week1': 'Week 1',
-  'landing.hero.mock.week2': 'Week 2',
-  'landing.hero.mock.week3': 'Week 3',
-  'landing.hero.mock.week4': 'Week 4',
-  'landing.hero.mock.multiple': 'Handle multiple ministries',
-  'landing.hero.mock.sundayService': 'Sunday Service',
-  'landing.hero.mock.sundaySize': '240 people',
-  'landing.hero.mock.wednesdayPrayer': 'Wednesday Prayer',
-  'landing.hero.mock.wednesdaySize': '85 people',
+    'The system your ministry team runs on. Every checklist, every rotation, every evaluation — in one place.',
+  'landing.hero.ctaPrimary': 'Start free trial',
+  'landing.hero.ctaSecondary': 'Watch demo',
+  'landing.hero.ctaFine': 'No credit card required · Setup in 5 minutes',
+  'landing.hero.mockAlt': 'Leadership Overview dashboard preview',
+  // Labels inside the placeholder hero mockup. Deliberately leadership
+  // metrics, never attendance or congregation size.
+  'landing.hero.mock.title': 'Leadership Overview',
+  'landing.hero.mock.checklist': 'Sunday Checklist',
+  'landing.hero.mock.checklistBadge': 'On track',
+  'landing.hero.mock.teamHealth': 'Team Health',
+  'landing.hero.mock.volunteers': 'Volunteers Confirmed',
+  'landing.hero.mock.volunteersBadge': '4 pending',
+  'landing.hero.mock.reports': 'Reports Due',
+  'landing.hero.mock.reportsBadge': 'This week',
+  // Floating badges around the mockup.
+  'landing.hero.badge.checklist': 'Sunday Checklist',
+  'landing.hero.badge.pastors': '3 pastors assigned',
+  'landing.hero.badge.growing': 'Leadership growing',
 
   // Trust strip below hero.
-  'landing.trust.label':
-    'Trusted by 500+ pastors and ministry leaders like',
+  'landing.trust.label': 'Trusted by ministry leaders worldwide',
+  'landing.trust.m1': 'Fire Church · Cameroon',
+  'landing.trust.m2': 'Grace Community · UK',
+  'landing.trust.m3': 'New Hope · USA',
+  'landing.trust.m4': 'Elim Ministries · Kenya',
+  'landing.trust.m5': 'Living Waters · Nigeria',
 
-  // "Streamline Your Ministry Operations" — 3-card services section.
-  'landing.streamline.eyebrow': 'SERVICES',
-  'landing.streamline.title': 'Streamline Your Ministry Operations',
-  'landing.streamline.subtitle':
-    'Unlock the full potential of your ministry with tools to automate workflows, deliver insights, and centralize data. Simplify processes and focus on growth.',
-  'landing.streamline.card1.title': 'Automated workflows',
-  'landing.streamline.card1.body':
-    'The Sunday Checklist runs itself. 11 checkpoints before service, 6 during, 5 after — every leader knows exactly where they are.',
-  'landing.streamline.card2.title': 'Pastoral reporting',
-  'landing.streamline.card2.body':
-    'End-of-month reports write themselves as your team works. Attendance, giving, and pastoral notes captured for the review conversation.',
-  'landing.streamline.card3.title': 'Ministry-wide insights',
-  'landing.streamline.card3.body':
-    'One dashboard, every ministry. See at a glance which departments are firing, which are quiet, and where a leader needs backup.',
-  'landing.streamline.cta': 'Request a Demo',
-  // Placeholder labels inside the three streamline mockups.
-  'landing.streamline.mock1.title': 'Sunday Checklist',
-  'landing.streamline.mock1.beforeCount': '11 before',
-  'landing.streamline.mock1.duringCount': '6 during',
-  'landing.streamline.mock1.afterCount': '5 after',
-  'landing.streamline.mock2.title': 'Pastoral Report',
-  'landing.streamline.mock2.month': 'August 2026',
-  'landing.streamline.mock2.sundaysServed': 'Sundays served',
-  'landing.streamline.mock2.attendanceUp': 'Attendance +12%',
-  'landing.streamline.mock3.title': 'Ministry Insights',
-  'landing.streamline.mock3.ushering': 'Ushering',
-  'landing.streamline.mock3.usheringSize': '40 volunteers active',
-  'landing.streamline.mock3.welcome': 'Welcome Team',
-  'landing.streamline.mock3.welcomeSize': '25 volunteers active',
+  // Three-metric strip under the trust logos.
+  'landing.metric.updates': 'Weekly product updates',
+  'landing.metric.pricing': 'Fair, flat pricing',
+  'landing.metric.founders': 'Founded by pastors, for pastors',
 
   // Features section (9-card 3×3 grid).
   'landing.features.eyebrow': 'EVERYTHING YOU NEED',
   'landing.features.title': 'Empower your pastoral leadership.',
   'landing.features.subtitle':
     "Nine modules, one platform. Everyone knows what to do and when it's due.",
-  'landing.features.comingSoon': 'Coming soon',
+  'landing.features.comingSoon': 'Soon',
   // Row 1 — Pastor Workflow
   'landing.feature.sunday.title': 'Sunday Checklist',
   'landing.feature.sunday.desc':
@@ -117,9 +104,9 @@ const en: Dictionary = {
   'landing.feature.dept.title': 'Department Coordination',
   'landing.feature.dept.desc':
     'Every department has its own head, schedule, and weekly report. Ushering, Welcome, Media, Cleaning — all coordinated.',
-  'landing.feature.insights.title': 'Performance Insights',
-  'landing.feature.insights.desc':
-    "Dashboard analytics show ministry health at a glance. See what's done, what's missing, and where to focus.",
+  'landing.feature.growth.title': 'Leadership Growth',
+  'landing.feature.growth.desc':
+    'Track how each pastor and department head is developing month over month. Evaluations, follow-through, and the gaps worth coaching.',
   'landing.feature.rotation.title': 'Volunteer Rotation',
   'landing.feature.rotation.desc':
     'Sunday-by-Sunday rotation with Groups A, B, C, D. Every volunteer knows exactly when they serve. No more empty stations.',
@@ -129,37 +116,16 @@ const en: Dictionary = {
 
   // ── Phase 2 additions ────────────────────────────────────────
 
-  // Mega-menu — "Products" dropdown
-  'landing.mega.products': 'Products',
-  'landing.mega.col1.title': 'PASTOR WORKFLOW',
-  'landing.mega.col2.title': 'TEAM & OPERATIONS',
-  'landing.mega.col3.title': 'KIDS & COMMUNICATION',
-  // Column 1 entries (name + tagline)
-  'landing.mega.sunday.tagline': 'Track 17 checkpoints every Sunday',
-  'landing.mega.weekly.tagline': 'Plan your pastoral week',
-  'landing.mega.monthly.tagline': 'End-of-month reflection',
-  'landing.mega.potm.tagline': 'Rotate monthly leadership',
-  'landing.mega.eval.tagline': 'Structured feedback',
-  // Column 2 entries
-  'landing.mega.team.tagline':
-    'Invite pastors, department heads, volunteers',
-  'landing.mega.dept.tagline': 'Schedules, reports, weekly plans',
-  'landing.mega.rotation.tagline': 'Coming soon',
-  'landing.mega.insights.tagline': 'Ministry health dashboard',
-  // Column 3 entries
-  'landing.mega.kidsCheckin.name': 'Kids Check-In',
-  'landing.mega.kidsCheckin.tagline': "Secure children's ministry",
-  'landing.mega.fireKids.name': 'Fire Kids',
-  'landing.mega.fireKids.tagline': 'Screened volunteer pipeline',
-  'landing.mega.whatsapp.name': 'WhatsApp Native',
-  'landing.mega.whatsapp.tagline': 'All notifications via WhatsApp',
-
-  // Category tabs (sticky bar below hero)
+  // "All your ministry rhythms" — category tabs section
+  'landing.rhythms.eyebrow': 'ONE PLATFORM',
+  'landing.rhythms.title': 'All your ministry rhythms.',
+  'landing.rhythms.subtitle':
+    'Every recurring thing your leadership team does, in one place — with a clear owner and a clear due date.',
   'landing.tabs.pastor': 'Pastor Workflow',
-  'landing.tabs.team': 'Team & Leadership',
+  'landing.tabs.team': 'Team Management',
   'landing.tabs.rotation': 'Volunteer Rotation',
-  'landing.tabs.kids': 'Kids Ministry',
-  'landing.tabs.insights': 'Insights',
+  'landing.tabs.growth': 'Leadership Growth',
+  'landing.tabs.insights': 'Reports & Insights',
 
   // Social proof
   'landing.social.label': 'Trusted by ministry teams worldwide',
@@ -294,11 +260,14 @@ const en: Dictionary = {
   'landing.faq.a8':
     'English and French at launch. If your ministry needs another language, tell us — we add languages based on real ministry demand.',
 
-  // Final CTA
-  'landing.finalCta.title': 'Ready to empower your ministry?',
+  // Final CTA. Split around the highlighted word; the suffix carries its
+  // own leading space where the language needs one.
+  'landing.finalCta.titlePre': 'Ready for a rhythm-driven',
+  'landing.finalCta.titleHighlight': 'Sunday',
+  'landing.finalCta.titleSuffix': '?',
   'landing.finalCta.subtitle':
     'Join the ministries turning chaos into pastoral excellence.',
-  'landing.finalCta.button': 'Start 30-Day Free Trial',
+  'landing.finalCta.button': 'Start 30-day free trial',
   'landing.finalCta.fine':
     '5-minute setup. No credit card. English or French.',
 
@@ -325,7 +294,7 @@ const en: Dictionary = {
   'landing.footer.link.dpa': 'Data Processing',
   'landing.footer.link.security': 'Security',
   'landing.footer.bottom':
-    'Made with care from Cameroon 🇨🇲 for ministries worldwide.',
+    'Made with care from Cameroon 🇨🇲 for ministries worldwide · © 2026 DigiSmart Africa',
 
   // Auth
   'auth.login.title': 'Welcome Back',
@@ -1086,66 +1055,48 @@ const fr: Dictionary = {
   'landing.nav.menuOpen': 'Ouvrir le menu',
   'landing.nav.menuClose': 'Fermer le menu',
 
-  'landing.hero.pill':
-    'Choisi par des pasteurs sur 3 continents',
-  'landing.hero.titleLine1': 'Renforcez votre leadership pastoral,',
-  'landing.hero.titleLine2': 'gérez votre ministère',
+  'landing.hero.pill': 'Conçu pour le leadership ministériel',
+  'landing.hero.title.pre1': 'Votre ministère a une',
+  'landing.hero.title.mission': 'mission',
+  'landing.hero.title.pre2': 'Votre leadership a besoin d\'un',
+  'landing.hero.title.system': 'système',
   'landing.hero.subtitle':
-    'Prenez le contrôle de vos opérations ministérielles grâce à une plateforme intuitive. Suivez les parcours pastoraux, coordonnez les équipes et renforcez chaque responsable — dimanche après dimanche.',
-  'landing.hero.ctaPrimary': 'Demander une démo',
+    'Le système sur lequel votre équipe ministérielle s\'appuie. Chaque checklist, chaque rotation, chaque évaluation — en un seul endroit.',
+  'landing.hero.ctaPrimary': 'Commencer l\'essai gratuit',
   'landing.hero.ctaSecondary': 'Voir la démo',
   'landing.hero.ctaFine':
-    'Sans carte bancaire. Mise en place en 5 minutes.',
+    'Sans carte bancaire · Mise en place en 5 minutes',
   'landing.hero.mockAlt':
-    'Aperçu du tableau de bord pastoral, présences hebdomadaires',
-  'landing.hero.mock.title': 'Présence dominicale',
-  'landing.hero.mock.week1': 'Semaine 1',
-  'landing.hero.mock.week2': 'Semaine 2',
-  'landing.hero.mock.week3': 'Semaine 3',
-  'landing.hero.mock.week4': 'Semaine 4',
-  'landing.hero.mock.multiple': 'Gérez plusieurs ministères',
-  'landing.hero.mock.sundayService': 'Culte du dimanche',
-  'landing.hero.mock.sundaySize': '240 personnes',
-  'landing.hero.mock.wednesdayPrayer': 'Prière du mercredi',
-  'landing.hero.mock.wednesdaySize': '85 personnes',
+    'Aperçu du tableau de bord Vue d\'ensemble du leadership',
+  'landing.hero.mock.title': 'Vue d\'ensemble du leadership',
+  'landing.hero.mock.checklist': 'Liste du dimanche',
+  'landing.hero.mock.checklistBadge': 'Dans les temps',
+  'landing.hero.mock.teamHealth': 'Santé de l\'équipe',
+  'landing.hero.mock.volunteers': 'Bénévoles confirmés',
+  'landing.hero.mock.volunteersBadge': '4 en attente',
+  'landing.hero.mock.reports': 'Rapports à rendre',
+  'landing.hero.mock.reportsBadge': 'Cette semaine',
+  'landing.hero.badge.checklist': 'Liste du dimanche',
+  'landing.hero.badge.pastors': '3 pasteurs assignés',
+  'landing.hero.badge.growing': 'Leadership en croissance',
 
   'landing.trust.label':
-    'Choisi par plus de 500 pasteurs et responsables ministériels, dont',
+    'Choisi par des responsables ministériels du monde entier',
+  'landing.trust.m1': 'Fire Church · Cameroun',
+  'landing.trust.m2': 'Grace Community · Royaume-Uni',
+  'landing.trust.m3': 'New Hope · États-Unis',
+  'landing.trust.m4': 'Elim Ministries · Kenya',
+  'landing.trust.m5': 'Living Waters · Nigéria',
 
-  'landing.streamline.eyebrow': 'SERVICES',
-  'landing.streamline.title':
-    'Simplifiez vos opérations ministérielles',
-  'landing.streamline.subtitle':
-    'Libérez tout le potentiel de votre ministère avec des outils qui automatisent les flux, révèlent les tendances et centralisent les données. Simplifiez les processus et concentrez-vous sur la croissance.',
-  'landing.streamline.card1.title': 'Parcours automatisés',
-  'landing.streamline.card1.body':
-    'La Liste du dimanche se pilote toute seule. 11 points avant le culte, 6 pendant, 5 après — chaque responsable sait exactement où il en est.',
-  'landing.streamline.card2.title': 'Reporting pastoral',
-  'landing.streamline.card2.body':
-    'Les rapports de fin de mois se rédigent au fil de l\'action. Présence, offrandes et notes pastorales rassemblés pour la revue.',
-  'landing.streamline.card3.title': 'Vue d\'ensemble du ministère',
-  'landing.streamline.card3.body':
-    'Un tableau de bord, tous les départements. Voyez d\'un coup d\'œil ce qui avance, ce qui ralentit et où un responsable a besoin de renfort.',
-  'landing.streamline.cta': 'Demander une démo',
-  'landing.streamline.mock1.title': 'Liste du dimanche',
-  'landing.streamline.mock1.beforeCount': '11 avant',
-  'landing.streamline.mock1.duringCount': '6 pendant',
-  'landing.streamline.mock1.afterCount': '5 après',
-  'landing.streamline.mock2.title': 'Rapport pastoral',
-  'landing.streamline.mock2.month': 'Août 2026',
-  'landing.streamline.mock2.sundaysServed': 'Dimanches servis',
-  'landing.streamline.mock2.attendanceUp': 'Présence +12 %',
-  'landing.streamline.mock3.title': 'Vue d\'ensemble',
-  'landing.streamline.mock3.ushering': 'Placeurs',
-  'landing.streamline.mock3.usheringSize': '40 bénévoles actifs',
-  'landing.streamline.mock3.welcome': 'Équipe d\'accueil',
-  'landing.streamline.mock3.welcomeSize': '25 bénévoles actifs',
+  'landing.metric.updates': 'Mises à jour hebdomadaires',
+  'landing.metric.pricing': 'Tarif juste et unique',
+  'landing.metric.founders': 'Fondé par des pasteurs, pour des pasteurs',
 
   'landing.features.eyebrow': 'TOUT CE DONT VOUS AVEZ BESOIN',
   'landing.features.title': 'Renforcez votre leadership pastoral.',
   'landing.features.subtitle':
     'Neuf modules, une seule plateforme. Chacun sait quoi faire et pour quand.',
-  'landing.features.comingSoon': 'Bientôt disponible',
+  'landing.features.comingSoon': 'Bientôt',
   // Ligne 1 — Ministère pastoral
   'landing.feature.sunday.title': 'Liste du dimanche',
   'landing.feature.sunday.desc':
@@ -1170,9 +1121,9 @@ const fr: Dictionary = {
   'landing.feature.dept.title': 'Coordination des départements',
   'landing.feature.dept.desc':
     'Chaque département a son chef, son planning et son rapport hebdomadaire. Placeurs, accueil, média, entretien — tout est coordonné.',
-  'landing.feature.insights.title': 'Analyses de performance',
-  'landing.feature.insights.desc':
-    'Les analyses du tableau de bord donnent l\'état du ministère d\'un coup d\'œil. Voyez ce qui est fait, ce qui manque et où concentrer l\'effort.',
+  'landing.feature.growth.title': 'Croissance du leadership',
+  'landing.feature.growth.desc':
+    'Suivez la progression de chaque pasteur et chef de département mois après mois. Évaluations, suivi des engagements et points à accompagner.',
   'landing.feature.rotation.title': 'Rotation des bénévoles',
   'landing.feature.rotation.desc':
     'Rotation dimanche par dimanche avec les groupes A, B, C, D. Chaque bénévole sait précisément quand il sert. Plus de postes vides.',
@@ -1182,34 +1133,15 @@ const fr: Dictionary = {
 
   // ── Ajouts Phase 2 ────────────────────────────────────────
 
-  'landing.mega.products': 'Produits',
-  'landing.mega.col1.title': 'PARCOURS PASTORAL',
-  'landing.mega.col2.title': 'ÉQUIPE & OPÉRATIONS',
-  'landing.mega.col3.title': 'ENFANTS & COMMUNICATION',
-  'landing.mega.sunday.tagline': 'Suivez 17 points chaque dimanche',
-  'landing.mega.weekly.tagline': 'Planifiez votre semaine pastorale',
-  'landing.mega.monthly.tagline': 'Bilan de fin de mois',
-  'landing.mega.potm.tagline': 'Alternance mensuelle du leadership',
-  'landing.mega.eval.tagline': 'Retours structurés',
-  'landing.mega.team.tagline':
-    'Invitez pasteurs, chefs de département, bénévoles',
-  'landing.mega.dept.tagline': 'Plannings, rapports, plans hebdomadaires',
-  'landing.mega.rotation.tagline': 'Bientôt disponible',
-  'landing.mega.insights.tagline':
-    'Tableau de bord de santé ministérielle',
-  'landing.mega.kidsCheckin.name': 'Enregistrement des enfants',
-  'landing.mega.kidsCheckin.tagline': 'Ministère des enfants sécurisé',
-  'landing.mega.fireKids.name': 'Fire Kids',
-  'landing.mega.fireKids.tagline':
-    'Vivier de bénévoles vérifiés',
-  'landing.mega.whatsapp.name': 'WhatsApp natif',
-  'landing.mega.whatsapp.tagline': 'Toutes les notifications par WhatsApp',
-
+  'landing.rhythms.eyebrow': 'UNE SEULE PLATEFORME',
+  'landing.rhythms.title': 'Tous les rythmes de votre ministère.',
+  'landing.rhythms.subtitle':
+    'Chaque tâche récurrente de votre équipe de direction au même endroit — avec un responsable clair et une échéance claire.',
   'landing.tabs.pastor': 'Parcours pastoral',
-  'landing.tabs.team': 'Équipe & leadership',
+  'landing.tabs.team': 'Gestion de l\'équipe',
   'landing.tabs.rotation': 'Rotation des bénévoles',
-  'landing.tabs.kids': 'Ministère des enfants',
-  'landing.tabs.insights': 'Analyses',
+  'landing.tabs.growth': 'Croissance du leadership',
+  'landing.tabs.insights': 'Rapports & analyses',
 
   'landing.social.label':
     'Choisi par des équipes ministérielles dans le monde entier',
@@ -1348,7 +1280,9 @@ const fr: Dictionary = {
   'landing.faq.a8':
     'Anglais et français au lancement. Si votre ministère a besoin d\'une autre langue, dites-le nous — nous les ajoutons selon la demande réelle.',
 
-  'landing.finalCta.title': 'Prêt(e) à renforcer votre ministère ?',
+  'landing.finalCta.titlePre': 'Prêt(e) pour un',
+  'landing.finalCta.titleHighlight': 'dimanche',
+  'landing.finalCta.titleSuffix': ' guidé par le rythme ?',
   'landing.finalCta.subtitle':
     'Rejoignez les ministères qui transforment le chaos en excellence pastorale.',
   'landing.finalCta.button': 'Commencer l\'essai gratuit de 30 jours',
@@ -1377,7 +1311,7 @@ const fr: Dictionary = {
   'landing.footer.link.dpa': 'Traitement des données',
   'landing.footer.link.security': 'Sécurité',
   'landing.footer.bottom':
-    'Conçu avec soin depuis le Cameroun 🇨🇲 pour les ministères du monde entier.',
+    'Conçu avec soin depuis le Cameroun 🇨🇲 pour les ministères du monde entier · © 2026 DigiSmart Africa',
 
   // Auth
   'auth.login.title': 'Bon Retour',
