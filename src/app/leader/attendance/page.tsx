@@ -65,7 +65,7 @@ export default async function AttendancePage({
           <p className="text-sm text-muted">{t('att.noSchedules', lang)}</p>
           <Link
             href="/leader/schedules"
-            className="mt-3 inline-block text-sm font-medium text-brand-700 hover:underline"
+            className="mt-3 inline-block text-sm font-medium text-indigo-royal-700 hover:underline"
           >
             {t('att.createScheduleLink', lang)}
           </Link>

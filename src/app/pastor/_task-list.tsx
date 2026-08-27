@@ -50,14 +50,14 @@ export function WeeklyTaskList({
           <div
             key={week}
             className={`rounded-xl border ${
-              isCurrent ? 'border-brand-200 bg-brand-50/40' : 'border-gray-100 bg-white'
+              isCurrent ? 'border-indigo-royal-200 bg-indigo-royal-50/40' : 'border-gray-100 bg-white'
             } p-4`}
           >
             <div className="flex items-center justify-between">
               <p className="text-sm font-semibold text-ink">
                 {t('pastor.week', lang)} {week}
                 {isCurrent && (
-                  <span className="ml-2 rounded-full bg-brand-700 px-2 py-0.5 text-[10px] font-medium uppercase text-white">
+                  <span className="ml-2 rounded-full bg-indigo-royal-700 px-2 py-0.5 text-[10px] font-medium uppercase text-white">
                     {t('pastor.currentWeekBadge', lang)}
                   </span>
                 )}

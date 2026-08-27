@@ -45,9 +45,9 @@ export function ProgressSidebar({
                 className={
                   'mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-semibold ' +
                   (st === 'done'
-                    ? 'bg-brand-700 text-white'
+                    ? 'bg-indigo-royal-700 text-white'
                     : st === 'current'
-                      ? 'bg-brand-700 text-white ring-4 ring-brand-100'
+                      ? 'bg-indigo-royal-700 text-white ring-4 ring-indigo-royal-100'
                       : 'border border-gray-300 bg-white text-gray-500')
                 }
               >

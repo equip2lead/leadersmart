@@ -31,7 +31,7 @@ export function CurrencySelector({
         value={current}
         onChange={(e) => pick(e.target.value)}
         disabled={pending}
-        className="rounded-md border border-gray-200 bg-white px-2 py-1 text-xs text-ink focus:border-brand-500 focus:outline-none"
+        className="rounded-md border border-gray-200 bg-white px-2 py-1 text-xs text-ink focus:border-indigo-royal-500 focus:outline-none"
       >
         {ALL_CURRENCIES.map((c) => (
           <option key={c} value={c}>

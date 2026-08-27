@@ -57,7 +57,7 @@ export function ConfirmDialog({
         <div className="flex items-start gap-3">
           <div
             className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg ${
-              destructive ? 'bg-red-50 text-red-600' : 'bg-brand-50 text-brand-700'
+              destructive ? 'bg-red-50 text-red-600' : 'bg-indigo-royal-50 text-indigo-royal-700'
             }`}
           >
             <AlertTriangle className="h-5 w-5" aria-hidden="true" />

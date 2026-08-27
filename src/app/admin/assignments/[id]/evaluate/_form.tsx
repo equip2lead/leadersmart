@@ -205,8 +205,8 @@ export function EvaluationForm({
                         }
                         className={`flex h-10 w-10 items-center justify-center rounded-lg border text-sm font-semibold transition ${
                           value === n
-                            ? 'border-brand-700 bg-brand-700 text-white'
-                            : 'border-gray-200 bg-white text-body hover:border-brand-500'
+                            ? 'border-indigo-royal-700 bg-indigo-royal-700 text-white'
+                            : 'border-gray-200 bg-white text-body hover:border-indigo-royal-500'
                         } disabled:cursor-not-allowed disabled:opacity-50`}
                         aria-label={`${t('eval.rate', lang)} ${n}`}
                       >

@@ -58,7 +58,7 @@ function QuickAction({
       className="card flex items-center justify-between gap-4 transition hover:shadow-card-hover"
     >
       <div className="flex items-center gap-3">
-        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-brand-50 text-brand-700">
+        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-royal-50 text-indigo-royal-700">
           <Icon className="h-5 w-5" aria-hidden="true" />
         </div>
         <span className="font-semibold text-ink">{label}</span>

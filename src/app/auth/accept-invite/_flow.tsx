@@ -208,8 +208,8 @@ function Shell({ children }: { children: React.ReactNode }) {
     <main className="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-12">
       <div className="w-full max-w-md">
         <div className="mb-6 flex flex-col items-center gap-2">
-          <Flame className="h-10 w-10 text-flame-600" aria-hidden="true" />
-          <p className="text-xs font-semibold uppercase tracking-wide text-brand-700">
+          <Flame className="h-10 w-10 text-gold-warm-600" aria-hidden="true" />
+          <p className="text-xs font-semibold uppercase tracking-wide text-indigo-royal-700">
             LeaderSmart
           </p>
         </div>
@@ -344,7 +344,7 @@ function WelcomePanel({
             <button
               type="button"
               onClick={() => setShowPw((s) => !s)}
-              className="absolute inset-y-0 right-2 my-auto rounded px-2 text-xs font-medium text-brand-700 hover:bg-brand-50"
+              className="absolute inset-y-0 right-2 my-auto rounded px-2 text-xs font-medium text-indigo-royal-700 hover:bg-indigo-royal-50"
             >
               {showPw ? t('accept.form.hide', lang) : t('accept.form.show', lang)}
             </button>

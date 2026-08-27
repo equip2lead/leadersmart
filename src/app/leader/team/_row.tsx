@@ -86,7 +86,7 @@ export function TeamMemberRow({
               className="h-9 w-9 rounded-full object-cover"
             />
           ) : (
-            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-brand-50 text-xs font-semibold text-brand-700">
+            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-indigo-royal-50 text-xs font-semibold text-indigo-royal-700">
               {member.full_name.slice(0, 1)}
             </div>
           )}
@@ -118,7 +118,7 @@ export function TeamMemberRow({
           <button
             type="button"
             onClick={() => setEditing(true)}
-            className="flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium text-brand-700 hover:bg-brand-50"
+            className="flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium text-indigo-royal-700 hover:bg-indigo-royal-50"
           >
             <Pencil className="h-3 w-3" />
             {t('common.edit', lang)}

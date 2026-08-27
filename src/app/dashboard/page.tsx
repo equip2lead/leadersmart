@@ -10,7 +10,7 @@ function SetupError({ message, detail }: { message: string; detail?: string }) {
   return (
     <main className="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-12">
       <div className="w-full max-w-md text-center">
-        <Flame className="mx-auto h-10 w-10 text-flame-600" aria-hidden="true" />
+        <Flame className="mx-auto h-10 w-10 text-gold-warm-600" aria-hidden="true" />
         <h1 className="mt-4 text-2xl font-bold text-ink">Setup incomplete</h1>
         <p className="mt-3 text-sm text-body">{message}</p>
         {detail && (

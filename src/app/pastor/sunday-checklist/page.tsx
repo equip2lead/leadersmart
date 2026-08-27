@@ -30,7 +30,7 @@ export default async function SundayChecklistPage() {
           subtitle={t('pastor.noActiveAssignment', lang)}
         />
         <p className="mt-4 rounded-lg border border-dashed border-gray-200 bg-white px-6 py-8 text-center text-sm text-muted">
-          <Link href="/admin/assignments" className="text-brand-700 hover:underline">
+          <Link href="/admin/assignments" className="text-indigo-royal-700 hover:underline">
             {t('pastor.setAssignmentLink', lang)}
           </Link>
         </p>
@@ -106,7 +106,7 @@ export default async function SundayChecklistPage() {
       />
 
       {ctx.isOnBehalf && (
-        <div className="mt-4 rounded-lg bg-brand-50 px-4 py-3 text-sm text-brand-800">
+        <div className="mt-4 rounded-lg bg-indigo-royal-50 px-4 py-3 text-sm text-indigo-royal-800">
           {t('pastor.sunday.onBehalfBanner', lang).replace('{name}', ctx.pastorName)}
         </div>
       )}

@@ -48,10 +48,10 @@ const ADMIN_PASTOR_SOFT_LIMIT = 10;
 // Colour map for role badges. Owner (flame), Fire Kids (indigo), rest
 // grey. Kept tiny so it inlines rather than pulling a Tailwind config.
 function badgeClass(role: UserRole): string {
-  if (role === 'owner') return 'bg-flame-100 text-flame-700';
+  if (role === 'owner') return 'bg-gold-warm-100 text-gold-warm-700';
   if (role === 'fire_kids_coordinator') return 'bg-indigo-100 text-indigo-700';
   if (role === 'admin_pastor' || role === 'pastor')
-    return 'bg-brand-100 text-brand-700';
+    return 'bg-indigo-royal-100 text-indigo-royal-700';
   return 'bg-gray-100 text-gray-700';
 }
 
@@ -132,7 +132,7 @@ export function UserRow({
   return (
     <>
       <tr
-        className={`transition ${expanded ? 'bg-brand-50/40' : 'hover:bg-gray-50'} cursor-pointer`}
+        className={`transition ${expanded ? 'bg-indigo-royal-50/40' : 'hover:bg-gray-50'} cursor-pointer`}
         onClick={() => setExpanded((s) => !s)}
       >
         <td className="px-4 py-3 text-sm font-medium text-ink">
@@ -145,7 +145,7 @@ export function UserRow({
             <span>{user.full_name}</span>
             {isOwner && (
               <span
-                className="ml-1 inline-flex items-center rounded-full bg-flame-100 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-flame-700"
+                className="ml-1 inline-flex items-center rounded-full bg-gold-warm-100 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-gold-warm-700"
                 title={t('nav.owner.badgeTitle', lang)}
               >
                 {t('nav.owner.badge', lang)}
@@ -184,9 +184,9 @@ export function UserRow({
       </tr>
 
       {expanded && (
-        <tr className="bg-brand-50/20">
+        <tr className="bg-indigo-royal-50/20">
           <td colSpan={5} className="px-4 py-4">
-            <div className="rounded-xl border border-brand-100 bg-white p-4">
+            <div className="rounded-xl border border-indigo-royal-100 bg-white p-4">
               <div className="grid gap-3 sm:grid-cols-2">
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-wide text-muted">
@@ -234,7 +234,7 @@ export function UserRow({
                       <button
                         type="button"
                         onClick={() => setAction('promote')}
-                        className="inline-flex items-center gap-1.5 rounded-lg border border-brand-200 bg-white px-3 py-1.5 text-xs font-semibold text-brand-700 transition hover:bg-brand-50"
+                        className="inline-flex items-center gap-1.5 rounded-lg border border-indigo-royal-200 bg-white px-3 py-1.5 text-xs font-semibold text-indigo-royal-700 transition hover:bg-indigo-royal-50"
                       >
                         <ArrowUp className="h-3 w-3" />
                         {t('userDetail.action.promote', lang)}

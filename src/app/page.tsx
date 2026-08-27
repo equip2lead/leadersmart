@@ -751,7 +751,7 @@ function FinalCta({ lang }: { lang: AppLanguage }) {
       {/* Warm accent blob top-left. */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -top-32 -left-32 h-96 w-96 rounded-full bg-flame-500/15 blur-3xl"
+        className="pointer-events-none absolute -top-32 -left-32 h-96 w-96 rounded-full bg-gold-warm-500/15 blur-3xl"
       />
       <div className="relative mx-auto max-w-4xl px-4 sm:px-6">
         <h2 className="text-4xl font-extrabold leading-[1.1] tracking-[-0.02em] sm:text-6xl lg:text-7xl">

@@ -42,7 +42,7 @@ export function CategoryTabs({ lang }: { lang: AppLanguage }) {
                 onClick={() => setActive(tab.id)}
                 className={
                   isActive
-                    ? 'rounded-full bg-brand-700 px-4 py-1.5 text-white shadow-sm transition'
+                    ? 'rounded-full bg-indigo-royal-700 px-4 py-1.5 text-white shadow-sm transition'
                     : 'rounded-full px-4 py-1.5 text-gray-500 transition hover:text-gray-900'
                 }
               >

@@ -93,7 +93,7 @@ export function Step3Form({
                   className={
                     'flex cursor-pointer items-center gap-3 rounded-xl border-2 px-4 py-3 text-sm transition ' +
                     (checked
-                      ? 'border-brand-700 bg-brand-50 text-ink'
+                      ? 'border-indigo-royal-700 bg-indigo-royal-50 text-ink'
                       : 'border-gray-200 bg-white text-body hover:border-gray-300')
                   }
                 >
@@ -101,7 +101,7 @@ export function Step3Form({
                     type="checkbox"
                     checked={checked}
                     onChange={() => toggle(s)}
-                    className="h-4 w-4 rounded border-gray-300 text-brand-700 focus:ring-brand-500"
+                    className="h-4 w-4 rounded border-gray-300 text-indigo-royal-700 focus:ring-indigo-royal-500"
                   />
                   <span className="font-medium">{s}</span>
                 </label>
@@ -145,7 +145,7 @@ export function Step3Form({
             {custom.map((c) => (
               <li
                 key={c}
-                className="flex items-center justify-between rounded-xl border border-brand-100 bg-brand-50 px-4 py-2 text-sm text-ink"
+                className="flex items-center justify-between rounded-xl border border-indigo-royal-100 bg-indigo-royal-50 px-4 py-2 text-sm text-ink"
               >
                 <span>{c}</span>
                 <button

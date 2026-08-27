@@ -49,7 +49,7 @@ function QuickAction({
       className="card flex items-center justify-between gap-4 transition hover:shadow-card-hover"
     >
       <div className="flex items-center gap-3">
-        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-brand-50 text-brand-700">
+        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-royal-50 text-indigo-royal-700">
           <Icon className="h-5 w-5" aria-hidden="true" />
         </div>
         <span className="font-semibold text-ink">{label}</span>
@@ -120,7 +120,7 @@ export default async function PastorDashboard() {
       />
 
       {ctx.isOnBehalf && (
-        <div className="mt-4 rounded-lg bg-brand-50 px-4 py-3 text-sm text-brand-800">
+        <div className="mt-4 rounded-lg bg-indigo-royal-50 px-4 py-3 text-sm text-indigo-royal-800">
           {t('pastor.onBehalfBanner', lang).replace('{name}', ctx.pastorName)}
         </div>
       )}
@@ -161,7 +161,7 @@ export default async function PastorDashboard() {
           </h2>
           <Link
             href="/pastor/weekly-plan"
-            className="text-sm font-medium text-brand-700 hover:underline"
+            className="text-sm font-medium text-indigo-royal-700 hover:underline"
           >
             {t('common.edit', lang)}
           </Link>

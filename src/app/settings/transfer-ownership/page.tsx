@@ -31,7 +31,7 @@ export default async function TransferOwnershipPage() {
       <div className="mt-6 grid gap-4">
         <div className="card">
           <div className="flex items-start gap-3">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-brand-50 text-brand-700">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-indigo-royal-50 text-indigo-royal-700">
               <ArrowRightLeft className="h-5 w-5" aria-hidden="true" />
             </div>
             <div className="min-w-0 flex-1">
@@ -85,7 +85,7 @@ export default async function TransferOwnershipPage() {
         </div>
 
         <p className="text-xs">
-          <Link href="/settings" className="text-brand-700 hover:underline">
+          <Link href="/settings" className="text-indigo-royal-700 hover:underline">
             <ArrowLeft className="mr-1 inline h-3 w-3" />
             {t('common.back', lang)}
           </Link>

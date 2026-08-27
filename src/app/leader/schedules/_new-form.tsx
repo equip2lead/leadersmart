@@ -141,7 +141,7 @@ export function NewScheduleForm({
         <button
           type="button"
           onClick={addSlot}
-          className="mt-3 inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium text-brand-700 hover:bg-brand-50"
+          className="mt-3 inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium text-indigo-royal-700 hover:bg-indigo-royal-50"
         >
           <Plus className="h-3 w-3" />
           {t('sched.form.addSlot', lang)}

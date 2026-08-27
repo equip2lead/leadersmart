@@ -135,7 +135,7 @@ function NavList({
               className={cn(
                 'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition',
                 active
-                  ? 'bg-brand-50 text-brand-700'
+                  ? 'bg-indigo-royal-50 text-indigo-royal-700'
                   : 'text-body hover:bg-gray-50 hover:text-ink',
               )}
             >
@@ -178,7 +178,7 @@ export function Sidebar({
   return (
     <aside className="hidden w-64 shrink-0 flex-col border-r border-gray-100 bg-white md:flex">
       <div className="flex items-center gap-2 border-b border-gray-100 px-6 py-5">
-        <Flame className="h-6 w-6 text-flame-600" aria-hidden="true" />
+        <Flame className="h-6 w-6 text-gold-warm-600" aria-hidden="true" />
         <span className="text-lg font-bold text-ink">LeaderSmart</span>
       </div>
 
@@ -188,7 +188,7 @@ export function Sidebar({
           <p className="truncate text-xs text-muted">{userName}</p>
           {showOwnerTools && (
             <span
-              className="inline-flex shrink-0 items-center rounded-full bg-flame-100 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-flame-700"
+              className="inline-flex shrink-0 items-center rounded-full bg-gold-warm-100 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-gold-warm-700"
               title={t('nav.owner.badgeTitle', lang)}
             >
               {t('nav.owner.badge', lang)}

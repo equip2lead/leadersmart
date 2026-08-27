@@ -68,7 +68,7 @@ export default async function MyEvaluationsPage() {
             <p className="mt-3">
               <Link
                 href="/admin/assignments"
-                className="text-brand-700 hover:underline"
+                className="text-indigo-royal-700 hover:underline"
               >
                 {t('pastor.eval.evaluateLink', lang)}
               </Link>
@@ -88,7 +88,7 @@ export default async function MyEvaluationsPage() {
                     {t('pastor.eval.overallScore', lang)}: {e.overall_score?.toFixed(1) ?? '—'} / 5
                   </h3>
                   {e.overall_recommendation && (
-                    <span className="mt-2 inline-flex rounded-full bg-brand-50 px-2.5 py-0.5 text-xs font-medium capitalize text-brand-700">
+                    <span className="mt-2 inline-flex rounded-full bg-indigo-royal-50 px-2.5 py-0.5 text-xs font-medium capitalize text-indigo-royal-700">
                       {t(`eval.rec.${e.overall_recommendation === 'needs_improvement' ? 'needsImprovement' : e.overall_recommendation}`, lang)}
                     </span>
                   )}

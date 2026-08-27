@@ -21,7 +21,7 @@ type AssignmentRow = {
 const statusStyles: Record<AssignmentRow['status'], string> = {
   upcoming: 'bg-gray-100 text-gray-700',
   active: 'bg-emerald-100 text-emerald-800',
-  completed: 'bg-brand-50 text-brand-700',
+  completed: 'bg-indigo-royal-50 text-indigo-royal-700',
 };
 
 export default async function AssignmentsPage() {
@@ -107,7 +107,7 @@ export default async function AssignmentsPage() {
                       <td className="px-4 py-3 text-right">
                         <Link
                           href={`/admin/assignments/${a.id}/evaluate`}
-                          className="text-sm font-medium text-brand-700 hover:underline"
+                          className="text-sm font-medium text-indigo-royal-700 hover:underline"
                         >
                           {t('assign.action.evaluate', lang)}
                         </Link>

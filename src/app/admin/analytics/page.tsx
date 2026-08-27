@@ -92,7 +92,7 @@ function AggregateLink({
       href={href}
       className="card flex items-start gap-3 transition hover:shadow-card-hover"
     >
-      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-brand-50 text-brand-700">
+      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-indigo-royal-50 text-indigo-royal-700">
         <Icon className="h-5 w-5" aria-hidden="true" />
       </div>
       <div className="min-w-0 flex-1">

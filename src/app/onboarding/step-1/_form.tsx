@@ -141,7 +141,7 @@ export function Step1Form({
                 className={
                   'cursor-pointer rounded-xl border-2 p-4 text-center transition ' +
                   (active
-                    ? 'border-brand-700 bg-brand-50 text-brand-700'
+                    ? 'border-indigo-royal-700 bg-indigo-royal-50 text-indigo-royal-700'
                     : 'border-gray-200 bg-white text-body hover:border-gray-300')
                 }
               >

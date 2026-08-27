@@ -57,7 +57,7 @@ function StatLink({
       href={href}
       className="card flex items-start gap-3 transition hover:shadow-card-hover"
     >
-      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-brand-50 text-brand-700">
+      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-indigo-royal-50 text-indigo-royal-700">
         <Icon className="h-5 w-5" aria-hidden="true" />
       </div>
       <div className="min-w-0 flex-1">
@@ -280,7 +280,7 @@ export default async function AdminDashboard() {
                     href="/admin/departments"
                     className={`flex items-center gap-3 rounded-xl border border-gray-100 ${s.bg} px-4 py-3 transition hover:shadow-card-hover`}
                   >
-                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white text-brand-700">
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white text-indigo-royal-700">
                       <Icon className="h-4 w-4" aria-hidden="true" />
                     </div>
                     <div className="min-w-0 flex-1">
@@ -333,14 +333,14 @@ function SkipCard({
   return (
     <Link
       href={href}
-      className="group flex flex-col rounded-2xl border border-flame-100 bg-flame-50/40 p-5 transition hover:border-flame-200 hover:bg-flame-50"
+      className="group flex flex-col rounded-2xl border border-gold-warm-100 bg-gold-warm-50/40 p-5 transition hover:border-gold-warm-200 hover:bg-gold-warm-50"
     >
-      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-flame-100 text-flame-700">
+      <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gold-warm-100 text-gold-warm-700">
         <Icon className="h-4 w-4" aria-hidden="true" />
       </div>
       <p className="mt-3 text-sm font-semibold text-ink">{t(titleKey, lang)}</p>
       <p className="mt-1 text-xs text-body">{t(bodyKey, lang)}</p>
-      <p className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-flame-700 group-hover:gap-2">
+      <p className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-gold-warm-700 group-hover:gap-2">
         {t(ctaKey, lang)}
         <ArrowRight className="h-3 w-3" aria-hidden="true" />
       </p>

@@ -29,8 +29,8 @@ export default async function OnboardingLayout({
     <div className="min-h-screen bg-gray-50">
       <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-6 sm:px-6">
         <Link href="/" className="flex items-center gap-2">
-          <Flame className="h-5 w-5 text-flame-600" aria-hidden="true" />
-          <span className="text-lg font-bold tracking-tight text-brand-700">
+          <Flame className="h-5 w-5 text-gold-warm-600" aria-hidden="true" />
+          <span className="text-lg font-bold tracking-tight text-indigo-royal-700">
             LeaderSmart
           </span>
           <span className="ml-2 text-xs font-medium uppercase tracking-wider text-muted">

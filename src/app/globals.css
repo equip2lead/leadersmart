@@ -28,15 +28,15 @@
 
 @layer components {
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 rounded-lg bg-brand-700 px-5 py-3 text-sm font-semibold text-white shadow-sm transition-all hover:bg-brand-800 hover:shadow-card focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
+    @apply inline-flex items-center justify-center gap-2 rounded-lg bg-indigo-royal-700 px-5 py-3 text-sm font-semibold text-white shadow-sm transition-all hover:bg-indigo-royal-800 hover:shadow-card focus:outline-none focus:ring-2 focus:ring-indigo-royal-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
   }
 
   .btn-secondary {
-    @apply inline-flex items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white px-5 py-3 text-sm font-semibold text-ink shadow-sm transition-all hover:border-gray-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2;
+    @apply inline-flex items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white px-5 py-3 text-sm font-semibold text-ink shadow-sm transition-all hover:border-gray-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-royal-500 focus:ring-offset-2;
   }
 
-  .btn-flame {
-    @apply inline-flex items-center justify-center gap-2 rounded-lg bg-flame-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition-all hover:bg-flame-700 focus:outline-none focus:ring-2 focus:ring-flame-500 focus:ring-offset-2;
+  .btn-gold {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg bg-gold-warm-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition-all hover:bg-gold-warm-700 focus:outline-none focus:ring-2 focus:ring-gold-warm-500 focus:ring-offset-2;
   }
 
   .card {
@@ -44,7 +44,7 @@
   }
 
   .input {
-    @apply block w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm text-ink placeholder:text-muted focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/20;
+    @apply block w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm text-ink placeholder:text-muted focus:border-indigo-royal-500 focus:outline-none focus:ring-2 focus:ring-indigo-royal-500/20;
   }
 
   .label {

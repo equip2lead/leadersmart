@@ -71,7 +71,7 @@ export default function SignupPage() {
           href="/"
           className="mb-6 flex items-center justify-center gap-2 text-ink"
         >
-          <Flame className="h-8 w-8 text-flame-600" aria-hidden="true" />
+          <Flame className="h-8 w-8 text-gold-warm-600" aria-hidden="true" />
           <span className="text-xl font-bold">LeaderSmart</span>
         </Link>
 
@@ -147,7 +147,7 @@ export default function SignupPage() {
                 <label
                   className={`flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-lg border px-4 py-2.5 text-sm font-medium transition ${
                     language === 'en'
-                      ? 'border-brand-700 bg-brand-50 text-brand-700'
+                      ? 'border-indigo-royal-700 bg-indigo-royal-50 text-indigo-royal-700'
                       : 'border-gray-200 bg-white text-body hover:bg-gray-50'
                   }`}
                 >
@@ -164,7 +164,7 @@ export default function SignupPage() {
                 <label
                   className={`flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-lg border px-4 py-2.5 text-sm font-medium transition ${
                     language === 'fr'
-                      ? 'border-brand-700 bg-brand-50 text-brand-700'
+                      ? 'border-indigo-royal-700 bg-indigo-royal-50 text-indigo-royal-700'
                       : 'border-gray-200 bg-white text-body hover:bg-gray-50'
                   }`}
                 >
@@ -203,7 +203,7 @@ export default function SignupPage() {
             {t('auth.signup.hasAccount')}{' '}
             <Link
               href="/login"
-              className="font-semibold text-brand-700 hover:underline"
+              className="font-semibold text-indigo-royal-700 hover:underline"
             >
               {t('auth.signup.loginLink')}
             </Link>

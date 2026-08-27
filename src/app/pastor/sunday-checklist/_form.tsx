@@ -285,7 +285,7 @@ export function ChecklistForm({
           </div>
           <div className="h-2 w-24 overflow-hidden rounded-full bg-gray-100">
             <div
-              className="h-full bg-brand-700 transition-all"
+              className="h-full bg-indigo-royal-700 transition-all"
               style={{ width: `${Math.round((checkedCount / TOTAL_ITEMS) * 100)}%` }}
             />
           </div>

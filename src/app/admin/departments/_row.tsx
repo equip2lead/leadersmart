@@ -92,7 +92,7 @@ export function DepartmentRowCard({
 
   return (
     <li className="card flex items-start gap-4">
-      <div className="mt-1 flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-brand-50 text-brand-700">
+      <div className="mt-1 flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-indigo-royal-50 text-indigo-royal-700">
         {Icon ? (
           <Icon className="h-5 w-5" aria-hidden="true" />
         ) : (
@@ -136,7 +136,7 @@ export function DepartmentRowCard({
           <button
             type="button"
             onClick={() => setEditing(true)}
-            className="flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium text-brand-700 hover:bg-brand-50"
+            className="flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium text-indigo-royal-700 hover:bg-indigo-royal-50"
           >
             <Pencil className="h-3 w-3" />
             {t('common.edit', lang)}

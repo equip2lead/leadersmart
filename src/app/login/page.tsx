@@ -51,7 +51,7 @@ function LoginForm() {
       </p>
 
       {showCheckEmail && (
-        <p className="mt-6 rounded-lg bg-flame-50 px-4 py-3 text-sm text-flame-800">
+        <p className="mt-6 rounded-lg bg-gold-warm-50 px-4 py-3 text-sm text-gold-warm-800">
           {t('auth.checkEmail')}
         </p>
       )}
@@ -92,13 +92,13 @@ function LoginForm() {
               type="checkbox"
               checked={remember}
               onChange={(e) => setRemember(e.target.checked)}
-              className="h-4 w-4 rounded border-gray-300 text-brand-700 focus:ring-brand-500"
+              className="h-4 w-4 rounded border-gray-300 text-indigo-royal-700 focus:ring-indigo-royal-500"
             />
             {t('auth.login.remember')}
           </label>
           <a
             href="#"
-            className="text-sm font-medium text-brand-700 hover:underline"
+            className="text-sm font-medium text-indigo-royal-700 hover:underline"
           >
             {t('auth.login.forgot')}
           </a>
@@ -126,7 +126,7 @@ function LoginForm() {
         {t('auth.login.noAccount')}{' '}
         <Link
           href="/signup"
-          className="font-semibold text-brand-700 hover:underline"
+          className="font-semibold text-indigo-royal-700 hover:underline"
         >
           {t('auth.login.signupLink')}
         </Link>
@@ -143,7 +143,7 @@ export default function LoginPage() {
           href="/"
           className="mb-6 flex items-center justify-center gap-2 text-ink"
         >
-          <Flame className="h-8 w-8 text-flame-600" aria-hidden="true" />
+          <Flame className="h-8 w-8 text-gold-warm-600" aria-hidden="true" />
           <span className="text-xl font-bold">LeaderSmart</span>
         </Link>
         <Suspense fallback={<div className="card h-96" />}>

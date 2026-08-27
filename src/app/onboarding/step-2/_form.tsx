@@ -76,7 +76,7 @@ export function Step2Form({
 
   return (
     <form onSubmit={onSave} className="space-y-6">
-      <div className="flex items-start gap-3 rounded-xl border border-brand-100 bg-brand-50 px-4 py-3 text-xs text-brand-800">
+      <div className="flex items-start gap-3 rounded-xl border border-indigo-royal-100 bg-indigo-royal-50 px-4 py-3 text-xs text-indigo-royal-800">
         <Info className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
         <p>{t('onboarding.step2.info', lang)}</p>
       </div>
@@ -125,7 +125,7 @@ export function Step2Form({
         type="button"
         onClick={addRow}
         disabled={rows.length >= MAX_ROWS || !serviceKeyAvailable}
-        className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium text-brand-700 hover:bg-brand-50 disabled:opacity-40"
+        className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium text-indigo-royal-700 hover:bg-indigo-royal-50 disabled:opacity-40"
       >
         <Plus className="h-3 w-3" />
         {t('onboarding.step2.addRow', lang)}

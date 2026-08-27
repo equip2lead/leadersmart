@@ -153,7 +153,7 @@ export default async function AuditLogPage({
                     {formatDateTime(r.created_at)}
                   </td>
                   <td className="px-4 py-3 text-sm text-body">
-                    <span className="inline-flex items-center rounded-full bg-brand-50 px-2 py-0.5 text-xs font-medium text-brand-700">
+                    <span className="inline-flex items-center rounded-full bg-indigo-royal-50 px-2 py-0.5 text-xs font-medium text-indigo-royal-700">
                       {t(`audit.action.${r.action}`, lang)}
                     </span>
                   </td>

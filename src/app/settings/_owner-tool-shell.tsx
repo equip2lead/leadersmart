@@ -25,7 +25,7 @@ export function OwnerToolShell({
       <PageHeading title={t(titleKey, lang)} subtitle={t(subtitleKey, lang)} />
 
       <div className="mt-6 card flex flex-col items-center text-center">
-        <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-brand-50 text-brand-700">
+        <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-indigo-royal-50 text-indigo-royal-700">
           <Icon className="h-6 w-6" aria-hidden="true" />
         </div>
         <p className="mt-4 text-sm font-semibold text-ink">
@@ -34,7 +34,7 @@ export function OwnerToolShell({
         <p className="mt-2 max-w-md text-sm text-body">{t(bodyKey, lang)}</p>
         <Link
           href="/settings"
-          className="mt-6 inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-brand-700 hover:bg-brand-50"
+          className="mt-6 inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-indigo-royal-700 hover:bg-indigo-royal-50"
         >
           <ArrowLeft className="h-4 w-4" />
           {t('common.back', lang)}

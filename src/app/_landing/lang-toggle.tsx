@@ -49,7 +49,7 @@ export function LangToggle({ current }: { current: AppLanguage }) {
             aria-pressed={isActive}
             className={
               isActive
-                ? 'rounded-full bg-brand-700 px-3 py-1 text-white'
+                ? 'rounded-full bg-indigo-royal-700 px-3 py-1 text-white'
                 : 'rounded-full px-3 py-1 text-muted hover:text-ink'
             }
           >

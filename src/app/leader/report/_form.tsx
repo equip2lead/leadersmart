@@ -86,7 +86,7 @@ export function WeeklyReportForm({
   return (
     <div className="mt-6 space-y-4">
       {hasAttendance && (
-        <p className="rounded-lg bg-brand-50 px-4 py-3 text-sm text-brand-800">
+        <p className="rounded-lg bg-indigo-royal-50 px-4 py-3 text-sm text-indigo-royal-800">
           {t('report.autofillNotice', lang)}
         </p>
       )}

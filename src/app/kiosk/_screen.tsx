@@ -155,7 +155,7 @@ export function KioskScreen({
     <div className="flex min-h-screen flex-col bg-gray-50 print:bg-white">
       <header className="flex items-center justify-between border-b border-gray-100 bg-white px-6 py-4 print:hidden">
         <div className="flex items-center gap-2">
-          <Flame className="h-6 w-6 text-flame-600" aria-hidden="true" />
+          <Flame className="h-6 w-6 text-gold-warm-600" aria-hidden="true" />
           <span className="text-lg font-bold text-ink">
             {churchName} · Kiosk
           </span>
@@ -304,11 +304,11 @@ export function KioskScreen({
                         onClick={() => toggle(c.id)}
                         className={`flex items-center gap-4 rounded-xl border-2 p-4 text-left transition ${
                           picked
-                            ? 'border-brand-700 bg-brand-50'
-                            : 'border-gray-100 bg-white hover:border-brand-300'
+                            ? 'border-indigo-royal-700 bg-indigo-royal-50'
+                            : 'border-gray-100 bg-white hover:border-indigo-royal-300'
                         }`}
                       >
-                        <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-flame-100 text-flame-700 text-xl font-bold">
+                        <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-gold-warm-100 text-gold-warm-700 text-xl font-bold">
                           {c.full_name.slice(0, 1)}
                         </div>
                         <div className="min-w-0 flex-1">
@@ -320,7 +320,7 @@ export function KioskScreen({
                         <span
                           className={`flex h-7 w-7 items-center justify-center rounded-full text-sm font-bold ${
                             picked
-                              ? 'bg-brand-700 text-white'
+                              ? 'bg-indigo-royal-700 text-white'
                               : 'border border-gray-300 bg-white'
                           }`}
                         >
