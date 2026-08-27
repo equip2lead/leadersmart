@@ -17,6 +17,7 @@ import {
   ShowcaseSundayChecklist,
 } from './_landing/showcase';
 import { Features } from './_landing/features';
+import { CustomerDashboards } from './_landing/customer-dashboards';
 import { Pricing } from './_landing/pricing';
 import { Testimonial } from './_landing/testimonial';
 import { FAQ } from './_landing/faq';
@@ -58,6 +59,7 @@ export default async function LandingPage() {
         <ShowcaseSundayChecklist lang={lang} />
         <ShowcasePeerEvaluation lang={lang} />
         <Features lang={lang} />
+        <CustomerDashboards lang={lang} />
         <Pricing
           lang={lang}
           currency={currency}
