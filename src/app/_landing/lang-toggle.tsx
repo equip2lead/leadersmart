@@ -36,7 +36,7 @@ export function LangToggle({ current }: { current: AppLanguage }) {
     <div
       role="group"
       aria-label="Language"
-      className="inline-flex items-center rounded-full border border-gray-200 bg-white p-0.5 text-xs font-semibold"
+      className="inline-flex items-center rounded-full border border-[#1A1E3F]/15 bg-white p-0.5 text-xs font-bold"
     >
       {(['en', 'fr'] as const).map((lang) => {
         const isActive = active === lang;
@@ -49,8 +49,8 @@ export function LangToggle({ current }: { current: AppLanguage }) {
             aria-pressed={isActive}
             className={
               isActive
-                ? 'rounded-full bg-indigo-royal-700 px-3 py-1 text-white'
-                : 'rounded-full px-3 py-1 text-muted hover:text-ink'
+                ? 'rounded-full bg-[#1A1E3F] px-3 py-1 text-[#EFCB4A]'
+                : 'rounded-full px-3 py-1 text-[#3D4470] hover:text-[#1A1E3F]'
             }
           >
             {lang.toUpperCase()}

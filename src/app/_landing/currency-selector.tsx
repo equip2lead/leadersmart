@@ -25,13 +25,13 @@ export function CurrencySelector({
   }
 
   return (
-    <label className="inline-flex items-center gap-2 text-xs text-muted">
+    <label className="inline-flex items-center gap-2 text-xs text-[#3D4470]">
       <span>{t('landing.pricing.changeCurrency', lang)}:</span>
       <select
         value={current}
         onChange={(e) => pick(e.target.value)}
         disabled={pending}
-        className="rounded-md border border-gray-200 bg-white px-2 py-1 text-xs text-ink focus:border-indigo-royal-500 focus:outline-none"
+        className="rounded-md border border-[#1A1E3F]/15 bg-white px-2 py-1 text-xs text-[#1A1E3F] focus:border-[#EFCB4A] focus:outline-none focus:ring-2 focus:ring-[#EFCB4A]/40"
       >
         {ALL_CURRENCIES.map((c) => (
           <option key={c} value={c}>

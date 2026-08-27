@@ -140,7 +140,10 @@ function HeroMockup({ lang }: { lang: AppLanguage }) {
 
       {/* Floating badges. Hidden below `sm` — at 375px they overlap the
           mockup body and turn the composition to mush. */}
-      <div className="absolute -left-3 -top-5 hidden -rotate-2 sm:block">
+      {/* `-top-10` clears the browser chrome entirely — at a shallower
+          offset this badge sits on top of the "Leadership Overview"
+          title and eats the first word. */}
+      <div className="absolute -left-3 -top-10 hidden -rotate-2 sm:block">
         <FloatBadge tone="yellow" icon={CheckSquare}>
           {t('landing.hero.badge.checklist', lang)}
         </FloatBadge>
