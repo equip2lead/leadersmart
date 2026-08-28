@@ -20,7 +20,7 @@ import type { AppLanguage } from '@/lib/types';
 // tailwind.config screen, because a 200px sidebar stops being readable
 // well before Tailwind's `md` and the config is shared with the app.
 
-const ROTATE_MS = 6000;
+const ROTATE_MS = 4000;
 const MANUAL_PAUSE_MS = 15000;
 
 const FLING = {
@@ -36,8 +36,20 @@ const FIRE = {
 };
 
 const SLIDES = [
-  { id: 'network', url: FLING.url, dotKey: 'landing.dash.dot.network' },
-  { id: 'church', url: FIRE.url, dotKey: 'landing.dash.dot.church' },
+  {
+    id: 'network',
+    url: FLING.url,
+    emoji: '\u{1F30D}',
+    labelKey: 'landing.dash.toggle.network',
+    dotKey: 'landing.dash.dot.network',
+  },
+  {
+    id: 'church',
+    url: FIRE.url,
+    emoji: '\u{26EA}',
+    labelKey: 'landing.dash.toggle.church',
+    dotKey: 'landing.dash.dot.church',
+  },
 ] as const;
 
 export function CustomerDashboards({ lang }: { lang: AppLanguage }) {
@@ -130,6 +142,26 @@ export function CustomerDashboards({ lang }: { lang: AppLanguage }) {
           onFocusCapture={() => setHovered(true)}
           onBlurCapture={() => setHovered(false)}
         >
+          <div className="mx-auto mb-6 max-w-fit rounded-full border border-[#1A1E3F]/10 bg-white p-1.5 shadow-sm">
+            {SLIDES.map((slide, i) => (
+              <button
+                key={slide.id}
+                type="button"
+                onClick={() => jumpTo(i)}
+                aria-current={index === i}
+                className={
+                  'font-manrope rounded-full px-6 py-2.5 text-sm font-bold transition-colors duration-200 ' +
+                  (index === i
+                    ? 'bg-[#1A1E3F] text-[#EFCB4A]'
+                    : 'text-gray-500 hover:bg-[#F9F4E7]')
+                }
+              >
+                <span aria-hidden="true">{slide.emoji}</span>{' '}
+                {t(slide.labelKey, lang)}
+              </button>
+            ))}
+          </div>
+
           <div
             role="region"
             aria-live="polite"
