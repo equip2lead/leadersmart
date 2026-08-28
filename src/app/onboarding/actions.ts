@@ -314,6 +314,23 @@ export async function createDepartmentsStep(names: string[]): Promise<Step3Resul
   return { ok: true, created: data?.length ?? 0 };
 }
 
+// Ministries have no step 4, so step 3 is their last. Closing the wizard
+// here writes the same rows a church would get from skipping step 4 —
+// pom_skipped_at plus the two completion stamps — so a ministry and a
+// church that skipped PoM are indistinguishable to everything downstream.
+export async function finishMinistryWizard(): Promise<StepResult> {
+  const { me, error } = await requireOwner();
+  if (!me) return { ok: false, error };
+  if (me.church.organization_type !== 'ministry') {
+    return { ok: false, error: 'not_ministry' };
+  }
+  await markProgress(me.user.id, {
+    pom_skipped_at: new Date().toISOString(),
+  });
+  await finishWizard(me.user.id, me.church.id);
+  return { ok: true };
+}
+
 export async function skipDepartmentsStep(): Promise<StepResult> {
   const { me, error } = await requireOwner();
   if (!me) return { ok: false, error };

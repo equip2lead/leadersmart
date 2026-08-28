@@ -1,3 +1,4 @@
+import { redirect } from 'next/navigation';
 import { getMe } from '@/lib/auth';
 import { createClient } from '@/lib/supabase/server';
 import { t } from '@/lib/i18n';
@@ -9,6 +10,12 @@ export const dynamic = 'force-dynamic';
 
 export default async function Step4Page() {
   const me = await getMe();
+
+  // Pastor of the Month is a church concept. Ministries finish at step 3,
+  // so a deep link or a stale back-button lands here — bounce to the
+  // wizard root, which resolves to step 3 for them.
+  if (me.church.organization_type === 'ministry') redirect('/onboarding');
+
   const lang = me.user.preferred_language;
   const progress = await ensureProgress(me);
   const supabase = await createClient();
@@ -34,7 +41,12 @@ export default async function Step4Page() {
 
   return (
     <div className="grid grid-cols-1 overflow-hidden rounded-2xl bg-white shadow-lg md:grid-cols-[280px_1fr]">
-      <ProgressSidebar currentStep={4} progress={progress} lang={lang} />
+      <ProgressSidebar
+        currentStep={4}
+        progress={progress}
+        lang={lang}
+        orgType={me.church.organization_type}
+      />
       <div className="px-6 py-10 sm:px-10">
         <h1 className="text-2xl font-bold text-ink sm:text-3xl">
           {t('onboarding.step4.title', lang)}

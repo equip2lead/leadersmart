@@ -24,7 +24,7 @@ export default async function OnboardingRoot() {
 
   const progress = await ensureProgress(me);
   if (progress.org_type_selected_at) {
-    redirect(`/onboarding/step-${nextStep(progress)}`);
+    redirect(`/onboarding/step-${nextStep(progress, me.church.organization_type)}`);
   }
 
   const lang = me.user.preferred_language;

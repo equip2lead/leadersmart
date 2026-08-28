@@ -494,6 +494,26 @@ const en: Dictionary = {
   'onboarding.step4.errMonth': 'Please pick a valid month.',
   'onboarding.step4.errPastor': 'Please choose a pastor to assign.',
 
+  // Ministry wording for step 3 and the /admin prompts. Same tables and
+  // same routes as the church variants — only the vocabulary differs.
+  'onboarding.step3.ministry.navTitle': 'Teams',
+  'onboarding.step3.ministry.navHint': 'Leadership, Programs, Outreach…',
+  'onboarding.step3.ministry.title': 'What teams or programs do you have?',
+  'onboarding.step3.ministry.subtitle':
+    'Teams are the groups that make your ministry run. Pick from the suggestions or add your own.',
+  'onboarding.step3.ministry.suggestionsLabel': 'Common teams',
+  'onboarding.step3.ministry.customLabel': 'Add a custom team',
+  'onboarding.step3.ministry.customPlaceholder': 'e.g. Campus Outreach',
+  'onboarding.step3.ministry.count': '{n} team(s) will be created',
+  'onboarding.step3.ministrySuggest.leadership': 'Leadership Team',
+  'onboarding.step3.ministrySuggest.programs': 'Programs Team',
+  'onboarding.step3.ministrySuggest.communications': 'Communications',
+  'onboarding.step3.ministrySuggest.volunteers': 'Volunteers',
+  'onboarding.step3.ministrySuggest.operations': 'Operations',
+  'onboarding.step3.ministrySuggest.outreach': 'Outreach',
+  'onboarding.step3.ministrySuggest.training': 'Training',
+  'onboarding.step3.ministrySuggest.finance': 'Finance',
+
   // Skipped-onboarding prompts on /admin dashboard
   'admin.onboardingSkipped.title': 'Finish setting up',
   'admin.onboardingSkipped.admins.title': 'Add your admin team',
@@ -508,6 +528,14 @@ const en: Dictionary = {
   'admin.onboardingSkipped.pom.body':
     'Pastor of the Month is a rotating leadership role. Track Sunday checklists and monthly performance.',
   'admin.onboardingSkipped.pom.cta': 'Assign Pastor',
+  'admin.onboardingSkipped.admins.ministry.title': 'Invite team leaders',
+  'admin.onboardingSkipped.admins.ministry.body':
+    'Team leaders share the workload with you. Invite the people who help run your ministry.',
+  'admin.onboardingSkipped.admins.ministry.cta': 'Invite team leader',
+  'admin.onboardingSkipped.departments.ministry.title': 'Create your first team',
+  'admin.onboardingSkipped.departments.ministry.body':
+    'Teams are the groups that make your ministry run. Add Leadership, Programs, Outreach, or any team you have.',
+  'admin.onboardingSkipped.departments.ministry.cta': 'Create team',
 
   // Accept invite
   'accept.verifying': 'Verifying your invitation…',
@@ -1597,6 +1625,24 @@ const fr: Dictionary = {
   'onboarding.step4.errMonth': 'Veuillez choisir un mois valide.',
   'onboarding.step4.errPastor': 'Veuillez choisir un pasteur à assigner.',
 
+  'onboarding.step3.ministry.navTitle': 'Équipes',
+  'onboarding.step3.ministry.navHint': 'Direction, programmes, rayonnement…',
+  'onboarding.step3.ministry.title': 'Quelles équipes ou programmes avez-vous ?',
+  'onboarding.step3.ministry.subtitle':
+    "Les équipes sont les groupes qui font vivre votre ministère. Choisissez parmi les suggestions ou ajoutez les vôtres.",
+  'onboarding.step3.ministry.suggestionsLabel': 'Équipes courantes',
+  'onboarding.step3.ministry.customLabel': 'Ajouter une équipe personnalisée',
+  'onboarding.step3.ministry.customPlaceholder': 'ex. Rayonnement universitaire',
+  'onboarding.step3.ministry.count': '{n} équipe(s) seront créées',
+  'onboarding.step3.ministrySuggest.leadership': 'Équipe de direction',
+  'onboarding.step3.ministrySuggest.programs': 'Équipe des programmes',
+  'onboarding.step3.ministrySuggest.communications': 'Communication',
+  'onboarding.step3.ministrySuggest.volunteers': 'Bénévoles',
+  'onboarding.step3.ministrySuggest.operations': 'Opérations',
+  'onboarding.step3.ministrySuggest.outreach': 'Rayonnement',
+  'onboarding.step3.ministrySuggest.training': 'Formation',
+  'onboarding.step3.ministrySuggest.finance': 'Finances',
+
   'admin.onboardingSkipped.title': 'Finaliser la mise en place',
   'admin.onboardingSkipped.admins.title': 'Ajoutez votre équipe pastorale',
   'admin.onboardingSkipped.admins.body':
@@ -1612,6 +1658,14 @@ const fr: Dictionary = {
   'admin.onboardingSkipped.pom.body':
     "Le Pasteur du Mois est un rôle tournant. Suivez les listes du dimanche et la performance mensuelle.",
   'admin.onboardingSkipped.pom.cta': 'Assigner le pasteur',
+  'admin.onboardingSkipped.admins.ministry.title': 'Invitez vos responsables d\'équipe',
+  'admin.onboardingSkipped.admins.ministry.body':
+    "Les responsables d'équipe partagent la charge avec vous. Invitez les personnes qui font tourner votre ministère.",
+  'admin.onboardingSkipped.admins.ministry.cta': "Inviter un responsable d'équipe",
+  'admin.onboardingSkipped.departments.ministry.title': 'Créez votre première équipe',
+  'admin.onboardingSkipped.departments.ministry.body':
+    "Les équipes sont les groupes qui font vivre votre ministère. Ajoutez la direction, les programmes, le rayonnement ou toute autre équipe.",
+  'admin.onboardingSkipped.departments.ministry.cta': 'Créer une équipe',
 
   // Acceptation d\'invitation
   'accept.verifying': 'Vérification de votre invitation…',

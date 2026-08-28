@@ -1,6 +1,6 @@
 import { Check } from 'lucide-react';
 import { t } from '@/lib/i18n';
-import type { AppLanguage } from '@/lib/types';
+import type { AppLanguage, OrganizationType } from '@/lib/types';
 import type { OnboardingProgress } from './_progress-lib';
 
 type Step = 1 | 2 | 3 | 4;
@@ -12,11 +12,14 @@ export function ProgressSidebar({
   currentStep,
   progress,
   lang,
+  orgType = 'church',
 }: {
   currentStep: Step;
   progress: OnboardingProgress;
   lang: AppLanguage;
+  orgType?: OrganizationType;
 }) {
+  const isMinistry = orgType === 'ministry';
   const status = (step: Step): 'done' | 'current' | 'upcoming' => {
     if (step < currentStep && isStepDone(step, progress)) return 'done';
     if (step === currentStep) return 'current';
@@ -24,11 +27,29 @@ export function ProgressSidebar({
     return 'upcoming';
   };
 
+  // Ministries run a three-step wizard — Pastor of the Month is a church
+  // concept, so step 4 is not rendered and the count reads 3.
   const steps: Array<{ n: Step; titleKey: string; hintKey: string }> = [
     { n: 1, titleKey: 'onboarding.step1.navTitle', hintKey: 'onboarding.step1.navHint' },
     { n: 2, titleKey: 'onboarding.step2.navTitle', hintKey: 'onboarding.step2.navHint' },
-    { n: 3, titleKey: 'onboarding.step3.navTitle', hintKey: 'onboarding.step3.navHint' },
-    { n: 4, titleKey: 'onboarding.step4.navTitle', hintKey: 'onboarding.step4.navHint' },
+    {
+      n: 3,
+      titleKey: isMinistry
+        ? 'onboarding.step3.ministry.navTitle'
+        : 'onboarding.step3.navTitle',
+      hintKey: isMinistry
+        ? 'onboarding.step3.ministry.navHint'
+        : 'onboarding.step3.navHint',
+    },
+    ...(isMinistry
+      ? []
+      : [
+          {
+            n: 4 as Step,
+            titleKey: 'onboarding.step4.navTitle',
+            hintKey: 'onboarding.step4.navHint',
+          },
+        ]),
   ];
 
   return (

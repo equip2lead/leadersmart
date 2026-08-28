@@ -105,9 +105,25 @@ export default async function AdminDashboard() {
         .maybeSingle()
     : { data: null };
   const skipped = skipRes.data;
+
+  // Ministries use the same tables but different vocabulary, and have no
+  // Pastor of the Month at all.
+  const isMinistry = church.organization_type === 'ministry';
+  const skipKey = (card: 'admins' | 'departments', part: 'title' | 'body' | 'cta') =>
+    isMinistry
+      ? `admin.onboardingSkipped.${card}.ministry.${part}`
+      : `admin.onboardingSkipped.${card}.${part}`;
+
+  // pom_skipped_at is excluded for ministries — the wizard sets it for
+  // every ministry on completion, so counting it would render the
+  // "Finish setting up" heading above an empty grid.
   const anySkipped =
     !!skipped &&
-    !!(skipped.admins_skipped_at || skipped.departments_skipped_at || skipped.pom_skipped_at);
+    !!(
+      skipped.admins_skipped_at ||
+      skipped.departments_skipped_at ||
+      (!isMinistry && skipped.pom_skipped_at)
+    );
 
   const [activeRes, deptCountRes, userCountRes, deptsRes, latestChecklistRes, reportsRes] =
     await Promise.all([
@@ -197,9 +213,9 @@ export default async function AdminDashboard() {
             {skipped.admins_skipped_at && (
               <SkipCard
                 icon={Users}
-                titleKey="admin.onboardingSkipped.admins.title"
-                bodyKey="admin.onboardingSkipped.admins.body"
-                ctaKey="admin.onboardingSkipped.admins.cta"
+                titleKey={skipKey('admins', 'title')}
+                bodyKey={skipKey('admins', 'body')}
+                ctaKey={skipKey('admins', 'cta')}
                 href="/admin/users"
                 lang={lang}
               />
@@ -207,14 +223,16 @@ export default async function AdminDashboard() {
             {skipped.departments_skipped_at && (
               <SkipCard
                 icon={LayoutGrid}
-                titleKey="admin.onboardingSkipped.departments.title"
-                bodyKey="admin.onboardingSkipped.departments.body"
-                ctaKey="admin.onboardingSkipped.departments.cta"
+                titleKey={skipKey('departments', 'title')}
+                bodyKey={skipKey('departments', 'body')}
+                ctaKey={skipKey('departments', 'cta')}
                 href="/admin/departments"
                 lang={lang}
               />
             )}
-            {skipped.pom_skipped_at && (
+            {/* Pastor of the Month is church-only — ministries never get
+                this prompt, because there is nothing for it to link to. */}
+            {!isMinistry && skipped.pom_skipped_at && (
               <SkipCard
                 icon={Award}
                 titleKey="admin.onboardingSkipped.pom.title"

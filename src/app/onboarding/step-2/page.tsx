@@ -15,7 +15,12 @@ export default async function Step2Page() {
 
   return (
     <div className="grid grid-cols-1 overflow-hidden rounded-2xl bg-white shadow-lg md:grid-cols-[280px_1fr]">
-      <ProgressSidebar currentStep={2} progress={progress} lang={lang} />
+      <ProgressSidebar
+        currentStep={2}
+        progress={progress}
+        lang={lang}
+        orgType={me.church.organization_type}
+      />
       <div className="px-6 py-10 sm:px-10">
         <h1 className="text-2xl font-bold text-ink sm:text-3xl">
           {t('onboarding.step2.title', lang)}

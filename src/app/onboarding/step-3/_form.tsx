@@ -4,17 +4,41 @@ import { useState, useTransition, type FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import { Plus, Trash2 } from 'lucide-react';
 import { t } from '@/lib/i18n';
-import type { AppLanguage } from '@/lib/types';
-import { createDepartmentsStep, skipDepartmentsStep } from '../actions';
+import type { AppLanguage, OrganizationType } from '@/lib/types';
+import {
+  createDepartmentsStep,
+  finishMinistryWizard,
+  skipDepartmentsStep,
+} from '../actions';
 
 export function Step3Form({
   lang,
   suggestions,
+  orgType,
 }: {
   lang: AppLanguage;
   suggestions: string[];
+  orgType: OrganizationType;
 }) {
   const router = useRouter();
+  const isMinistry = orgType === 'ministry';
+  // Ministries end here: there is no step 4, so saving or skipping this
+  // step has to close the wizard before navigating, otherwise /dashboard
+  // would bounce them straight back into onboarding.
+  const advance = async (): Promise<string | null> => {
+    if (!isMinistry) {
+      router.push('/onboarding/step-4');
+      return null;
+    }
+    const done = await finishMinistryWizard();
+    if (!done.ok) return mapError(done.error, lang);
+    router.push('/dashboard');
+    return null;
+  };
+  const k = (base: string) =>
+    isMinistry
+      ? `onboarding.step3.ministry.${base}`
+      : `onboarding.step3.${base}`;
   // Suggestion state: name → checked. Initialised true for all so the
   // spec's "pre-checked by default so pastor can just uncheck" behaviour
   // holds.
@@ -59,7 +83,8 @@ export function Step3Form({
         setError(mapError(res.error, lang));
         return;
       }
-      router.push('/onboarding/step-4');
+      const advErr = await advance();
+      if (advErr) setError(advErr);
     });
   }
 
@@ -71,7 +96,8 @@ export function Step3Form({
         setError(mapError(res.error, lang));
         return;
       }
-      router.push('/onboarding/step-4');
+      const advErr = await advance();
+      if (advErr) setError(advErr);
     });
   }
 
@@ -82,7 +108,7 @@ export function Step3Form({
     <form onSubmit={onSave} className="space-y-6">
       <fieldset>
         <legend className="label">
-          {t('onboarding.step3.suggestionsLabel', lang)}
+          {t(k('suggestionsLabel'), lang)}
         </legend>
         <ul className="mt-2 grid gap-2 sm:grid-cols-2">
           {suggestions.map((s) => {
@@ -113,13 +139,13 @@ export function Step3Form({
 
       <div>
         <label className="label" htmlFor="custom-dept">
-          {t('onboarding.step3.customLabel', lang)}
+          {t(k('customLabel'), lang)}
         </label>
         <div className="flex gap-2">
           <input
             id="custom-dept"
             className="input"
-            placeholder={t('onboarding.step3.customPlaceholder', lang)}
+            placeholder={t(k('customPlaceholder'), lang)}
             value={customName}
             maxLength={60}
             onChange={(e) => setCustomName(e.target.value)}
@@ -163,7 +189,7 @@ export function Step3Form({
       </div>
 
       <p className="text-xs text-muted">
-        {t('onboarding.step3.count', lang).replace('{n}', String(totalChecked))}
+        {t(k('count'), lang).replace('{n}', String(totalChecked))}
       </p>
 
       {error && (

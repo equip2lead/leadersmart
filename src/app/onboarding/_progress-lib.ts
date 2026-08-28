@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server';
 import type { Me } from '@/lib/auth';
+import type { OrganizationType } from '@/lib/types';
 
 export type OnboardingProgress = {
   user_id: string;
@@ -57,10 +58,20 @@ export async function ensureProgress(me: Me): Promise<OnboardingProgress> {
 // Which step the wizard should default to based on the progress row.
 // If the user has completed church profile but hasn't touched admins,
 // they resume at step 2, etc.
-export function nextStep(p: OnboardingProgress): 1 | 2 | 3 | 4 {
+//
+// Ministries have no step 4, so they cap at 3. Without the cap, a
+// ministry that finished step 3 but whose completion write failed would
+// be sent to step 4, which bounces to /onboarding, which routes back to
+// step 4 — a redirect loop. Capping means the worst case is re-showing
+// step 3, where saving again completes the wizard.
+export function nextStep(
+  p: OnboardingProgress,
+  orgType: OrganizationType = 'church',
+): 1 | 2 | 3 | 4 {
   if (!p.church_profile_completed_at) return 1;
   if (!p.admins_invited_at && !p.admins_skipped_at) return 2;
   if (!p.departments_created_at && !p.departments_skipped_at) return 3;
+  if (orgType === 'ministry') return 3;
   if (!p.pom_assigned_at && !p.pom_skipped_at) return 4;
   return 4;
 }
