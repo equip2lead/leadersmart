@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { flushSync } from 'react-dom';
 import Image from 'next/image';
 import { t } from '@/lib/i18n';
 import type { AppLanguage } from '@/lib/types';
@@ -22,6 +23,7 @@ import type { AppLanguage } from '@/lib/types';
 
 const ROTATE_MS = 4000;
 const MANUAL_PAUSE_MS = 15000;
+const ANNOUNCE_MS = 500;
 
 const FLING = {
   accent: '#B91572',
@@ -68,7 +70,13 @@ export function CustomerDashboards({ lang }: { lang: AppLanguage }) {
   // also makes reduced-motion the safe default if matchMedia is missing.
   const [motionOk, setMotionOk] = useState(false);
 
+  // The live region is silent while the carousel rotates on its own —
+  // announcing a whole dashboard every few seconds is noise nobody asked
+  // for. It is switched to `polite` only around a deliberate click.
+  const [announce, setAnnounce] = useState(false);
+
   const manualTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const announceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -102,6 +110,7 @@ export function CustomerDashboards({ lang }: { lang: AppLanguage }) {
   useEffect(
     () => () => {
       if (manualTimer.current) clearTimeout(manualTimer.current);
+      if (announceTimer.current) clearTimeout(announceTimer.current);
     },
     [],
   );
@@ -109,13 +118,23 @@ export function CustomerDashboards({ lang }: { lang: AppLanguage }) {
   // Clicking a dot holds rotation for 15s so there is time to read the
   // slide that was asked for.
   const jumpTo = useCallback((next: number) => {
+    // Commit `aria-live="polite"` in its own render, before the slide
+    // changes. A screen reader that first sees the attribute in the same
+    // mutation that swapped the content can skip the announcement, so the
+    // region has to be live already when the new panel lands.
+    flushSync(() => setAnnounce(true));
+
     setIndex(next);
     setManualHold(true);
+
     if (manualTimer.current) clearTimeout(manualTimer.current);
     manualTimer.current = setTimeout(
       () => setManualHold(false),
       MANUAL_PAUSE_MS,
     );
+
+    if (announceTimer.current) clearTimeout(announceTimer.current);
+    announceTimer.current = setTimeout(() => setAnnounce(false), ANNOUNCE_MS);
   }, []);
 
   return (
@@ -164,7 +183,7 @@ export function CustomerDashboards({ lang }: { lang: AppLanguage }) {
 
           <div
             role="region"
-            aria-live="polite"
+            aria-live={announce ? 'polite' : 'off'}
             aria-label={t('landing.dash.title', lang)}
             className="overflow-hidden rounded-2xl border border-[#1A1E3F]/10 bg-white shadow-2xl shadow-[#1A1E3F]/10"
           >
