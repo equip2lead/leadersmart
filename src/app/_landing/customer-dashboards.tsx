@@ -1,13 +1,14 @@
 'use client';
 
-import { useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { t } from '@/lib/i18n';
 import type { AppLanguage } from '@/lib/types';
 
-// Two example customer dashboards behind a toggle — a multi-country
-// network (First Ladies International) and a single local church (Fire
-// Church) — so a visitor sees the product shaped to their own scale.
+// Two example customer dashboards on an auto-rotating carousel — a
+// multi-country network (First Ladies International) and a single local
+// church (Fire Church) — so a visitor sees the product shaped to their
+// own scale without having to click anything.
 //
 // Each dashboard carries the CUSTOMER's accent colour (FLING pink, Fire
 // orange), not the LeaderSmart palette. That is deliberate: these read
@@ -19,7 +20,8 @@ import type { AppLanguage } from '@/lib/types';
 // tailwind.config screen, because a 200px sidebar stops being readable
 // well before Tailwind's `md` and the config is shared with the app.
 
-type View = 'network' | 'church';
+const ROTATE_MS = 6000;
+const MANUAL_PAUSE_MS = 15000;
 
 const FLING = {
   accent: '#B91572',
@@ -33,8 +35,76 @@ const FIRE = {
   url: 'app.leadersmart.com/firechurch',
 };
 
+const SLIDES = [
+  { id: 'network', url: FLING.url, dotKey: 'landing.dash.dot.network' },
+  { id: 'church', url: FIRE.url, dotKey: 'landing.dash.dot.church' },
+] as const;
+
 export function CustomerDashboards({ lang }: { lang: AppLanguage }) {
-  const [view, setView] = useState<View>('network');
+  const [index, setIndex] = useState(0);
+
+  // Three independent reasons autoplay can stop. Kept as separate flags
+  // rather than one `isPaused` boolean so they can't clobber each other
+  // — e.g. the pointer leaving while the tab is still hidden must not
+  // restart rotation.
+  const [hovered, setHovered] = useState(false);
+  const [tabHidden, setTabHidden] = useState(false);
+  const [manualHold, setManualHold] = useState(false);
+
+  // Starts false so the server render and the first client render agree;
+  // the effect below is the only thing that ever turns rotation on. That
+  // also makes reduced-motion the safe default if matchMedia is missing.
+  const [motionOk, setMotionOk] = useState(false);
+
+  const manualTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const sync = () => setMotionOk(!mq.matches);
+    sync();
+    mq.addEventListener('change', sync);
+    return () => mq.removeEventListener('change', sync);
+  }, []);
+
+  useEffect(() => {
+    const onVisibility = () => setTabHidden(document.hidden);
+    onVisibility();
+    document.addEventListener('visibilitychange', onVisibility);
+    return () => document.removeEventListener('visibilitychange', onVisibility);
+  }, []);
+
+  const autoplay = motionOk && !hovered && !tabHidden && !manualHold;
+
+  useEffect(() => {
+    if (!autoplay) return;
+    // The interval id is a local const rather than a ref: the effect's
+    // own cleanup covers both a dependency change and unmount, and a ref
+    // would only add a way for the two to disagree.
+    const id = setInterval(
+      () => setIndex((prev) => (prev + 1) % SLIDES.length),
+      ROTATE_MS,
+    );
+    return () => clearInterval(id);
+  }, [autoplay]);
+
+  useEffect(
+    () => () => {
+      if (manualTimer.current) clearTimeout(manualTimer.current);
+    },
+    [],
+  );
+
+  // Clicking a dot holds rotation for 15s so there is time to read the
+  // slide that was asked for.
+  const jumpTo = useCallback((next: number) => {
+    setIndex(next);
+    setManualHold(true);
+    if (manualTimer.current) clearTimeout(manualTimer.current);
+    manualTimer.current = setTimeout(
+      () => setManualHold(false),
+      MANUAL_PAUSE_MS,
+    );
+  }, []);
 
   return (
     <section className="bg-[#FDFCF7] py-24">
@@ -51,54 +121,58 @@ export function CustomerDashboards({ lang }: { lang: AppLanguage }) {
           </p>
         </div>
 
-        <div className="mt-10 flex justify-center">
+        {/* Hover and focus both pause: a keyboard user tabbing onto a dot
+            is reading just as much as a mouse user hovering. */}
+        <div
+          className="mx-auto mt-12 max-w-5xl"
+          onMouseEnter={() => setHovered(true)}
+          onMouseLeave={() => setHovered(false)}
+          onFocusCapture={() => setHovered(true)}
+          onBlurCapture={() => setHovered(false)}
+        >
           <div
-            role="tablist"
+            role="region"
+            aria-live="polite"
             aria-label={t('landing.dash.title', lang)}
-            className="inline-flex rounded-full border border-[#1A1E3F]/10 bg-white p-1"
+            className="overflow-hidden rounded-2xl border border-[#1A1E3F]/10 bg-white shadow-2xl shadow-[#1A1E3F]/10"
           >
-            <ToggleButton
-              active={view === 'network'}
-              onClick={() => setView('network')}
-              id="dash-tab-network"
-              controls="dash-panel-network"
-            >
-              <span aria-hidden="true">🌍</span>{' '}
-              {t('landing.dash.toggle.network', lang)}
-            </ToggleButton>
-            <ToggleButton
-              active={view === 'church'}
-              onClick={() => setView('church')}
-              id="dash-tab-church"
-              controls="dash-panel-church"
-            >
-              <span aria-hidden="true">⛪</span>{' '}
-              {t('landing.dash.toggle.church', lang)}
-            </ToggleButton>
+            <BrowserChrome url={SLIDES[index].url} />
+
+            {/* Both panels occupy the same grid cell so the crossfade has
+                something to fade to and the card height doesn't jump. */}
+            <div className="grid">
+              <Panel active={index === 0} id="dash-panel-network">
+                <FlingDashboard lang={lang} />
+              </Panel>
+              <Panel active={index === 1} id="dash-panel-church">
+                <FireDashboard lang={lang} />
+              </Panel>
+            </div>
           </div>
-        </div>
 
-        <div className="mx-auto mt-10 max-w-5xl overflow-hidden rounded-2xl border border-[#1A1E3F]/10 bg-white shadow-2xl shadow-[#1A1E3F]/10">
-          <BrowserChrome url={view === 'network' ? FLING.url : FIRE.url} />
-
-          {/* Both panels occupy the same grid cell so the cross-fade has
-              something to fade to and the card height doesn't jump when
-              the toggle flips. */}
-          <div className="grid">
-            <Panel
-              active={view === 'network'}
-              id="dash-panel-network"
-              labelledBy="dash-tab-network"
-            >
-              <FlingDashboard lang={lang} />
-            </Panel>
-            <Panel
-              active={view === 'church'}
-              id="dash-panel-church"
-              labelledBy="dash-tab-church"
-            >
-              <FireDashboard lang={lang} />
-            </Panel>
+          <div className="mt-6 flex items-center justify-center gap-3">
+            {SLIDES.map((slide, i) => (
+              <button
+                key={slide.id}
+                type="button"
+                onClick={() => jumpTo(i)}
+                aria-label={t(slide.dotKey, lang)}
+                aria-current={index === i}
+                // The visual dot is 8px tall, well under a usable tap
+                // target, so the padding on the button carries the hit
+                // area and the inner span carries the spec'd size.
+                className="flex items-center justify-center px-1 py-2"
+              >
+                <span
+                  className={
+                    'block h-2 rounded-full transition-all duration-200 ' +
+                    (index === i
+                      ? 'w-8 bg-[#1A1E3F]'
+                      : 'w-2 bg-gray-300 hover:bg-[#1A1E3F]/40')
+                  }
+                />
+              </button>
+            ))}
           </div>
         </div>
       </div>
@@ -106,64 +180,27 @@ export function CustomerDashboards({ lang }: { lang: AppLanguage }) {
   );
 }
 
-function ToggleButton({
-  active,
-  onClick,
-  id,
-  controls,
-  children,
-}: {
-  active: boolean;
-  onClick: () => void;
-  id: string;
-  controls: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <button
-      type="button"
-      role="tab"
-      id={id}
-      aria-selected={active}
-      aria-controls={controls}
-      onClick={onClick}
-      className={
-        'whitespace-nowrap rounded-full px-5 py-2.5 text-sm font-bold transition ' +
-        (active
-          ? 'bg-[#1A1E3F] text-[#EFCB4A]'
-          : 'text-[#3D4470] hover:bg-[#F9F4E7] hover:text-[#1A1E3F]')
-      }
-    >
-      {children}
-    </button>
-  );
-}
-
 function Panel({
   active,
   id,
-  labelledBy,
   children,
 }: {
   active: boolean;
   id: string;
-  labelledBy: string;
   children: React.ReactNode;
 }) {
   return (
     <div
-      role="tabpanel"
       id={id}
-      aria-labelledby={labelledBy}
       // Not the `hidden` attribute: the inactive panel has to keep
-      // occupying its grid cell for the cross-fade to have something to
+      // occupying its grid cell for the crossfade to have something to
       // fade against, and `hidden` would need an inline display override
       // to do that — leaving it ambiguous whether AT still reads it.
       // Nothing inside either panel is focusable, so aria-hidden plus
       // pointer-events is enough to take it out of play.
       aria-hidden={!active}
       className={
-        'col-start-1 row-start-1 transition-opacity duration-300 ' +
+        'col-start-1 row-start-1 transition-opacity duration-[400ms] ' +
         (active ? 'opacity-100' : 'pointer-events-none opacity-0')
       }
     >

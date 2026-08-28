@@ -196,8 +196,8 @@ const en: Dictionary = {
     'Whether you lead one church or a global ministry.',
   'landing.dash.subtitle':
     'The same platform, shaped to your scale. Here is what LeaderSmart looks like for a multi-country network and for a single local church.',
-  'landing.dash.toggle.network': 'Ministry / Network',
-  'landing.dash.toggle.church': 'Local Church',
+  'landing.dash.dot.network': 'Show Ministry dashboard',
+  'landing.dash.dot.church': 'Show Church dashboard',
 
   // First Ladies International (network view)
   'landing.dash.fling.name': 'First Ladies International',
@@ -1283,8 +1283,8 @@ const fr: Dictionary = {
     'Que vous dirigiez une église ou un ministère mondial.',
   'landing.dash.subtitle':
     'La même plateforme, ajustée à votre échelle. Voici LeaderSmart pour un réseau multi-pays et pour une église locale.',
-  'landing.dash.toggle.network': 'Ministère / Réseau',
-  'landing.dash.toggle.church': 'Église locale',
+  'landing.dash.dot.network': 'Afficher le tableau de bord Ministère',
+  'landing.dash.dot.church': 'Afficher le tableau de bord Église',
 
   'landing.dash.fling.name': 'First Ladies International',
   'landing.dash.fling.tag': 'Réseau mondial',
