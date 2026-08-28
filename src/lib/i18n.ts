@@ -400,6 +400,23 @@ const en: Dictionary = {
   // Onboarding wizard (owner-only, 4 steps)
   // ─────────────────────────────────────────────────────────────
   'onboarding.brandTag': 'Church setup',
+  // Step 0 — church vs ministry decision page
+  'onboarding.step_0.title': 'Welcome to LeaderSmart! What are you leading?',
+  'onboarding.step_0.subtitle':
+    'This shapes how we set things up for you. You can change it later in settings.',
+  'onboarding.step_0.church.title': 'A Church',
+  'onboarding.step_0.church.body':
+    'You run Sunday services, pastoral teams, and church departments (Ushering, Welcome, Media).',
+  'onboarding.step_0.church.bullet1': 'Sunday-centric workflow',
+  'onboarding.step_0.church.bullet2': 'Pastor of the Month rotation',
+  'onboarding.step_0.church.bullet3': 'Department teams',
+  'onboarding.step_0.ministry.title': 'A Ministry or Organization',
+  'onboarding.step_0.ministry.body':
+    "You lead a ministry, non-profit, or team that isn't Sunday-centric. Think campus ministries, worship networks, or mission organizations.",
+  'onboarding.step_0.ministry.bullet1': 'Program-based workflow',
+  'onboarding.step_0.ministry.bullet2': 'Team leadership tracking',
+  'onboarding.step_0.ministry.bullet3': 'Flexible structure',
+
   'onboarding.progress.title': 'Setup progress',
   'onboarding.saveContinue': 'Save & Continue',
   'onboarding.skipForNow': 'Skip for now',
@@ -1486,6 +1503,23 @@ const fr: Dictionary = {
   // Assistant d\'installation (Pasteur Principal uniquement, 4 étapes)
   // ─────────────────────────────────────────────────────────────
   'onboarding.brandTag': 'Mise en place',
+  // Étape 0 — église ou ministère
+  'onboarding.step_0.title': 'Bienvenue sur LeaderSmart ! Que dirigez-vous ?',
+  'onboarding.step_0.subtitle':
+    'Cela détermine comment nous configurons LeaderSmart pour vous. Vous pouvez le modifier dans les paramètres.',
+  'onboarding.step_0.church.title': 'Une Église',
+  'onboarding.step_0.church.body':
+    "Vous dirigez des services dominicaux, des équipes pastorales et des départements d'église (placeurs, accueil, média).",
+  'onboarding.step_0.church.bullet1': 'Flux orienté dimanche',
+  'onboarding.step_0.church.bullet2': 'Rotation du pasteur du mois',
+  'onboarding.step_0.church.bullet3': 'Équipes de départements',
+  'onboarding.step_0.ministry.title': 'Un Ministère ou une Organisation',
+  'onboarding.step_0.ministry.body':
+    "Vous dirigez un ministère, une organisation à but non lucratif ou une équipe qui n'est pas centrée sur le dimanche. Par exemple : aumôneries universitaires, réseaux de louange ou organisations missionnaires.",
+  'onboarding.step_0.ministry.bullet1': 'Flux orienté programmes',
+  'onboarding.step_0.ministry.bullet2': "Suivi du leadership d'équipe",
+  'onboarding.step_0.ministry.bullet3': 'Structure flexible',
+
   'onboarding.progress.title': 'Progression',
   'onboarding.saveContinue': 'Enregistrer et continuer',
   'onboarding.skipForNow': 'Passer pour l\'instant',

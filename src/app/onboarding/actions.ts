@@ -7,7 +7,7 @@ import { OWNER_ROLES } from '@/lib/roles';
 import { createClient } from '@/lib/supabase/server';
 import { createAdminClient, hasAdminKey } from '@/lib/supabase/admin';
 import { logAudit } from '@/lib/audit';
-import type { AppLanguage } from '@/lib/types';
+import type { AppLanguage, OrganizationType } from '@/lib/types';
 import { isCountryCode } from './_countries';
 
 export type StepResult = { ok: true } | { ok: false; error: string };
@@ -26,6 +26,7 @@ async function requireOwner() {
 async function markProgress(
   userId: string,
   patch: Partial<{
+    org_type_selected_at: string;
     church_profile_completed_at: string;
     admins_invited_at: string;
     admins_skipped_at: string;
@@ -41,6 +42,50 @@ async function markProgress(
     .from('user_onboarding_progress')
     .update({ ...patch, updated_at: new Date().toISOString() })
     .eq('user_id', userId);
+}
+
+// ─────────────────────────────────────────────────────────────
+// Step 0 — church vs ministry (required, cannot be skipped)
+// ─────────────────────────────────────────────────────────────
+
+// Writes the tenant's organization_type and stamps the progress row so
+// the decision page is never shown twice. Everything downstream — Step 3
+// vocabulary, whether Step 4 exists, which dashboard cards appear —
+// reads churches.organization_type, so this is the only place it is set
+// during onboarding.
+export async function selectOrgType(
+  orgType: OrganizationType,
+): Promise<StepResult> {
+  const { me, error } = await requireOwner();
+  if (!me) return { ok: false, error };
+
+  if (orgType !== 'church' && orgType !== 'ministry') {
+    return { ok: false, error: 'invalid_org_type' };
+  }
+
+  const supabase = await createClient();
+  const { error: upErr } = await supabase
+    .from('churches')
+    .update({ organization_type: orgType })
+    .eq('id', me.church.id);
+  if (upErr) return { ok: false, error: upErr.message };
+
+  await markProgress(me.user.id, {
+    org_type_selected_at: new Date().toISOString(),
+  });
+
+  await logAudit({
+    churchId: me.church.id,
+    userId: me.user.id,
+    action: 'update',
+    entityType: 'church',
+    entityId: me.church.id,
+    beforeValue: { organization_type: me.church.organization_type },
+    afterValue: { organization_type: orgType, via: 'onboarding_step_0' },
+  });
+
+  revalidatePath('/onboarding');
+  return { ok: true };
 }
 
 // ─────────────────────────────────────────────────────────────
