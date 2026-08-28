@@ -36,9 +36,15 @@ export type TaskCategory =
   | 'evangelism'
   | 'report_clarity';
 
+// Churches and ministries share one table and one wizard; this decides
+// which vocabulary and which steps a tenant sees. Column added in Phase 2,
+// defaults to 'church' so pre-split tenants keep their behaviour.
+export type OrganizationType = 'church' | 'ministry';
+
 export interface Church {
   id: string;
   name: string;
+  organization_type: OrganizationType;
   country: string | null;
   city: string | null;
   language: AppLanguage;

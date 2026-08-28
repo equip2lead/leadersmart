@@ -4,6 +4,7 @@ import type { Me } from '@/lib/auth';
 export type OnboardingProgress = {
   user_id: string;
   church_id: string;
+  org_type_selected_at: string | null;
   church_profile_completed_at: string | null;
   admins_invited_at: string | null;
   admins_skipped_at: string | null;
@@ -40,6 +41,7 @@ export async function ensureProgress(me: Me): Promise<OnboardingProgress> {
     ({
       user_id: me.user.id,
       church_id: me.church.id,
+      org_type_selected_at: null,
       church_profile_completed_at: null,
       admins_invited_at: null,
       admins_skipped_at: null,
