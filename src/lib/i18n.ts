@@ -198,6 +198,8 @@ const en: Dictionary = {
     'The same platform, shaped to your scale. Here is what LeaderSmart looks like for a multi-country network and for a single local church.',
   'landing.dash.toggle.network': 'Ministry / Network',
   'landing.dash.toggle.church': 'Local Church',
+  'landing.dash.announce.network': 'Ministry dashboard now visible',
+  'landing.dash.announce.church': 'Local Church dashboard now visible',
   'landing.dash.dot.network': 'Show Ministry dashboard',
   'landing.dash.dot.church': 'Show Church dashboard',
 
@@ -1287,6 +1289,8 @@ const fr: Dictionary = {
     'La même plateforme, ajustée à votre échelle. Voici LeaderSmart pour un réseau multi-pays et pour une église locale.',
   'landing.dash.toggle.network': 'Ministère / Réseau',
   'landing.dash.toggle.church': 'Église locale',
+  'landing.dash.announce.network': 'Tableau de bord Ministère maintenant affiché',
+  'landing.dash.announce.church': 'Tableau de bord Église locale maintenant affiché',
   'landing.dash.dot.network': 'Afficher le tableau de bord Ministère',
   'landing.dash.dot.church': 'Afficher le tableau de bord Église',
 

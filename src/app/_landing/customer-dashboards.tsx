@@ -1,7 +1,6 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { flushSync } from 'react-dom';
 import Image from 'next/image';
 import { t } from '@/lib/i18n';
 import type { AppLanguage } from '@/lib/types';
@@ -44,6 +43,7 @@ const SLIDES = [
     emoji: '\u{1F30D}',
     labelKey: 'landing.dash.toggle.network',
     dotKey: 'landing.dash.dot.network',
+    announceKey: 'landing.dash.announce.network',
   },
   {
     id: 'church',
@@ -51,6 +51,7 @@ const SLIDES = [
     emoji: '\u{26EA}',
     labelKey: 'landing.dash.toggle.church',
     dotKey: 'landing.dash.dot.church',
+    announceKey: 'landing.dash.announce.church',
   },
 ] as const;
 
@@ -70,10 +71,11 @@ export function CustomerDashboards({ lang }: { lang: AppLanguage }) {
   // also makes reduced-motion the safe default if matchMedia is missing.
   const [motionOk, setMotionOk] = useState(false);
 
-  // The live region is silent while the carousel rotates on its own —
-  // announcing a whole dashboard every few seconds is noise nobody asked
-  // for. It is switched to `polite` only around a deliberate click.
-  const [announce, setAnnounce] = useState(false);
+  // Announcements go to a visually-hidden region holding just the slide
+  // name, never to the dashboard card itself — a live region wrapping the
+  // whole card would read every stat and chip aloud. Auto-rotation leaves
+  // this empty, so it only ever speaks for a deliberate click.
+  const [announcement, setAnnouncement] = useState('');
 
   const manualTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const announceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -117,25 +119,26 @@ export function CustomerDashboards({ lang }: { lang: AppLanguage }) {
 
   // Clicking a dot holds rotation for 15s so there is time to read the
   // slide that was asked for.
-  const jumpTo = useCallback((next: number) => {
-    // Commit `aria-live="polite"` in its own render, before the slide
-    // changes. A screen reader that first sees the attribute in the same
-    // mutation that swapped the content can skip the announcement, so the
-    // region has to be live already when the new panel lands.
-    flushSync(() => setAnnounce(true));
+  const jumpTo = useCallback(
+    (next: number) => {
+      setIndex(next);
+      setManualHold(true);
+      setAnnouncement(t(SLIDES[next].announceKey, lang));
 
-    setIndex(next);
-    setManualHold(true);
+      if (manualTimer.current) clearTimeout(manualTimer.current);
+      manualTimer.current = setTimeout(
+        () => setManualHold(false),
+        MANUAL_PAUSE_MS,
+      );
 
-    if (manualTimer.current) clearTimeout(manualTimer.current);
-    manualTimer.current = setTimeout(
-      () => setManualHold(false),
-      MANUAL_PAUSE_MS,
-    );
-
-    if (announceTimer.current) clearTimeout(announceTimer.current);
-    announceTimer.current = setTimeout(() => setAnnounce(false), ANNOUNCE_MS);
-  }, []);
+      // Clearing the text matters: clicking the control for the slide
+      // already shown would otherwise re-render identical content, which
+      // is not a change and so would not be announced a second time.
+      if (announceTimer.current) clearTimeout(announceTimer.current);
+      announceTimer.current = setTimeout(() => setAnnouncement(''), ANNOUNCE_MS);
+    },
+    [lang],
+  );
 
   return (
     <section className="bg-[#FDFCF7] py-24">
@@ -181,9 +184,16 @@ export function CustomerDashboards({ lang }: { lang: AppLanguage }) {
             ))}
           </div>
 
+          {/* Present from first render and always live, so the polite
+              announcement is never made in the same DOM mutation that
+              introduces the attribute. */}
+          <div aria-live="polite" aria-atomic="true" className="sr-only">
+            {announcement}
+          </div>
+
           <div
             role="region"
-            aria-live={announce ? 'polite' : 'off'}
+            aria-live="off"
             aria-label={t('landing.dash.title', lang)}
             className="overflow-hidden rounded-2xl border border-[#1A1E3F]/10 bg-white shadow-2xl shadow-[#1A1E3F]/10"
           >
