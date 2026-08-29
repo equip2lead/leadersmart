@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 import { Flame } from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
-import { homeForRole } from '@/lib/roles';
+import { homeForRole, isOwner } from '@/lib/roles';
 import type { AppLanguage, UserRole } from '@/lib/types';
 
 export const dynamic = 'force-dynamic';
@@ -51,7 +51,7 @@ export default async function DashboardRouter() {
   if (existing?.role) {
     // Owners are gated on the setup wizard the first time they hit the
     // dashboard router. Invited users (any other role) skip the wizard.
-    if (existing.role === 'owner' && !existing.onboarding_completed_at) {
+    if (isOwner(existing.role as UserRole) && !existing.onboarding_completed_at) {
       redirect('/onboarding');
     }
     redirect(homeForRole(existing.role as UserRole));
@@ -103,6 +103,6 @@ export default async function DashboardRouter() {
     .maybeSingle();
   const freshRole = (fresh?.role as UserRole) ?? 'owner';
   // Brand-new owners always land in the wizard first.
-  if (freshRole === 'owner') redirect('/onboarding');
+  if (isOwner(freshRole)) redirect('/onboarding');
   redirect(homeForRole(freshRole));
 }
