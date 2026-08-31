@@ -55,6 +55,21 @@ export interface Church {
   updated_at: string;
 }
 
+export interface Branch {
+  id: string;
+  church_id: string;
+  name: string;
+  /** ISO 3166-1 alpha-2, matching src/lib/countries.ts. */
+  country_code: string;
+  city: string | null;
+  /** At most one per church — enforced by the branches_hq_uniq index. */
+  is_headquarters: boolean;
+  coordinator_user_id: string | null;
+  created_at: string;
+  updated_at: string;
+  created_by: string | null;
+}
+
 export interface ChurchService {
   id: string;
   church_id: string;
