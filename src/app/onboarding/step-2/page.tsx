@@ -3,6 +3,7 @@ import { t } from '@/lib/i18n';
 import { hasAdminKey } from '@/lib/supabase/admin';
 import { ensureProgress } from '../_progress-lib';
 import { ProgressSidebar } from '../_progress-sidebar';
+import { ChangeOrgType } from '../_change-org-type';
 import { Step2Form } from './_form';
 
 export const dynamic = 'force-dynamic';
@@ -22,6 +23,9 @@ export default async function Step2Page() {
         orgType={me.church.organization_type}
       />
       <div className="px-6 py-10 sm:px-10">
+        <div className="mb-6">
+          <ChangeOrgType lang={lang} />
+        </div>
         <h1 className="text-2xl font-bold text-ink sm:text-3xl">
           {t('onboarding.step2.title', lang)}
         </h1>

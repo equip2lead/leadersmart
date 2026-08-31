@@ -88,6 +88,61 @@ export async function selectOrgType(
   return { ok: true };
 }
 
+// Undoes Step 0 so the owner can pick again. Clears every step stamp on
+// the progress row, which sends /onboarding back to the decision page and
+// restarts the wizard from step 1.
+//
+// organization_type is deliberately left alone. The column is NOT NULL
+// with a 'church' default, so the spec's `set organization_type = null`
+// cannot run — and making it nullable would be worse: four read sites
+// (dashboard, step 3, step 4 guard, sidebar) would each need a meaning
+// for "no type", which does not exist. org_type_selected_at is already
+// the source of truth for "has the owner chosen", and nothing reads
+// organization_type while it is null, because the only reachable page in
+// that state is Step 0. The next choice overwrites it.
+//
+// Church profile data — name, country, city, logo — is untouched.
+export async function resetOrgType(): Promise<StepResult> {
+  const { me, error } = await requireOwner();
+  if (!me) return { ok: false, error };
+
+  // Re-running the wizard after completion is a settings concern, not a
+  // wizard one; the layout would bounce them to /dashboard anyway.
+  if (me.user.onboarding_completed_at) {
+    return { ok: false, error: 'already_completed' };
+  }
+
+  const supabase = await createClient();
+  const { error: upErr } = await supabase
+    .from('user_onboarding_progress')
+    .update({
+      org_type_selected_at: null,
+      church_profile_completed_at: null,
+      admins_invited_at: null,
+      admins_skipped_at: null,
+      departments_created_at: null,
+      departments_skipped_at: null,
+      pom_assigned_at: null,
+      pom_skipped_at: null,
+      updated_at: new Date().toISOString(),
+    })
+    .eq('user_id', me.user.id);
+  if (upErr) return { ok: false, error: upErr.message };
+
+  await logAudit({
+    churchId: me.church.id,
+    userId: me.user.id,
+    action: 'reset_org_type',
+    entityType: 'church',
+    entityId: me.church.id,
+    beforeValue: { organization_type: me.church.organization_type },
+    afterValue: { progress_reset: true, via: 'onboarding_wizard' },
+  });
+
+  revalidatePath('/onboarding');
+  return { ok: true };
+}
+
 // ─────────────────────────────────────────────────────────────
 // Step 1 — church profile (required)
 // ─────────────────────────────────────────────────────────────

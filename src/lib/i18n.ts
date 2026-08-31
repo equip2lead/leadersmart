@@ -417,6 +417,15 @@ const en: Dictionary = {
   'onboarding.step_0.ministry.bullet2': 'Team leadership tracking',
   'onboarding.step_0.ministry.bullet3': 'Flexible structure',
 
+  // Escape hatch from steps 1-3 back to the Step 0 decision page.
+  'onboarding.changeOrgType.link': '\u2190 Change org type',
+  'onboarding.changeOrgType.title': 'Change organization type?',
+  'onboarding.changeOrgType.body':
+    "Your setup progress will be reset. You'll return to the first step to choose again. Continue?",
+  'onboarding.changeOrgType.confirm': 'Yes, change type',
+  'onboarding.changeOrgType.errCompleted':
+    'Setup is already finished. Change your organization type in Settings instead.',
+
   'onboarding.progress.title': 'Setup progress',
   'onboarding.saveContinue': 'Save & Continue',
   'onboarding.skipForNow': 'Skip for now',
@@ -1547,6 +1556,14 @@ const fr: Dictionary = {
   'onboarding.step_0.ministry.bullet1': 'Flux orienté programmes',
   'onboarding.step_0.ministry.bullet2': "Suivi du leadership d'équipe",
   'onboarding.step_0.ministry.bullet3': 'Structure flexible',
+
+  'onboarding.changeOrgType.link': "\u2190 Changer le type d'organisation",
+  'onboarding.changeOrgType.title': "Changer le type d'organisation ?",
+  'onboarding.changeOrgType.body':
+    'Votre progression sera r\u00e9initialis\u00e9e. Vous reviendrez \u00e0 la premi\u00e8re \u00e9tape pour choisir \u00e0 nouveau. Continuer ?',
+  'onboarding.changeOrgType.confirm': 'Oui, changer',
+  'onboarding.changeOrgType.errCompleted':
+    'La configuration est termin\u00e9e. Modifiez le type d\'organisation dans les param\u00e8tres.',
 
   'onboarding.progress.title': 'Progression',
   'onboarding.saveContinue': 'Enregistrer et continuer',

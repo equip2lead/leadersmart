@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase/server';
 import { t } from '@/lib/i18n';
 import { ensureProgress } from '../_progress-lib';
 import { ProgressSidebar } from '../_progress-sidebar';
+import { ChangeOrgType } from '../_change-org-type';
 import { Step1Form } from './_form';
 import { COUNTRIES } from '../_countries';
 
@@ -40,6 +41,9 @@ export default async function Step1Page() {
         orgType={me.church.organization_type}
       />
       <div className="px-6 py-10 sm:px-10">
+        <div className="mb-6">
+          <ChangeOrgType lang={lang} />
+        </div>
         <h1 className="text-2xl font-bold text-ink sm:text-3xl">
           {t('onboarding.step1.title', lang)}
         </h1>

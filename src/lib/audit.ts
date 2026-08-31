@@ -1,6 +1,12 @@
 import { createClient } from '@/lib/supabase/server';
 
-export type AuditAction = 'create' | 'update' | 'deactivate' | 'reactivate' | 'invite';
+export type AuditAction =
+  | 'create'
+  | 'update'
+  | 'deactivate'
+  | 'reactivate'
+  | 'invite'
+  | 'reset_org_type';
 
 export type AuditParams = {
   churchId: string;

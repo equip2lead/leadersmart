@@ -2,6 +2,7 @@ import { getMe } from '@/lib/auth';
 import { t } from '@/lib/i18n';
 import { ensureProgress } from '../_progress-lib';
 import { ProgressSidebar } from '../_progress-sidebar';
+import { ChangeOrgType } from '../_change-org-type';
 import { Step3Form } from './_form';
 
 export const dynamic = 'force-dynamic';
@@ -54,6 +55,9 @@ export default async function Step3Page() {
         orgType={orgType}
       />
       <div className="px-6 py-10 sm:px-10">
+        <div className="mb-6">
+          <ChangeOrgType lang={lang} />
+        </div>
         <h1 className="text-2xl font-bold text-ink sm:text-3xl">
           {t(
             isMinistry ? 'onboarding.step3.ministry.title' : 'onboarding.step3.title',
