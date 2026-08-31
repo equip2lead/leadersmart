@@ -17,9 +17,14 @@ const emptyRow = (): Row => ({ name: '', email: '' });
 export function Step2Form({
   lang,
   serviceKeyAvailable,
+  adminRolePlural,
+  orgTypeLabel,
 }: {
   lang: AppLanguage;
   serviceKeyAvailable: boolean;
+  /** Plural role label and org noun, resolved from the vocabulary. */
+  adminRolePlural: string;
+  orgTypeLabel: string;
 }) {
   const router = useRouter();
   const [rows, setRows] = useState<Row[]>(() =>
@@ -78,7 +83,11 @@ export function Step2Form({
     <form onSubmit={onSave} className="space-y-6">
       <div className="flex items-start gap-3 rounded-xl border border-indigo-royal-100 bg-indigo-royal-50 px-4 py-3 text-xs text-indigo-royal-800">
         <Info className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
-        <p>{t('onboarding.step2.info', lang)}</p>
+        <p>
+          {t('onboarding.step2.info', lang)
+            .replace('{role}', adminRolePlural)
+            .replace('{org}', orgTypeLabel)}
+        </p>
       </div>
 
       {!serviceKeyAvailable && (

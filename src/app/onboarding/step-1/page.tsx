@@ -2,6 +2,7 @@ import { cookies } from 'next/headers';
 import { getMe } from '@/lib/auth';
 import { createClient } from '@/lib/supabase/server';
 import { t } from '@/lib/i18n';
+import { getVocab } from '@/lib/vocabulary';
 import { ensureProgress } from '../_progress-lib';
 import { ProgressSidebar } from '../_progress-sidebar';
 import { ChangeOrgType } from '../_change-org-type';
@@ -14,6 +15,7 @@ export default async function Step1Page() {
   const me = await getMe();
   const lang = me.user.preferred_language;
   const progress = await ensureProgress(me);
+  const v = getVocab(me.church.organization_type, lang);
   const supabase = await createClient();
 
   // Load current church so we can prefill (name comes from signup;
@@ -60,6 +62,8 @@ export default async function Step1Page() {
               logoUrl: church?.logo_url ?? null,
             }}
             churchId={me.church.id}
+            nameLabel={v.orgNameLabel}
+            namePlaceholder={v.orgNamePlaceholder}
           />
         </div>
       </div>

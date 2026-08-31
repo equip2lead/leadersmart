@@ -30,8 +30,20 @@ export function ProgressSidebar({
   // Ministries run a three-step wizard — Pastor of the Month is a church
   // concept, so step 4 is not rendered and the count reads 3.
   const steps: Array<{ n: Step; titleKey: string; hintKey: string }> = [
-    { n: 1, titleKey: 'onboarding.step1.navTitle', hintKey: 'onboarding.step1.navHint' },
-    { n: 2, titleKey: 'onboarding.step2.navTitle', hintKey: 'onboarding.step2.navHint' },
+    {
+      n: 1,
+      titleKey: isMinistry
+        ? 'onboarding.step1.ministry.navTitle'
+        : 'onboarding.step1.navTitle',
+      hintKey: 'onboarding.step1.navHint',
+    },
+    {
+      n: 2,
+      titleKey: isMinistry
+        ? 'onboarding.step2.ministry.navTitle'
+        : 'onboarding.step2.navTitle',
+      hintKey: 'onboarding.step2.navHint',
+    },
     {
       n: 3,
       titleKey: isMinistry

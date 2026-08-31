@@ -16,9 +16,15 @@ export function Step1Form({
   lang,
   churchId,
   initial,
+  nameLabel,
+  namePlaceholder,
 }: {
   lang: AppLanguage;
   churchId: string;
+  // Resolved by the page from the vocabulary layer — "Church name" or
+  // "Ministry name" depending on organization_type.
+  nameLabel: string;
+  namePlaceholder: string;
   initial: {
     name: string;
     country: string;
@@ -94,13 +100,14 @@ export function Step1Form({
     <form onSubmit={onSubmit} className="space-y-6">
       <div>
         <label className="label" htmlFor="church-name">
-          {t('onboarding.step1.nameLabel', lang)}
+          {nameLabel}
         </label>
         <input
           id="church-name"
           className="input"
           required
           maxLength={100}
+          placeholder={namePlaceholder}
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
