@@ -7,7 +7,7 @@ import { ensureProgress } from '../_progress-lib';
 import { ProgressSidebar } from '../_progress-sidebar';
 import { ChangeOrgType } from '../_change-org-type';
 import { Step1Form } from './_form';
-import { COUNTRIES } from '../_countries';
+import { COUNTRIES } from '@/lib/countries';
 
 export const dynamic = 'force-dynamic';
 

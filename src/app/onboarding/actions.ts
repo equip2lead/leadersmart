@@ -8,7 +8,7 @@ import { createClient } from '@/lib/supabase/server';
 import { createAdminClient, hasAdminKey } from '@/lib/supabase/admin';
 import { logAudit } from '@/lib/audit';
 import type { AppLanguage, OrganizationType } from '@/lib/types';
-import { isCountryCode } from './_countries';
+import { isCountryCode } from '@/lib/countries';
 
 export type StepResult = { ok: true } | { ok: false; error: string };
 

@@ -1,9 +1,10 @@
 // ISO-3166-1 alpha-2 country codes with English display names + flag
 // emoji (regional-indicator characters). Static so it doesn't inflate
 // runtime memory across page renders. Sorted alphabetically by name;
-// only used for the wizard's country <select>, so English names are
-// fine — Cameroonian and French visitors will still recognise every
-// country in this list at a glance.
+// used by the onboarding wizard and the branches page. English names
+// throughout: Cameroonian and French visitors recognise every country in
+// this list at a glance, and maintaining a second 195-entry translated
+// list is a drift hazard for no real gain.
 
 export type Country = { code: string; name: string; flag: string };
 
@@ -90,6 +91,14 @@ const RAW: Array<[string, string]> = [
 export const COUNTRIES: Country[] = RAW
   .map(([code, name]) => ({ code, name, flag: flagFor(code) }))
   .sort((a, b) => a.name.localeCompare(b.name));
+
+// Flag emoji for an arbitrary stored code (e.g. a branch's country_code),
+// which may not be in COUNTRIES if the list ever changes. Returns a globe
+// rather than mojibake when the code isn't two ASCII letters.
+export function flagForCode(code: string): string {
+  if (!/^[A-Za-z]{2}$/.test(code)) return '\u{1F310}';
+  return flagFor(code);
+}
 
 export function isCountryCode(v: string): boolean {
   return COUNTRIES.some((c) => c.code === v);

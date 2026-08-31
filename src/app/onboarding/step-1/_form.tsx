@@ -6,7 +6,7 @@ import { Upload, X } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { t } from '@/lib/i18n';
 import type { AppLanguage } from '@/lib/types';
-import { COUNTRIES } from '../_countries';
+import { COUNTRIES } from '@/lib/countries';
 import { saveChurchProfile } from '../actions';
 
 const MAX_LOGO_BYTES = 2 * 1024 * 1024; // 2 MB — matches spec.
