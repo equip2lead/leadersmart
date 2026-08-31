@@ -3,7 +3,8 @@
 import { useMemo, useState, useTransition, type FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import { t } from '@/lib/i18n';
-import type { AppLanguage } from '@/lib/types';
+import { roleDisplayName } from '@/lib/vocabulary';
+import type { AppLanguage, OrganizationType } from '@/lib/types';
 import { inviteUser } from './actions';
 
 type InvitableRole =
@@ -15,26 +16,34 @@ export function InviteUserForm({
   lang,
   serviceKeyAvailable,
   callerIsOwner,
+  orgType,
 }: {
   lang: AppLanguage;
   serviceKeyAvailable: boolean;
   callerIsOwner: boolean;
+  orgType: OrganizationType;
 }) {
   const router = useRouter();
 
   // Options depend on caller role: admin_pastor and fire_kids_coordinator
   // are owner-only grants per Section 17 decisions #3 and #5. Non-owner
   // admins only see department_head.
-  const options = useMemo<Array<{ value: InvitableRole; labelKey: string }>>(() => {
-    if (callerIsOwner) {
-      return [
-        { value: 'admin_pastor', labelKey: 'role.admin_pastor' },
-        { value: 'department_head', labelKey: 'role.department_head' },
-        { value: 'fire_kids_coordinator', labelKey: 'role.fire_kids_coordinator' },
-      ];
-    }
-    return [{ value: 'department_head', labelKey: 'role.department_head' }];
-  }, [callerIsOwner]);
+  //
+  // Fire Kids is a Fire-Church-specific programme with no ministry
+  // meaning, so it is dropped for ministries rather than relabelled.
+  // Labels go through roleDisplayName, which returns the church
+  // vocabulary — identical to the role.* strings used before — for
+  // churches, and Admin Leader / Team Leader for ministries.
+  const options = useMemo<Array<{ value: InvitableRole; label: string }>>(() => {
+    const label = (r: InvitableRole) =>
+      roleDisplayName(r, orgType, lang) ?? t(`role.${r}`, lang);
+    const values: InvitableRole[] = callerIsOwner
+      ? orgType === 'ministry'
+        ? ['admin_pastor', 'department_head']
+        : ['admin_pastor', 'department_head', 'fire_kids_coordinator']
+      : ['department_head'];
+    return values.map((value) => ({ value, label: label(value) }));
+  }, [callerIsOwner, orgType, lang]);
 
   const [email, setEmail] = useState('');
   const [fullName, setFullName] = useState('');
@@ -117,7 +126,7 @@ export function InviteUserForm({
         >
           {options.map((o) => (
             <option key={o.value} value={o.value}>
-              {t(o.labelKey, lang)}
+              {o.label}
             </option>
           ))}
         </select>

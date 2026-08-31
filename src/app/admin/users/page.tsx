@@ -81,6 +81,7 @@ export default async function UsersPage() {
               lang={lang}
               serviceKeyAvailable={serviceKeyAvailable}
               callerIsOwner={callerIsOwner}
+              orgType={church.organization_type}
             />
           </div>
         </div>
