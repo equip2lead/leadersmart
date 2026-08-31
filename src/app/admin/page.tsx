@@ -16,6 +16,7 @@ import { createClient } from '@/lib/supabase/server';
 import { t } from '@/lib/i18n';
 import { PageHeading } from '@/components/page-heading';
 import { getDepartmentIcon } from '@/lib/icons';
+import { getVocab } from '@/lib/vocabulary';
 
 export const dynamic = 'force-dynamic';
 
@@ -109,6 +110,7 @@ export default async function AdminDashboard() {
   // Ministries use the same tables but different vocabulary, and have no
   // Pastor of the Month at all.
   const isMinistry = church.organization_type === 'ministry';
+  const v = getVocab(church.organization_type, lang);
   const skipKey = (card: 'admins' | 'departments', part: 'title' | 'body' | 'cta') =>
     isMinistry
       ? `admin.onboardingSkipped.${card}.ministry.${part}`
@@ -202,7 +204,7 @@ export default async function AdminDashboard() {
 
   return (
     <div className="px-4 py-6 sm:px-8 sm:py-8">
-      <PageHeading title={t('admin.title', lang)} subtitle={church.name} />
+      <PageHeading title={v.dashboardTitle} subtitle={church.name} />
 
       {anySkipped && skipped && (
         <section className="mt-6 space-y-3">
@@ -247,16 +249,20 @@ export default async function AdminDashboard() {
       )}
 
       <div className="mt-6 grid grid-cols-2 gap-4 lg:grid-cols-4">
-        <StatLink
-          href="/admin/assignments"
-          label={t('admin.stat.currentPastor', lang)}
-          value={activePastorName}
-          hint={activeMonth}
-          icon={Star}
-        />
+        {/* Pastor of the Month is a church concept — ministries don't get
+            a renamed version of this card, they get no card. */}
+        {v.showPom && (
+          <StatLink
+            href="/admin/assignments"
+            label={v.pomLabel ?? ''}
+            value={activePastorName}
+            hint={activeMonth}
+            icon={Star}
+          />
+        )}
         <StatLink
           href="/admin/departments"
-          label={t('admin.stat.departments', lang)}
+          label={v.departments}
           value={String(deptCount)}
           icon={Building2}
         />

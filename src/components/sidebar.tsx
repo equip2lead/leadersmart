@@ -28,26 +28,41 @@ import {
 import { cn } from '@/lib/cn';
 import { t } from '@/lib/i18n';
 import { isAdmin, isLeader, isOwner } from '@/lib/roles';
+import { getVocab } from '@/lib/vocabulary';
 import type { AppLanguage, OrganizationType, UserRole } from '@/lib/types';
 
-type NavItem = { href: string; labelKey: string; icon: LucideIcon };
+type NavItem = {
+  href: string;
+  icon: LucideIcon;
+  /** Static entries carry a key; vocabulary-driven ones a resolved label. */
+  labelKey?: string;
+  label?: string;
+};
 type NavSection = { titleKey: string; items: NavItem[] };
 
 // Admin nav — 5 grouped sections. Both Owner and Admin Pastor see all
 // of them; the Owner Tools section below is layered on top for Owner
 // only. Legacy 'senior_pastor' + 'admin' also route here.
-function adminSections(orgType: OrganizationType): NavSection[] {
+function adminSections(
+  orgType: OrganizationType,
+  lang: AppLanguage,
+): NavSection[] {
+  const v = getVocab(orgType, lang);
   // Service times are church-only: ministries don't run a weekly service
   // schedule, so the link is omitted rather than shown and refused. The
   // page guards independently — a hidden link is not access control.
   const isChurch = orgType === 'church';
   return [
   {
-    titleKey: 'nav.section.overview',
+    titleKey: v.showPom ? 'nav.section.overview' : 'nav.section.ministryOverview',
     items: [
       { href: '/admin', labelKey: 'nav.dashboard', icon: LayoutDashboard },
-      { href: '/admin/assignments', labelKey: 'nav.pastors', icon: Star },
-      { href: '/admin/departments', labelKey: 'admin.departments.page', icon: Building2 },
+      // No Pastor of the Month means no assignments to manage, so the
+      // link is omitted for ministries rather than relabelled.
+      ...(v.showPom
+        ? [{ href: '/admin/assignments', label: v.pastorAssignments, icon: Star }]
+        : []),
+      { href: '/admin/departments', label: v.departments, icon: Building2 },
       ...(isChurch
         ? [{ href: '/settings/services', labelKey: 'nav.serviceTimes', icon: Clock }]
         : []),
@@ -56,9 +71,9 @@ function adminSections(orgType: OrganizationType): NavSection[] {
     ],
   },
   {
-    titleKey: 'nav.section.pastor',
+    titleKey: v.showPom ? 'nav.section.pastor' : 'nav.section.leaderWorkflow',
     items: [
-      { href: '/pastor/sunday-checklist', labelKey: 'nav.sunday', icon: ClipboardCheck },
+      { href: '/pastor/sunday-checklist', label: v.weeklyChecklist, icon: ClipboardCheck },
       { href: '/pastor/weekly-plan', labelKey: 'nav.plan', icon: CalendarCheck },
       { href: '/pastor/monthly-report', labelKey: 'nav.report', icon: FileText },
       { href: '/pastor/evaluations', labelKey: 'nav.evaluations', icon: Star },
@@ -172,6 +187,7 @@ function NavList({
           pathname === item.href ||
           (item.href !== '/' && pathname.startsWith(`${item.href}/`));
         const Icon = item.icon;
+        const label = item.label ?? (item.labelKey ? t(item.labelKey, lang) : '');
         return (
           <li key={item.href}>
             <Link
@@ -184,7 +200,7 @@ function NavList({
               )}
             >
               <Icon className="h-4 w-4" aria-hidden="true" />
-              {t(item.labelKey, lang)}
+              {label}
             </Link>
           </li>
         );
@@ -246,7 +262,7 @@ export function Sidebar({
       <nav className="flex-1 overflow-y-auto p-3">
         {showAdminSidebar ? (
           <>
-            {adminSections(orgType).map((section) => (
+            {adminSections(orgType, lang).map((section) => (
               <div key={section.titleKey}>
                 <SectionHeader title={t(section.titleKey, lang)} />
                 <NavList items={section.items} pathname={pathname} lang={lang} />

@@ -4,6 +4,7 @@ import { PASTOR_PAGE_ACCESS } from '@/lib/roles';
 import { createClient } from '@/lib/supabase/server';
 import { t } from '@/lib/i18n';
 import { PageHeading } from '@/components/page-heading';
+import { getVocab } from '@/lib/vocabulary';
 import { ChecklistForm } from './_form';
 import { loadPastorPageContext } from '../_context';
 
@@ -19,6 +20,7 @@ function mostRecentSunday(): string {
 export default async function SundayChecklistPage() {
   const { user, church } = await requireRole(PASTOR_PAGE_ACCESS);
   const lang = user.preferred_language;
+  const v = getVocab(church.organization_type, lang);
   const supabase = await createClient();
   const ctx = await loadPastorPageContext(user, church.id);
 
@@ -26,7 +28,7 @@ export default async function SundayChecklistPage() {
     return (
       <div className="px-4 py-6 sm:px-8 sm:py-8">
         <PageHeading
-          title={t('pastor.sunday.title', lang)}
+          title={v.weeklyChecklist}
           subtitle={t('pastor.noActiveAssignment', lang)}
         />
         <p className="mt-4 rounded-lg border border-dashed border-gray-200 bg-white px-6 py-8 text-center text-sm text-muted">
@@ -97,7 +99,7 @@ export default async function SundayChecklistPage() {
         title={
           ctx.isOnBehalf
             ? t('pastor.sunday.onBehalfTitle', lang).replace('{name}', ctx.pastorName)
-            : t('pastor.sunday.title', lang)
+            : v.weeklyChecklist
         }
         subtitle={`${t('pastor.potm', lang)} — ${ctx.assignmentMonth} · ${t(
           'sunday.serviceDate',

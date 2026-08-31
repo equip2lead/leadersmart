@@ -1,3 +1,4 @@
+import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { Star } from 'lucide-react';
 import { requireRole } from '@/lib/auth';
@@ -26,6 +27,11 @@ const statusStyles: Record<AssignmentRow['status'], string> = {
 
 export default async function AssignmentsPage() {
   const { user, church } = await requireRole(ADMIN_ROLES);
+
+  // Pastor of the Month does not exist for ministries (deferred to Q5).
+  // The nav omits these, so reaching them means a bookmark or a stale
+  // tab — send them home rather than showing a church-only feature.
+  if (church.organization_type === 'ministry') redirect('/admin');
   const lang = user.preferred_language;
   const supabase = await createClient();
 

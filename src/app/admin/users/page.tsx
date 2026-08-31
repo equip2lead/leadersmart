@@ -106,6 +106,7 @@ export default async function UsersPage() {
                     callerIsOwner={callerIsOwner}
                     currentAdminPastorCount={adminPastorCount}
                     lang={lang}
+                    orgType={church.organization_type}
                   />
                 ))}
               </tbody>

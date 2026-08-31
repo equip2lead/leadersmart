@@ -3,6 +3,7 @@ import { ADMIN_ROLES } from '@/lib/roles';
 import { createClient } from '@/lib/supabase/server';
 import { t } from '@/lib/i18n';
 import { PageHeading } from '@/components/page-heading';
+import { getVocab } from '@/lib/vocabulary';
 import { DepartmentForm, type LeaderOption } from './_department-form';
 import { DepartmentRowCard, type DepartmentRow } from './_row';
 
@@ -22,6 +23,7 @@ const CO_LEADER_ELIGIBLE_ROLES = [
 export default async function DepartmentsPage() {
   const { user, church } = await requireRole(ADMIN_ROLES);
   const lang = user.preferred_language;
+  const v = getVocab(church.organization_type, lang);
   const supabase = await createClient();
 
   const [deptRes, leaderRes] = await Promise.all([
@@ -91,13 +93,15 @@ export default async function DepartmentsPage() {
   return (
     <div className="px-4 py-6 sm:px-8 sm:py-8">
       <PageHeading
-        title={t('admin.departments.page', lang)}
+        title={v.departments}
         subtitle={t('dept.subtitle', lang)}
       />
 
       <div className="mt-6 grid gap-6 lg:grid-cols-3">
         <div className="card lg:col-span-1">
-          <h2 className="text-lg font-semibold text-ink">{t('dept.addTitle', lang)}</h2>
+          <h2 className="text-lg font-semibold text-ink">
+            {v.addUnitTitle}
+          </h2>
           <DepartmentForm
             mode="create"
             initial={{

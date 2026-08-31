@@ -12,7 +12,8 @@ import {
   Baby,
 } from 'lucide-react';
 import { t } from '@/lib/i18n';
-import type { AppLanguage, UserRole } from '@/lib/types';
+import { roleDisplayName } from '@/lib/vocabulary';
+import type { AppLanguage, OrganizationType, UserRole } from '@/lib/types';
 import {
   changeUserRole,
   removeUserFromChurch,
@@ -55,12 +56,20 @@ function badgeClass(role: UserRole): string {
   return 'bg-gray-100 text-gray-700';
 }
 
-function RoleBadge({ role, lang }: { role: UserRole; lang: AppLanguage }) {
+function RoleBadge({
+  role,
+  lang,
+  orgType,
+}: {
+  role: UserRole;
+  lang: AppLanguage;
+  orgType: OrganizationType;
+}) {
   return (
     <span
       className={`inline-flex items-center rounded-full px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${badgeClass(role)}`}
     >
-      {t(`role.${role}`, lang)}
+      {roleDisplayName(role, orgType, lang) ?? t(`role.${role}`, lang)}
     </span>
   );
 }
@@ -71,12 +80,16 @@ export function UserRow({
   callerIsOwner,
   currentAdminPastorCount,
   lang,
+  orgType,
 }: {
   user: UserRowData;
   meId: string;
   callerIsOwner: boolean;
   currentAdminPastorCount: number;
   lang: AppLanguage;
+  // Display only — the stored role is unchanged; a ministry just shows
+  // admin_pastor as "Admin Leader".
+  orgType: OrganizationType;
 }) {
   const router = useRouter();
   const [expanded, setExpanded] = useState(false);
@@ -159,9 +172,9 @@ export function UserRow({
         <td className="px-4 py-3 text-sm text-body">{user.email}</td>
         <td className="px-4 py-3 text-sm text-body">
           <div className="flex flex-wrap items-center gap-1">
-            <RoleBadge role={user.role} lang={lang} />
+            <RoleBadge role={user.role} lang={lang} orgType={orgType} />
             {user.secondary_roles.map((r) => (
-              <RoleBadge key={r} role={r} lang={lang} />
+              <RoleBadge key={r} role={r} lang={lang} orgType={orgType} />
             ))}
           </div>
         </td>
@@ -192,7 +205,10 @@ export function UserRow({
                   <p className="text-xs font-semibold uppercase tracking-wide text-muted">
                     {t('userDetail.primaryRole', lang)}
                   </p>
-                  <p className="mt-1 text-sm text-ink">{t(`role.${user.role}`, lang)}</p>
+                  <p className="mt-1 text-sm text-ink">
+                    {roleDisplayName(user.role, orgType, lang) ??
+                      t(`role.${user.role}`, lang)}
+                  </p>
                 </div>
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-wide text-muted">
@@ -209,7 +225,7 @@ export function UserRow({
                     </p>
                     <div className="mt-1 flex flex-wrap gap-1">
                       {user.secondary_roles.map((r) => (
-                        <RoleBadge key={r} role={r} lang={lang} />
+                        <RoleBadge key={r} role={r} lang={lang} orgType={orgType} />
                       ))}
                     </div>
                   </div>

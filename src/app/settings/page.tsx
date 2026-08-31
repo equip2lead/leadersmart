@@ -2,6 +2,7 @@ import { getMe } from '@/lib/auth';
 import { isAdmin } from '@/lib/roles';
 import { t } from '@/lib/i18n';
 import { PageHeading } from '@/components/page-heading';
+import { getVocab } from '@/lib/vocabulary';
 import { ChurchProfileForm } from './_church-form';
 import { UserProfileForm } from './_user-form';
 import { PasswordForm } from './_password-form';
@@ -20,7 +21,9 @@ export default async function SettingsPage() {
       <div className="mt-6 grid gap-6 lg:grid-cols-2">
         {canEditChurch && (
           <section className="card">
-            <h2 className="text-lg font-semibold text-ink">Church profile</h2>
+            <h2 className="text-lg font-semibold text-ink">
+              {getVocab(church.organization_type, lang).orgProfileTitle}
+            </h2>
             <ChurchProfileForm
               churchId={church.id}
               initial={{

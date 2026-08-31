@@ -25,6 +25,7 @@ const KEYS = {
     department: 'vocab.church.department',
     departments: 'vocab.church.departments',
     departmentHead: 'vocab.church.departmentHead',
+    addUnitTitle: 'vocab.church.addUnitTitle',
     weeklyChecklist: 'vocab.church.weeklyChecklist',
     weeklyPeriod: 'vocab.church.weeklyPeriod',
     pomLabel: 'vocab.church.pomLabel',
@@ -43,6 +44,7 @@ const KEYS = {
     department: 'vocab.ministry.department',
     departments: 'vocab.ministry.departments',
     departmentHead: 'vocab.ministry.departmentHead',
+    addUnitTitle: 'vocab.ministry.addUnitTitle',
     weeklyChecklist: 'vocab.ministry.weeklyChecklist',
     weeklyPeriod: 'vocab.ministry.weeklyPeriod',
     pomLabel: 'vocab.church.pomLabel', // unreachable: showPom is false
@@ -63,6 +65,8 @@ export type Vocab = {
   department: string;
   departments: string;
   departmentHead: string;
+  /** Full phrase, not a token: French gender differs (un département / une équipe). */
+  addUnitTitle: string;
   weeklyChecklist: string;
   weeklyPeriod: string;
   /** Pastor of the Month is a church concept; ministries hide it entirely. */
@@ -96,6 +100,7 @@ export function getVocab(
     department: t(k.department, lang),
     departments: t(k.departments, lang),
     departmentHead: t(k.departmentHead, lang),
+    addUnitTitle: t(k.addUnitTitle, lang),
     weeklyChecklist: t(k.weeklyChecklist, lang),
     weeklyPeriod: t(k.weeklyPeriod, lang),
     showPom: isChurch,
