@@ -17,6 +17,7 @@ export function AppShell({
         userName={user.full_name}
         churchName={church.name}
         lang={user.preferred_language}
+        orgType={church.organization_type}
       />
       <div className="flex min-w-0 flex-1 flex-col">
         <header className="flex items-center gap-2 border-b border-gray-100 bg-white px-4 py-3 md:hidden">

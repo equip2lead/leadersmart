@@ -55,6 +55,21 @@ export interface Church {
   updated_at: string;
 }
 
+export interface ChurchService {
+  id: string;
+  church_id: string;
+  name: string;
+  /** 0 = Sunday … 6 = Saturday, matching JS getDay(). */
+  day_of_week: number;
+  /** Postgres `time`, returned as HH:MM:SS. */
+  start_time: string;
+  volunteer_arrival_offset_minutes: number;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+  created_by: string | null;
+}
+
 export interface User {
   id: string;
   church_id: string;

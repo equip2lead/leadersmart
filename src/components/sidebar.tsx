@@ -16,6 +16,7 @@ import {
   LogOut,
   UserCog,
   Building2,
+  Clock,
   Monitor,
   CreditCard,
   ArrowRightLeft,
@@ -27,7 +28,7 @@ import {
 import { cn } from '@/lib/cn';
 import { t } from '@/lib/i18n';
 import { isAdmin, isLeader, isOwner } from '@/lib/roles';
-import type { AppLanguage, UserRole } from '@/lib/types';
+import type { AppLanguage, OrganizationType, UserRole } from '@/lib/types';
 
 type NavItem = { href: string; labelKey: string; icon: LucideIcon };
 type NavSection = { titleKey: string; items: NavItem[] };
@@ -35,13 +36,21 @@ type NavSection = { titleKey: string; items: NavItem[] };
 // Admin nav — 5 grouped sections. Both Owner and Admin Pastor see all
 // of them; the Owner Tools section below is layered on top for Owner
 // only. Legacy 'senior_pastor' + 'admin' also route here.
-const ADMIN_SECTIONS: NavSection[] = [
+function adminSections(orgType: OrganizationType): NavSection[] {
+  // Service times are church-only: ministries don't run a weekly service
+  // schedule, so the link is omitted rather than shown and refused. The
+  // page guards independently — a hidden link is not access control.
+  const isChurch = orgType === 'church';
+  return [
   {
     titleKey: 'nav.section.overview',
     items: [
       { href: '/admin', labelKey: 'nav.dashboard', icon: LayoutDashboard },
       { href: '/admin/assignments', labelKey: 'nav.pastors', icon: Star },
       { href: '/admin/departments', labelKey: 'admin.departments.page', icon: Building2 },
+      ...(isChurch
+        ? [{ href: '/settings/services', labelKey: 'nav.serviceTimes', icon: Clock }]
+        : []),
       { href: '/admin/users', labelKey: 'nav.users', icon: UserCog },
       { href: '/admin/analytics', labelKey: 'nav.reportsAnalytics', icon: BarChart3 },
     ],
@@ -76,7 +85,8 @@ const ADMIN_SECTIONS: NavSection[] = [
       { href: '/settings', labelKey: 'nav.settings', icon: Settings },
     ],
   },
-];
+  ];
+}
 
 // Pastor-of-the-Month sidebar. Historically a flat list; regrouped in
 // v2 Phase 2 to match ADMIN_SECTIONS' visual structure (uppercase small
@@ -196,11 +206,13 @@ export function Sidebar({
   userName,
   churchName,
   lang,
+  orgType,
 }: {
   role: UserRole;
   userName: string;
   churchName: string;
   lang: AppLanguage;
+  orgType: OrganizationType;
 }) {
   const pathname = usePathname();
   const showOwnerTools = isOwner(role);
@@ -234,7 +246,7 @@ export function Sidebar({
       <nav className="flex-1 overflow-y-auto p-3">
         {showAdminSidebar ? (
           <>
-            {ADMIN_SECTIONS.map((section) => (
+            {adminSections(orgType).map((section) => (
               <div key={section.titleKey}>
                 <SectionHeader title={t(section.titleKey, lang)} />
                 <NavList items={section.items} pathname={pathname} lang={lang} />

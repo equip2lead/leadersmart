@@ -523,6 +523,47 @@ const en: Dictionary = {
   'onboarding.step3.ministrySuggest.training': 'Training',
   'onboarding.step3.ministrySuggest.finance': 'Finance',
 
+  // Service times (settings > services)
+  'settings.services.title': 'Service times',
+  'settings.services.subtitle':
+    'Configure when your church meets. Volunteers use these times for arrival planning.',
+  'settings.services.empty': 'No services configured yet.',
+  'settings.services.add': '+ Add service',
+  'settings.services.nameLabel': 'Service name',
+  'settings.services.namePlaceholder': 'e.g. Sunday Celebration',
+  'settings.services.dayLabel': 'Day',
+  'settings.services.timeLabel': 'Start time',
+  'settings.services.offsetLabel': 'Volunteers arrive (minutes before)',
+  'settings.services.activeLabel': 'Active',
+  'settings.services.save': 'Save',
+  'settings.services.arriveAt': 'Volunteers arrive at {time}',
+  'settings.services.inactiveBadge': 'Inactive',
+  'settings.services.deactivate': 'Deactivate',
+  'settings.services.delete': 'Delete permanently',
+  'settings.services.confirmDeactivate':
+    'Deactivate this service? It stays in the list and can be switched back on.',
+  'settings.services.confirmDelete':
+    'Delete this service permanently? This cannot be undone.',
+  'settings.services.err.name_required': 'Please give the service a name.',
+  'settings.services.err.name_too_long': 'That name is too long.',
+  'settings.services.err.invalid_day': 'Please pick a valid day.',
+  'settings.services.err.invalid_time': 'Please enter a valid time.',
+  'settings.services.err.invalid_offset':
+    'Arrival time must be between 0 and 480 minutes before the service.',
+  'settings.services.err.not_admin':
+    'Only the owner and admin pastors can change service times.',
+  'settings.services.err.not_a_church':
+    'Service times apply to churches only.',
+  'settings.services.err.not_found': 'That service no longer exists.',
+  'settings.day.0': 'Sunday',
+  'settings.day.1': 'Monday',
+  'settings.day.2': 'Tuesday',
+  'settings.day.3': 'Wednesday',
+  'settings.day.4': 'Thursday',
+  'settings.day.5': 'Friday',
+  'settings.day.6': 'Saturday',
+  'nav.serviceTimes': 'Service times',
+
   // Skipped-onboarding prompts on /admin dashboard
   'admin.onboardingSkipped.title': 'Finish setting up',
   'admin.onboardingSkipped.admins.title': 'Add your admin team',
@@ -1659,6 +1700,46 @@ const fr: Dictionary = {
   'onboarding.step3.ministrySuggest.outreach': 'Rayonnement',
   'onboarding.step3.ministrySuggest.training': 'Formation',
   'onboarding.step3.ministrySuggest.finance': 'Finances',
+
+  'settings.services.title': 'Horaires de services',
+  'settings.services.subtitle':
+    "Configurez les heures de rassemblement. Les b\u00e9n\u00e9voles utilisent ces horaires pour planifier leur arriv\u00e9e.",
+  'settings.services.empty': 'Aucun service configur\u00e9 pour le moment.',
+  'settings.services.add': '+ Ajouter un service',
+  'settings.services.nameLabel': 'Nom du service',
+  'settings.services.namePlaceholder': 'ex. C\u00e9l\u00e9bration du dimanche',
+  'settings.services.dayLabel': 'Jour',
+  'settings.services.timeLabel': 'Heure de d\u00e9but',
+  'settings.services.offsetLabel': "Arriv\u00e9e des b\u00e9n\u00e9voles (minutes avant)",
+  'settings.services.activeLabel': 'Actif',
+  'settings.services.save': 'Enregistrer',
+  'settings.services.arriveAt': 'Arriv\u00e9e des b\u00e9n\u00e9voles \u00e0 {time}',
+  'settings.services.inactiveBadge': 'Inactif',
+  'settings.services.deactivate': 'D\u00e9sactiver',
+  'settings.services.delete': 'Supprimer d\u00e9finitivement',
+  'settings.services.confirmDeactivate':
+    "D\u00e9sactiver ce service ? Il reste dans la liste et peut \u00eatre r\u00e9activ\u00e9.",
+  'settings.services.confirmDelete':
+    'Supprimer ce service d\u00e9finitivement ? Cette action est irr\u00e9versible.',
+  'settings.services.err.name_required': 'Veuillez nommer le service.',
+  'settings.services.err.name_too_long': 'Ce nom est trop long.',
+  'settings.services.err.invalid_day': 'Veuillez choisir un jour valide.',
+  'settings.services.err.invalid_time': 'Veuillez saisir une heure valide.',
+  'settings.services.err.invalid_offset':
+    "L'arriv\u00e9e doit \u00eatre comprise entre 0 et 480 minutes avant le service.",
+  'settings.services.err.not_admin':
+    'Seuls le propri\u00e9taire et les pasteurs administrateurs peuvent modifier les horaires.',
+  'settings.services.err.not_a_church':
+    "Les horaires de services concernent uniquement les \u00e9glises.",
+  'settings.services.err.not_found': "Ce service n'existe plus.",
+  'settings.day.0': 'Dimanche',
+  'settings.day.1': 'Lundi',
+  'settings.day.2': 'Mardi',
+  'settings.day.3': 'Mercredi',
+  'settings.day.4': 'Jeudi',
+  'settings.day.5': 'Vendredi',
+  'settings.day.6': 'Samedi',
+  'nav.serviceTimes': 'Horaires de services',
 
   'admin.onboardingSkipped.title': 'Finaliser la mise en place',
   'admin.onboardingSkipped.admins.title': 'Ajoutez votre équipe pastorale',
