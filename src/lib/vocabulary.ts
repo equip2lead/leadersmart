@@ -25,6 +25,7 @@ const KEYS = {
     department: 'vocab.church.department',
     departments: 'vocab.church.departments',
     departmentHead: 'vocab.church.departmentHead',
+    ownerLabel: 'vocab.church.ownerLabel',
     addUnitTitle: 'vocab.church.addUnitTitle',
     weeklyChecklist: 'vocab.church.weeklyChecklist',
     weeklyPeriod: 'vocab.church.weeklyPeriod',
@@ -44,6 +45,7 @@ const KEYS = {
     department: 'vocab.ministry.department',
     departments: 'vocab.ministry.departments',
     departmentHead: 'vocab.ministry.departmentHead',
+    ownerLabel: 'vocab.ministry.ownerLabel',
     addUnitTitle: 'vocab.ministry.addUnitTitle',
     weeklyChecklist: 'vocab.ministry.weeklyChecklist',
     weeklyPeriod: 'vocab.ministry.weeklyPeriod',
@@ -65,6 +67,8 @@ export type Vocab = {
   department: string;
   departments: string;
   departmentHead: string;
+  /** Church keeps the existing "Senior Pastor" reading; ministries say Founder. */
+  ownerLabel: string;
   /** Full phrase, not a token: French gender differs (un département / une équipe). */
   addUnitTitle: string;
   weeklyChecklist: string;
@@ -100,6 +104,7 @@ export function getVocab(
     department: t(k.department, lang),
     departments: t(k.departments, lang),
     departmentHead: t(k.departmentHead, lang),
+    ownerLabel: t(k.ownerLabel, lang),
     addUnitTitle: t(k.addUnitTitle, lang),
     weeklyChecklist: t(k.weeklyChecklist, lang),
     weeklyPeriod: t(k.weeklyPeriod, lang),
@@ -121,8 +126,17 @@ export function roleDisplayName(
 ): string | null {
   const v = getVocab(orgType, lang);
   if (role === 'admin_pastor') return v.adminRole;
-  if (role === 'department_head' || role === 'department_leader') {
-    return v.departmentHead;
+  if (role === 'department_head') return v.departmentHead;
+  // 'department_leader' is the legacy spelling. A ministry should read it
+  // as a Team Leader, but a church must keep saying "Department Leader" —
+  // mapping it to departmentHead for both would silently retitle it to
+  // "Department Head" in English church mode.
+  if (role === 'department_leader') {
+    return orgType === 'ministry' ? v.departmentHead : null;
   }
+  // 'senior_pastor' is the pre-Phase-2 spelling of owner. No rows carry
+  // it today, but mapping it here means one surfacing later reads as the
+  // org's owner label rather than a legacy church title.
+  if (role === 'owner' || role === 'senior_pastor') return v.ownerLabel;
   return null;
 }
