@@ -17,6 +17,7 @@ import {
   UserCog,
   Building2,
   Clock,
+  Globe,
   Monitor,
   CreditCard,
   ArrowRightLeft,
@@ -67,6 +68,11 @@ function adminSections(
         ? [{ href: '/settings/services', labelKey: 'nav.serviceTimes', icon: Clock }]
         : []),
       { href: '/admin/users', labelKey: 'nav.users', icon: UserCog },
+      // Branches are a ministry concept (Q5a) — churches see no link and
+      // the page redirects them.
+      ...(isChurch
+        ? []
+        : [{ href: '/admin/branches', labelKey: 'nav.branches', icon: Globe }]),
       { href: '/admin/analytics', labelKey: 'nav.reportsAnalytics', icon: BarChart3 },
     ],
   },
