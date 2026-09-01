@@ -652,6 +652,29 @@ const en: Dictionary = {
   'branches.err.not_found': 'That branch no longer exists.',
   'nav.branches': 'Branches',
 
+  // Ministry dashboard (/admin in ministry mode)
+  'dashboard.ministry.greeting_morning': 'Good morning, {name} 👋',
+  'dashboard.ministry.greeting_afternoon': 'Good afternoon, {name} 👋',
+  'dashboard.ministry.greeting_evening': 'Good evening, {name} 👋',
+  'dashboard.ministry.greeting_subtitle':
+    "Here's what's happening across your ministry.",
+  'dashboard.ministry.branches_title': 'Branches',
+  'dashboard.ministry.branches_manage_link': 'Manage branches →',
+  'dashboard.ministry.branches_empty_title':
+    'No branches yet — set up your first branch',
+  'dashboard.ministry.branches_empty_cta': 'Add your first branch',
+  'dashboard.ministry.branches_more': '+{n} more',
+  'dashboard.ministry.upcoming_title': 'Upcoming',
+  'dashboard.ministry.upcoming_placeholder':
+    'Activities coming in the next update',
+  'dashboard.ministry.leaders_title': 'Leaders in development',
+  'dashboard.ministry.leaders_placeholder':
+    'Leadership pipeline coming in the next update',
+  'dashboard.ministry.leaders_hint': "Track your leaders' growth soon",
+  'header.language_toggle_aria_label': 'Change language',
+  'header.language_english': 'EN',
+  'header.language_french': 'FR',
+
   // Skipped-onboarding prompts on /admin dashboard
   'admin.onboardingSkipped.title': 'Finish setting up',
   'admin.onboardingSkipped.admins.title': 'Add your admin team',
@@ -1916,6 +1939,29 @@ const fr: Dictionary = {
     'Les antennes sont disponibles uniquement pour les ministères.',
   'branches.err.not_found': "Cette antenne n'existe plus.",
   'nav.branches': 'Antennes',
+
+  'dashboard.ministry.greeting_morning': 'Bonjour, {name} 👋',
+  'dashboard.ministry.greeting_afternoon': 'Bon après-midi, {name} 👋',
+  'dashboard.ministry.greeting_evening': 'Bonsoir, {name} 👋',
+  'dashboard.ministry.greeting_subtitle':
+    'Voici ce qui se passe dans votre ministère.',
+  'dashboard.ministry.branches_title': 'Antennes',
+  'dashboard.ministry.branches_manage_link': 'Gérer les antennes →',
+  'dashboard.ministry.branches_empty_title':
+    "Aucune antenne — créez votre première antenne",
+  'dashboard.ministry.branches_empty_cta': 'Ajouter votre première antenne',
+  'dashboard.ministry.branches_more': '+{n} autres',
+  'dashboard.ministry.upcoming_title': 'À venir',
+  'dashboard.ministry.upcoming_placeholder':
+    'Les activités arrivent dans la prochaine mise à jour',
+  'dashboard.ministry.leaders_title': 'Leaders en développement',
+  'dashboard.ministry.leaders_placeholder':
+    'Le parcours de leadership arrive dans la prochaine mise à jour',
+  'dashboard.ministry.leaders_hint':
+    'Suivez bientôt la croissance de vos leaders',
+  'header.language_toggle_aria_label': 'Changer de langue',
+  'header.language_english': 'EN',
+  'header.language_french': 'FR',
 
   'admin.onboardingSkipped.title': 'Finaliser la mise en place',
   'admin.onboardingSkipped.admins.title': 'Ajoutez votre équipe pastorale',
