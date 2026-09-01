@@ -1,4 +1,5 @@
 import { Sidebar } from './sidebar';
+import { LanguageToggle } from './language-toggle';
 import type { Church, User } from '@/lib/types';
 
 export function AppShell({
@@ -20,8 +21,11 @@ export function AppShell({
         orgType={church.organization_type}
       />
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="flex items-center gap-2 border-b border-gray-100 bg-white px-4 py-3 md:hidden">
-          <span className="text-lg font-bold text-ink">LeaderSmart</span>
+        <header className="flex items-center gap-2 border-b border-gray-100 bg-white px-4 py-3">
+          <span className="text-lg font-bold text-ink md:hidden">LeaderSmart</span>
+          <div className="ml-auto">
+            <LanguageToggle current={user.preferred_language} />
+          </div>
         </header>
         <main className="flex-1 overflow-x-hidden">{children}</main>
       </div>
