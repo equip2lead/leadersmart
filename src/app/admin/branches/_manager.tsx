@@ -2,9 +2,11 @@
 
 import { useEffect, useRef, useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { Globe, Pencil, Trash2 } from 'lucide-react';
 import { t } from '@/lib/i18n';
 import { COUNTRIES, flagForCode } from '@/lib/countries';
+import { zoneCountLabel } from '@/lib/zones';
 import type { AppLanguage, Branch } from '@/lib/types';
 import { createBranch, deleteBranch, updateBranch } from './actions';
 
@@ -45,11 +47,14 @@ export function BranchesManager({
   lang,
   branches,
   coordinators,
+  zoneCounts,
   canDelete,
 }: {
   lang: AppLanguage;
   branches: Branch[];
   coordinators: CoordinatorOption[];
+  /** branch id -> number of zones, for the drill-down line. */
+  zoneCounts: Record<string, number>;
   /** Deleting is owner-only, matching the branches_delete policy. */
   canDelete: boolean;
 }) {
@@ -167,7 +172,14 @@ export function BranchesManager({
                 )}
               </div>
 
-              <h3 className="mt-3 truncate text-lg font-bold text-ink">{b.name}</h3>
+              <h3 className="mt-3 truncate text-lg font-bold text-ink">
+                <Link
+                  href={`/admin/branches/${b.id}/zones`}
+                  className="hover:text-indigo-royal-700 hover:underline"
+                >
+                  {b.name}
+                </Link>
+              </h3>
               {b.city && <p className="text-sm text-muted">{b.city}</p>}
               <p className="mt-2 truncate text-sm text-body">
                 {nameOf(b.coordinator_user_id) ?? (
@@ -176,6 +188,12 @@ export function BranchesManager({
                   </span>
                 )}
               </p>
+              <Link
+                href={`/admin/branches/${b.id}/zones`}
+                className="mt-1 inline-block text-xs text-muted hover:text-indigo-royal-700 hover:underline"
+              >
+                {zoneCountLabel(zoneCounts[b.id] ?? 0, lang)}
+              </Link>
 
               <div className="mt-5 flex items-center gap-4 border-t border-gray-100 pt-4">
                 <button

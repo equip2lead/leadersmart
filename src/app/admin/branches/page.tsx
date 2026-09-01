@@ -6,6 +6,7 @@ import { t } from '@/lib/i18n';
 import { roleDisplayName } from '@/lib/vocabulary';
 import { PageHeading } from '@/components/page-heading';
 import type { Branch } from '@/lib/types';
+import { tallyByBranch } from '@/lib/zones';
 import { BranchesManager, type CoordinatorOption } from './_manager';
 
 export const dynamic = 'force-dynamic';
@@ -40,6 +41,14 @@ export default async function BranchesPage() {
 
   const branches = (branchRes.data ?? []) as Branch[];
 
+  // Zone counts for the cards. Scoped to this org's branch ids, so the
+  // query cannot see another tenant's zones even before RLS.
+  const { data: zoneRows } = await supabase
+    .from('zones')
+    .select('branch_id')
+    .in('branch_id', branches.length ? branches.map((b) => b.id) : ['']);
+  const zoneCounts = tallyByBranch(zoneRows ?? []);
+
   const coordinators: CoordinatorOption[] = (userRes.data ?? []).map((u) => ({
     id: u.id,
     name: u.full_name,
@@ -60,6 +69,7 @@ export default async function BranchesPage() {
         lang={lang}
         branches={branches}
         coordinators={coordinators}
+        zoneCounts={zoneCounts}
         canDelete={isOwner(user.role)}
       />
     </div>

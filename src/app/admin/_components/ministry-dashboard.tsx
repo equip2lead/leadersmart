@@ -3,6 +3,7 @@ import { CalendarDays, Globe, Sparkles } from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
 import { t } from '@/lib/i18n';
 import { flagForCode } from '@/lib/countries';
+import { tallyByBranch, zoneCountLabel } from '@/lib/zones';
 import type { AppLanguage, Branch, Church, User } from '@/lib/types';
 
 // How many branch tiles fit before the grid rolls up into a "+N more"
@@ -68,6 +69,14 @@ export async function MinistryDashboard({
   const visible = branches.slice(0, MAX_TILES);
   const overflow = Math.max(0, branches.length - MAX_TILES);
 
+  // Zone counts for the visible tiles only — the overflow tile shows a
+  // branch count, not zones, so fetching the rest would be wasted work.
+  const { data: zoneRows } = await supabase
+    .from('zones')
+    .select('branch_id')
+    .in('branch_id', visible.length ? visible.map((b) => b.id) : ['']);
+  const zoneCounts = tallyByBranch(zoneRows ?? []);
+
   const firstName = user.full_name.trim().split(/\s+/)[0] || user.full_name;
   const greeting = t(greetingKey(new Date().getHours()), lang).replace(
     '{name}',
@@ -112,26 +121,33 @@ export async function MinistryDashboard({
           ) : (
             <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {visible.map((b) => (
-                <li
-                  key={b.id}
-                  className={
-                    'flex items-center gap-3 rounded-lg border px-4 py-3 ' +
-                    (b.is_headquarters
-                      ? 'border-[#B91572] bg-[#FCE7F3]'
-                      : 'border-gray-200 bg-[#FDFCF7]')
-                  }
-                >
-                  <span className="text-2xl leading-none" aria-hidden="true">
-                    {flagForCode(b.country_code)}
-                  </span>
-                  <span className="min-w-0 flex-1 truncate text-sm font-semibold text-ink">
-                    {b.name}
-                  </span>
-                  {b.is_headquarters && (
-                    <span className="shrink-0 rounded-full bg-white/70 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-[#B91572]">
-                      {t('branches.hq_badge', lang)}
+                <li key={b.id}>
+                  <Link
+                    href={`/admin/branches/${b.id}/zones`}
+                    className={
+                      'flex items-center gap-3 rounded-lg border px-4 py-3 transition hover:shadow-card ' +
+                      (b.is_headquarters
+                        ? 'border-[#B91572] bg-[#FCE7F3]'
+                        : 'border-gray-200 bg-[#FDFCF7]')
+                    }
+                  >
+                    <span className="text-2xl leading-none" aria-hidden="true">
+                      {flagForCode(b.country_code)}
                     </span>
-                  )}
+                    <span className="min-w-0 flex-1">
+                      <span className="block truncate text-sm font-semibold text-ink">
+                        {b.name}
+                      </span>
+                      <span className="block text-xs text-muted">
+                        {zoneCountLabel(zoneCounts[b.id] ?? 0, lang)}
+                      </span>
+                    </span>
+                    {b.is_headquarters && (
+                      <span className="shrink-0 rounded-full bg-white/70 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-[#B91572]">
+                        {t('branches.hq_badge', lang)}
+                      </span>
+                    )}
+                  </Link>
                 </li>
               ))}
 
