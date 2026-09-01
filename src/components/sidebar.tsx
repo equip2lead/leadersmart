@@ -18,6 +18,7 @@ import {
   Building2,
   Clock,
   Globe,
+  Sparkles,
   Monitor,
   CreditCard,
   ArrowRightLeft,
@@ -72,7 +73,10 @@ function adminSections(
       // the page redirects them.
       ...(isChurch
         ? []
-        : [{ href: '/admin/branches', labelKey: 'nav.branches', icon: Globe }]),
+        : [
+            { href: '/admin/branches', labelKey: 'nav.branches', icon: Globe },
+            { href: '/admin/leaders', labelKey: 'leaders.sidebar_link', icon: Sparkles },
+          ]),
       { href: '/admin/analytics', labelKey: 'nav.reportsAnalytics', icon: BarChart3 },
     ],
   },
