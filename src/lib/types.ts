@@ -70,6 +70,17 @@ export interface Branch {
   created_by: string | null;
 }
 
+export interface Zone {
+  id: string;
+  /** Tenancy is reached through the parent branch, which carries church_id. */
+  branch_id: string;
+  name: string;
+  coordinator_user_id: string | null;
+  created_at: string;
+  updated_at: string;
+  created_by: string | null;
+}
+
 export interface ChurchService {
   id: string;
   church_id: string;
