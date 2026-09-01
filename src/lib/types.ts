@@ -81,6 +81,25 @@ export interface Zone {
   created_by: string | null;
 }
 
+/** Fixed 5-level development programme; current_level is CHECKed 1..5. */
+export const LEADER_LEVELS = [1, 2, 3, 4, 5] as const;
+export const MAX_LEADER_LEVEL = 5;
+
+export interface LeaderDevelopment {
+  id: string;
+  church_id: string;
+  user_id: string;
+  current_level: number;
+  started_at: string;
+  last_level_change_at: string;
+  /** Soft removal — the row stays for history. */
+  is_active: boolean;
+  notes: string | null;
+  created_at: string;
+  updated_at: string;
+  created_by: string | null;
+}
+
 export interface ChurchService {
   id: string;
   church_id: string;
