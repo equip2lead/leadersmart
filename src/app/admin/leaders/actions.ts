@@ -22,9 +22,6 @@ async function requireLeaderAdmin() {
   if (!ADMIN_ROLES.includes(me.user.role)) {
     return { me: null, error: 'not_admin' as const };
   }
-  if (me.church.organization_type !== 'ministry') {
-    return { me: null, error: 'not_a_ministry' as const };
-  }
   return { me, error: null };
 }
 

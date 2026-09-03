@@ -71,12 +71,12 @@ function adminSections(
       { href: '/admin/users', labelKey: 'nav.users', icon: UserCog },
       // Branches are a ministry concept (Q5a) — churches see no link and
       // the page redirects them.
+      // Branches stay ministry-only; the leader pipeline is available to
+      // both org types, so it sits outside the branch.
       ...(isChurch
         ? []
-        : [
-            { href: '/admin/branches', labelKey: 'nav.branches', icon: Globe },
-            { href: '/admin/leaders', labelKey: 'leaders.sidebar_link', icon: Sparkles },
-          ]),
+        : [{ href: '/admin/branches', labelKey: 'nav.branches', icon: Globe }]),
+      { href: '/admin/leaders', labelKey: 'leaders.sidebar_link', icon: Sparkles },
       { href: '/admin/analytics', labelKey: 'nav.reportsAnalytics', icon: BarChart3 },
     ],
   },

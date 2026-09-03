@@ -1,4 +1,3 @@
-import { redirect } from 'next/navigation';
 import { requireRole } from '@/lib/auth';
 import { ADMIN_ROLES, isOwner, roleLabelKey } from '@/lib/roles';
 import { createClient } from '@/lib/supabase/server';
@@ -16,10 +15,6 @@ export const dynamic = 'force-dynamic';
 
 export default async function LeadersPage() {
   const { user, church } = await requireRole(ADMIN_ROLES);
-
-  // Ministry-only. The sidebar omits the link for churches, but a hidden
-  // link is not access control — the actions refuse independently too.
-  if (church.organization_type === 'church') redirect('/admin');
 
   const lang = user.preferred_language;
   const supabase = await createClient();

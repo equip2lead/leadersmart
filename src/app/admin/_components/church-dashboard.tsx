@@ -17,6 +17,11 @@ import { t } from '@/lib/i18n';
 import { PageHeading } from '@/components/page-heading';
 import { getDepartmentIcon } from '@/lib/icons';
 import { getVocab } from '@/lib/vocabulary';
+import {
+  LeadersPanelBody,
+  LeadersViewAllLink,
+  fetchLeaderSummary,
+} from './leaders-panel';
 
 type PastorRef = { full_name: string | null } | null;
 type ActiveAssignment = {
@@ -94,6 +99,7 @@ export async function ChurchDashboard({
   church: Church;
 }) {
   const lang = user.preferred_language;
+  const leaderSummary = await fetchLeaderSummary(church.id);
   const supabase = await createClient();
 
   const thisWeek = currentWeekStart();
@@ -285,6 +291,20 @@ export async function ChurchDashboard({
           icon={ClipboardCheck}
         />
       </div>
+
+      <section className="mt-8">
+        <div className="flex items-center justify-between gap-3">
+          <h2 className="text-lg font-semibold text-ink">
+            {t('leaders.page_title', lang)}
+          </h2>
+          {leaderSummary.avatars.length > 0 && (
+            <LeadersViewAllLink lang={lang} />
+          )}
+        </div>
+        <div className="mt-4">
+          <LeadersPanelBody summary={leaderSummary} lang={lang} />
+        </div>
+      </section>
 
       <section className="mt-8">
         <div className="flex items-center justify-between">

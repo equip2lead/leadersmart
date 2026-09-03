@@ -4,16 +4,16 @@ import { createClient } from '@/lib/supabase/server';
 import { t } from '@/lib/i18n';
 import { flagForCode } from '@/lib/countries';
 import { tallyByBranch, zoneCountLabel } from '@/lib/zones';
-import { initialsOf, leaderCountLabel, levelTone } from '@/lib/leaders';
-import type { LeaderDevelopment } from '@/lib/types';
+import {
+  LeadersPanelBody,
+  LeadersViewAllLink,
+  fetchLeaderSummary,
+} from './leaders-panel';
 import type { AppLanguage, Branch, Church, User } from '@/lib/types';
 
 // How many branch tiles fit before the grid rolls up into a "+N more"
 // tile. Eight fills three rows evenly at the desktop breakpoint.
 const MAX_TILES = 8;
-
-// Avatars shown before the row rolls up into a "+N" circle.
-const MAX_AVATARS = 8;
 
 // Greeting bucket from the *viewer's* clock. Rendered on the server, so
 // this is the server's hour, not the user's — see the note where it is
@@ -82,29 +82,7 @@ export async function MinistryDashboard({
     .in('branch_id', visible.length ? visible.map((b) => b.id) : ['']);
   const zoneCounts = tallyByBranch(zoneRows ?? []);
 
-  // Active pipeline only — a deactivated leader is history, not someone
-  // currently in development. One extra row so "+N" is exact.
-  const { data: pipelineRows } = await supabase
-    .from('leader_development')
-    .select('*')
-    .eq('church_id', church.id)
-    .eq('is_active', true)
-    .order('current_level', { ascending: false })
-    .limit(MAX_AVATARS + 1);
-  const pipeline = (pipelineRows ?? []) as LeaderDevelopment[];
-
-  const { data: memberRows } = await supabase
-    .from('users')
-    .select('id, full_name')
-    .eq('church_id', church.id);
-  const nameById = new Map((memberRows ?? []).map((m) => [m.id, m.full_name]));
-
-  const leaderAvatars = pipeline.slice(0, MAX_AVATARS).map((p) => ({
-    id: p.id,
-    name: nameById.get(p.user_id) ?? p.user_id,
-    level: p.current_level,
-  }));
-  const leaderOverflow = Math.max(0, pipeline.length - MAX_AVATARS);
+  const leaderSummary = await fetchLeaderSummary(church.id);
 
   const firstName = user.full_name.trim().split(/\s+/)[0] || user.full_name;
   const greeting = t(greetingKey(new Date().getHours()), lang).replace(
@@ -226,62 +204,12 @@ export async function MinistryDashboard({
           icon={Sparkles}
           title={t('dashboard.ministry.leaders_title', lang)}
           action={
-            leaderAvatars.length > 0 ? (
-              <Link
-                href="/admin/leaders"
-                className="shrink-0 text-sm font-medium text-indigo-royal-700 hover:underline"
-              >
-                {t('leaders.dashboard_view_all', lang)}
-              </Link>
+            leaderSummary.avatars.length > 0 ? (
+              <LeadersViewAllLink lang={lang} />
             ) : null
           }
         >
-          {leaderAvatars.length === 0 ? (
-            <div className="rounded-lg border border-dashed border-gray-300 px-6 py-10 text-center">
-              <p className="text-sm font-semibold text-ink">
-                {t('leaders.dashboard_empty_title', lang)}
-              </p>
-              <p className="mt-1 text-sm text-body">
-                {t('leaders.dashboard_empty_body', lang)}
-              </p>
-              <Link href="/admin/leaders" className="btn-primary mt-4">
-                {t('leaders.dashboard_empty_cta', lang)}
-              </Link>
-            </div>
-          ) : (
-            <>
-              <ul className="flex flex-wrap items-center gap-2">
-                {leaderAvatars.map((l) => (
-                  <li key={l.id}>
-                    <span
-                      className={
-                        'flex h-9 w-9 items-center justify-center rounded-full text-xs font-bold ' +
-                        levelTone(l.level)
-                      }
-                      title={t('leaders.dashboard_tooltip', lang)
-                        .replace('{name}', l.name)
-                        .replace('{level}', String(l.level))}
-                    >
-                      {initialsOf(l.name)}
-                    </span>
-                  </li>
-                ))}
-                {leaderOverflow > 0 && (
-                  <li>
-                    <span className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-100 text-xs font-bold text-muted">
-                      {t('leaders.dashboard_more', lang).replace(
-                        '{n}',
-                        String(leaderOverflow),
-                      )}
-                    </span>
-                  </li>
-                )}
-              </ul>
-              <p className="mt-3 text-xs text-muted">
-                {leaderCountLabel(pipeline.length, lang)}
-              </p>
-            </>
-          )}
+          <LeadersPanelBody summary={leaderSummary} lang={lang} />
         </Panel>
       </div>
     </div>
