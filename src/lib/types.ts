@@ -100,6 +100,76 @@ export interface LeaderDevelopment {
   created_by: string | null;
 }
 
+export type MaterialType = 'book' | 'course' | 'video' | 'article' | 'other';
+export const MATERIAL_TYPES: MaterialType[] = [
+  'book',
+  'course',
+  'video',
+  'article',
+  'other',
+];
+
+export type RequirementType = 'competency' | 'material' | 'milestone';
+export type ProgressStatus = 'not_started' | 'in_progress' | 'completed';
+export const PROGRESS_STATUSES: ProgressStatus[] = [
+  'not_started',
+  'in_progress',
+  'completed',
+];
+
+export interface LevelDefinition {
+  id: string;
+  church_id: string;
+  level: number;
+  title: string;
+  description: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface LevelCompetency {
+  id: string;
+  level_definition_id: string;
+  name: string;
+  description: string | null;
+  sort_order: number;
+  created_at: string;
+}
+
+export interface LevelMaterial {
+  id: string;
+  level_definition_id: string;
+  title: string;
+  material_type: MaterialType;
+  url: string | null;
+  description: string | null;
+  sort_order: number;
+  created_at: string;
+}
+
+export interface LevelMilestone {
+  id: string;
+  level_definition_id: string;
+  name: string;
+  description: string | null;
+  sort_order: number;
+  created_at: string;
+}
+
+export interface LeaderProgress {
+  id: string;
+  leader_development_id: string;
+  requirement_type: RequirementType;
+  /** Polymorphic — points at a competency, material or milestone, so it
+      carries no FK. AFTER DELETE triggers on those tables clean up. */
+  requirement_id: string;
+  status: ProgressStatus;
+  completed_at: string | null;
+  notes: string | null;
+  updated_at: string;
+  updated_by: string | null;
+}
+
 export interface ChurchService {
   id: string;
   church_id: string;
