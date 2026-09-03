@@ -4,7 +4,13 @@ import { ADMIN_ROLES } from '@/lib/roles';
 import { createClient } from '@/lib/supabase/server';
 import { t } from '@/lib/i18n';
 import { PageHeading } from '@/components/page-heading';
-import type { LevelDefinition } from '@/lib/types';
+import type {
+  LevelCompetency,
+  LevelDefinition,
+  LevelMaterial,
+  LevelMilestone,
+} from '@/lib/types';
+import type { RequirementRow } from './_requirements';
 import { LevelsManager } from './_manager';
 
 export const dynamic = 'force-dynamic';
@@ -24,6 +30,64 @@ export default async function LevelDefinitionsPage() {
     .order('level');
 
   const definitions = (data ?? []) as LevelDefinition[];
+  const defIds = definitions.map((d) => d.id);
+
+  // All three requirement tables for every level in one round trip each,
+  // then grouped in memory — five levels times three tables would
+  // otherwise be fifteen queries.
+  const [compRes, matRes, mileRes] = await Promise.all([
+    supabase
+      .from('level_competencies')
+      .select('*')
+      .in('level_definition_id', defIds.length ? defIds : [''])
+      .order('sort_order')
+      .order('created_at'),
+    supabase
+      .from('level_materials')
+      .select('*')
+      .in('level_definition_id', defIds.length ? defIds : [''])
+      .order('sort_order')
+      .order('created_at'),
+    supabase
+      .from('level_milestones')
+      .select('*')
+      .in('level_definition_id', defIds.length ? defIds : [''])
+      .order('sort_order')
+      .order('created_at'),
+  ]);
+
+  // Flatten name/title into a single `label` so the shared section
+  // component never has to know which table a row came from.
+  function group<T extends { level_definition_id: string }>(
+    rows: T[],
+    toRow: (r: T) => RequirementRow,
+  ): Record<string, RequirementRow[]> {
+    const out: Record<string, RequirementRow[]> = {};
+    for (const id of defIds) out[id] = [];
+    for (const r of rows) (out[r.level_definition_id] ??= []).push(toRow(r));
+    return out;
+  }
+
+  const competencies = group((compRes.data ?? []) as LevelCompetency[], (r) => ({
+    id: r.id,
+    label: r.name,
+    description: r.description,
+    sortOrder: r.sort_order,
+  }));
+  const materials = group((matRes.data ?? []) as LevelMaterial[], (r) => ({
+    id: r.id,
+    label: r.title,
+    description: r.description,
+    sortOrder: r.sort_order,
+    materialType: r.material_type,
+    url: r.url,
+  }));
+  const milestones = group((mileRes.data ?? []) as LevelMilestone[], (r) => ({
+    id: r.id,
+    label: r.name,
+    description: r.description,
+    sortOrder: r.sort_order,
+  }));
 
   return (
     <div className="px-4 py-6 sm:px-8 sm:py-8">
@@ -39,7 +103,13 @@ export default async function LevelDefinitionsPage() {
           subtitle={t('levels.definitions.page_subtitle', lang)}
         />
       </div>
-      <LevelsManager lang={lang} definitions={definitions} />
+      <LevelsManager
+        lang={lang}
+        definitions={definitions}
+        competencies={competencies}
+        materials={materials}
+        milestones={milestones}
+      />
     </div>
   );
 }

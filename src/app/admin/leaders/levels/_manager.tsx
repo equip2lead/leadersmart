@@ -7,6 +7,7 @@ import { t } from '@/lib/i18n';
 import { levelTone } from '@/lib/leaders';
 import type { AppLanguage, LevelDefinition } from '@/lib/types';
 import { updateLevelDefinition } from './actions';
+import { RequirementSection, type RequirementRow } from './_requirements';
 
 function mapError(code: string, lang: AppLanguage): string {
   const key = `levels.definitions.err.${code}`;
@@ -14,12 +15,20 @@ function mapError(code: string, lang: AppLanguage): string {
   return translated === key ? code : translated;
 }
 
+type RowsByDefinition = Record<string, RequirementRow[]>;
+
 export function LevelsManager({
   lang,
   definitions,
+  competencies,
+  materials,
+  milestones,
 }: {
   lang: AppLanguage;
   definitions: LevelDefinition[];
+  competencies: RowsByDefinition;
+  materials: RowsByDefinition;
+  milestones: RowsByDefinition;
 }) {
   const router = useRouter();
   const [activeLevel, setActiveLevel] = useState(definitions[0]?.level ?? 1);
@@ -193,6 +202,29 @@ export function LevelsManager({
                 : t('levels.definitions.save', lang)}
             </button>
           </div>
+        </div>
+      )}
+
+      {active && (
+        <div className="mt-6 space-y-4">
+          <RequirementSection
+            lang={lang}
+            type="competency"
+            levelDefinitionId={active.id}
+            rows={competencies[active.id] ?? []}
+          />
+          <RequirementSection
+            lang={lang}
+            type="material"
+            levelDefinitionId={active.id}
+            rows={materials[active.id] ?? []}
+          />
+          <RequirementSection
+            lang={lang}
+            type="milestone"
+            levelDefinitionId={active.id}
+            rows={milestones[active.id] ?? []}
+          />
         </div>
       )}
     </div>
