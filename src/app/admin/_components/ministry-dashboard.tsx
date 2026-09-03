@@ -1,9 +1,16 @@
 import Link from 'next/link';
-import { CalendarDays, Globe, Sparkles } from 'lucide-react';
+import { BarChart3, Globe, Sparkles } from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
 import { t } from '@/lib/i18n';
 import { flagForCode } from '@/lib/countries';
 import { tallyByBranch, zoneCountLabel } from '@/lib/zones';
+import {
+  currentMonthStart,
+  statusClass,
+  statusLabel,
+  type DisplayStatus,
+} from '@/lib/reports';
+import type { BranchReport } from '@/lib/types';
 import {
   LeadersPanelBody,
   LeadersViewAllLink,
@@ -83,6 +90,17 @@ export async function MinistryDashboard({
   const zoneCounts = tallyByBranch(zoneRows ?? []);
 
   const leaderSummary = await fetchLeaderSummary(church.id);
+
+  // This month's report status per visible branch. A branch with no row
+  // yet is "pending" — that is a display state, not a stored one.
+  const { data: reportRows } = await supabase
+    .from('branch_reports')
+    .select('*')
+    .eq('report_month', currentMonthStart())
+    .in('branch_id', visible.length ? visible.map((b) => b.id) : ['']);
+  const statusByBranch = new Map<string, DisplayStatus>(
+    ((reportRows ?? []) as BranchReport[]).map((r) => [r.branch_id, r.status]),
+  );
 
   const firstName = user.full_name.trim().split(/\s+/)[0] || user.full_name;
   const greeting = t(greetingKey(new Date().getHours()), lang).replace(
@@ -175,29 +193,70 @@ export async function MinistryDashboard({
           )}
         </Panel>
 
-        {/* Sections 3 and 4 are intentionally inert until 5e and 5d. The
-            skeletons are there so the panels read as "not built yet"
-            rather than "failed to load" — an empty white box would look
-            like a bug. aria-hidden keeps the fake rows out of the
-            accessibility tree, where they would announce as content. */}
         <Panel
-          icon={CalendarDays}
-          title={t('dashboard.ministry.upcoming_title', lang)}
-        >
-          <p className="text-sm text-muted">
-            {t('dashboard.ministry.upcoming_placeholder', lang)}
-          </p>
-          <div className="mt-4 space-y-2" aria-hidden="true">
-            {[0, 1, 2].map((i) => (
-              <div
-                key={i}
-                className="flex items-center gap-3 rounded-lg border border-gray-100 bg-gray-50 px-4 py-3"
+          icon={BarChart3}
+          title={t('reports.dashboard.panel_title', lang)}
+          action={
+            visible.length > 0 ? (
+              <Link
+                href={`/admin/branches/${visible[0].id}/reports`}
+                className="shrink-0 text-sm font-medium text-indigo-royal-700 hover:underline"
               >
-                <span className="h-2 w-2 shrink-0 rounded-full bg-gray-200" />
-                <span className="h-2 w-2/5 rounded bg-gray-200" />
-              </div>
-            ))}
-          </div>
+                {t('reports.dashboard.view_all', lang)}
+              </Link>
+            ) : null
+          }
+        >
+          <p className="-mt-2 mb-4 text-sm text-muted">
+            {t('reports.dashboard.panel_subtitle', lang)}
+          </p>
+          {visible.length === 0 ? (
+            <p className="rounded-lg border border-dashed border-gray-300 px-6 py-8 text-center text-sm text-muted">
+              {t('reports.dashboard.no_branches', lang)}
+            </p>
+          ) : (
+            <ul className="space-y-2">
+              {visible.map((b) => {
+                const status = statusByBranch.get(b.id) ?? 'pending';
+                return (
+                  <li key={b.id}>
+                    <Link
+                      href={`/admin/branches/${b.id}/reports`}
+                      className="flex items-center gap-3 rounded-lg border border-gray-100 bg-white px-4 py-2.5 transition hover:border-gray-200 hover:shadow-card"
+                    >
+                      <span className="text-lg leading-none" aria-hidden="true">
+                        {flagForCode(b.country_code)}
+                      </span>
+                      <span className="min-w-0 flex-1 truncate text-sm font-semibold text-ink">
+                        {b.name}
+                      </span>
+                      <span
+                        className={
+                          'shrink-0 rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide ' +
+                          statusClass(status)
+                        }
+                      >
+                        {statusLabel(status, lang)}
+                      </span>
+                    </Link>
+                  </li>
+                );
+              })}
+              {overflow > 0 && (
+                <li>
+                  <Link
+                    href="/admin/branches"
+                    className="block rounded-lg border border-dashed border-gray-300 px-4 py-2.5 text-center text-sm font-medium text-muted transition hover:border-gray-400 hover:text-ink"
+                  >
+                    {t('dashboard.ministry.branches_more', lang).replace(
+                      '{n}',
+                      String(overflow),
+                    )}
+                  </Link>
+                </li>
+              )}
+            </ul>
+          )}
         </Panel>
 
         <Panel
