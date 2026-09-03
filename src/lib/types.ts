@@ -170,6 +170,43 @@ export interface LeaderProgress {
   updated_by: string | null;
 }
 
+export type ReportStatus = 'draft' | 'submitted' | 'approved' | 'needs_review';
+
+/** The five narrative sections of a branch's monthly report. Deliberately
+    about execution and coordination — not congregation attendance or
+    giving, which is ChurchSmart's domain. */
+export const REPORT_SECTIONS = [
+  'activities',
+  'leadership_updates',
+  'wins',
+  'challenges',
+  'prayer_requests',
+] as const;
+export type ReportSection = (typeof REPORT_SECTIONS)[number];
+
+export const REPORT_SECTION_MAX = 2000;
+export const REPORT_SECTION_WARN = 1800;
+
+export interface BranchReport {
+  id: string;
+  branch_id: string;
+  /** First day of the reported month, e.g. 2026-09-01. */
+  report_month: string;
+  status: ReportStatus;
+  activities: string | null;
+  leadership_updates: string | null;
+  wins: string | null;
+  challenges: string | null;
+  prayer_requests: string | null;
+  reviewer_comment: string | null;
+  submitted_at: string | null;
+  reviewed_at: string | null;
+  reviewed_by: string | null;
+  created_at: string;
+  updated_at: string;
+  created_by: string | null;
+}
+
 export interface ChurchService {
   id: string;
   church_id: string;
