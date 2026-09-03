@@ -11,6 +11,7 @@ import {
   type DisplayStatus,
 } from '@/lib/reports';
 import type { BranchReport } from '@/lib/types';
+import { TimeAwareGreeting } from './time-aware-greeting';
 import {
   LeadersPanelBody,
   LeadersViewAllLink,
@@ -21,15 +22,6 @@ import type { AppLanguage, Branch, Church, User } from '@/lib/types';
 // How many branch tiles fit before the grid rolls up into a "+N more"
 // tile. Eight fills three rows evenly at the desktop breakpoint.
 const MAX_TILES = 8;
-
-// Greeting bucket from the *viewer's* clock. Rendered on the server, so
-// this is the server's hour, not the user's — see the note where it is
-// called. Kept as a pure function so the boundary is obvious.
-function greetingKey(hour: number): string {
-  if (hour < 12) return 'dashboard.ministry.greeting_morning';
-  if (hour < 18) return 'dashboard.ministry.greeting_afternoon';
-  return 'dashboard.ministry.greeting_evening';
-}
 
 function Panel({
   icon: Icon,
@@ -103,16 +95,12 @@ export async function MinistryDashboard({
   );
 
   const firstName = user.full_name.trim().split(/\s+/)[0] || user.full_name;
-  const greeting = t(greetingKey(new Date().getHours()), lang).replace(
-    '{name}',
-    firstName,
-  );
 
   return (
     <div className="px-4 py-6 sm:px-8 sm:py-8">
       <header>
         <h1 className="text-2xl font-bold tracking-tight text-ink sm:text-3xl">
-          {greeting}
+          <TimeAwareGreeting name={firstName} lang={lang} />
         </h1>
         <p className="mt-1 text-sm text-body">
           {t('dashboard.ministry.greeting_subtitle', lang)}

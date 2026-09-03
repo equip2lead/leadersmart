@@ -656,6 +656,7 @@ const en: Dictionary = {
   'dashboard.ministry.greeting_morning': 'Good morning, {name} 👋',
   'dashboard.ministry.greeting_afternoon': 'Good afternoon, {name} 👋',
   'dashboard.ministry.greeting_evening': 'Good evening, {name} 👋',
+  'dashboard.ministry.greeting_neutral': '{name} 👋',
   'dashboard.ministry.greeting_subtitle':
     "Here's what's happening across your ministry.",
   'dashboard.ministry.branches_title': 'Branches',
@@ -2218,6 +2219,7 @@ const fr: Dictionary = {
   'dashboard.ministry.greeting_morning': 'Bonjour, {name} 👋',
   'dashboard.ministry.greeting_afternoon': 'Bon après-midi, {name} 👋',
   'dashboard.ministry.greeting_evening': 'Bonsoir, {name} 👋',
+  'dashboard.ministry.greeting_neutral': '{name} 👋',
   'dashboard.ministry.greeting_subtitle':
     'Voici ce qui se passe dans votre ministère.',
   'dashboard.ministry.branches_title': 'Antennes',
