@@ -6,7 +6,6 @@ import { createClient } from '@/lib/supabase/server';
 import { t } from '@/lib/i18n';
 import { PageHeading } from '@/components/page-heading';
 import { formatStartedDate, initialsOf, levelTone } from '@/lib/leaders';
-import { MAX_LEADER_LEVEL } from '@/lib/types';
 import type {
   LeaderDevelopment,
   LeaderProgress,
@@ -16,6 +15,7 @@ import type {
   LevelMilestone,
 } from '@/lib/types';
 import { Checklist, type ChecklistItem } from './_checklist';
+import { LevelJourney } from './_journey';
 
 export const dynamic = 'force-dynamic';
 
@@ -50,12 +50,13 @@ export default async function LeaderDetailPage({
       .from('level_definitions')
       .select('*')
       .eq('church_id', church.id)
-      .eq('level', entry.current_level)
-      .maybeSingle(),
+      .order('level'),
   ]);
 
   const personName = personRes.data?.full_name ?? entry.user_id;
-  const definition = (defRes.data ?? null) as LevelDefinition | null;
+  const definitions = (defRes.data ?? []) as LevelDefinition[];
+  const definition =
+    definitions.find((d) => d.level === entry.current_level) ?? null;
 
   // Requirements for the current level only. Without a definition there
   // is nothing to require, so the queries are skipped entirely.
@@ -130,6 +131,9 @@ export default async function LeaderDetailPage({
   const total = items.length;
   const done = items.filter((i) => i.status === 'completed').length;
   const percent = total === 0 ? 0 : Math.round((done / total) * 100);
+  // A level with no requirements defined yet is not "complete" — that
+  // would mark every leader ready the moment they were added.
+  const readyToAdvance = total > 0 && done === total;
 
   return (
     <div className="px-4 py-6 sm:px-8 sm:py-8">
@@ -195,6 +199,15 @@ export default async function LeaderDetailPage({
         </div>
       </section>
 
+      <div className="mt-6">
+        <LevelJourney
+          lang={lang}
+          definitions={definitions}
+          currentLevel={entry.current_level}
+          readyToAdvance={readyToAdvance}
+        />
+      </div>
+
       <section className="mt-6">
         <h2 className="text-lg font-semibold text-ink">
           {t('leader_progress.requirements_title', lang)}
@@ -220,11 +233,6 @@ export default async function LeaderDetailPage({
         </div>
       </section>
 
-      <p className="mt-6 text-xs text-muted">
-        {t('leaders.card.level_of_total', lang)
-          .replace('{level}', String(entry.current_level))
-          .replace('{total}', String(MAX_LEADER_LEVEL))}
-      </p>
     </div>
   );
 }

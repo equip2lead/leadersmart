@@ -865,6 +865,16 @@ const en: Dictionary = {
   'leader_progress.err.notes_too_long': 'That note is too long.',
   'leader_progress.err.invalid_requirement': 'That requirement no longer exists.',
 
+  // Level journey overview on the leader detail page
+  'leader_journey.title': 'Development journey',
+  'leader_journey.state.completed': 'Completed',
+  'leader_journey.state.current': 'Current',
+  'leader_journey.state.locked': 'Locked',
+  'leader_journey.ready_badge': 'Ready to advance to Level {level}',
+  'leader_journey.ready_hint':
+    'All requirements for this level are complete. Use Change level on the leaders list to advance them.',
+  'leader_journey.at_top': 'This is the final level.',
+
   // Skipped-onboarding prompts on /admin dashboard
   'admin.onboardingSkipped.title': 'Finish setting up',
   'admin.onboardingSkipped.admins.title': 'Add your admin team',
@@ -2348,6 +2358,15 @@ const fr: Dictionary = {
   'leader_progress.err.not_found': "Ce leader n'existe plus.",
   'leader_progress.err.notes_too_long': 'Cette note est trop longue.',
   'leader_progress.err.invalid_requirement': "Cette exigence n'existe plus.",
+
+  'leader_journey.title': 'Parcours de développement',
+  'leader_journey.state.completed': 'Terminé',
+  'leader_journey.state.current': 'En cours',
+  'leader_journey.state.locked': 'Verrouillé',
+  'leader_journey.ready_badge': 'Prêt·e à passer au niveau {level}',
+  'leader_journey.ready_hint':
+    "Toutes les exigences de ce niveau sont remplies. Utilisez « Changer de niveau » dans la liste des leaders pour le faire avancer.",
+  'leader_journey.at_top': "C'est le dernier niveau.",
 
   'admin.onboardingSkipped.title': 'Finaliser la mise en place',
   'admin.onboardingSkipped.admins.title': 'Ajoutez votre équipe pastorale',
