@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { requireRole } from '@/lib/auth';
 import { ADMIN_ROLES, isOwner, roleLabelKey } from '@/lib/roles';
 import { createClient } from '@/lib/supabase/server';
@@ -72,6 +73,11 @@ export default async function LeadersPage() {
       <PageHeading
         title={t('leaders.page_title', lang)}
         subtitle={t('leaders.page_subtitle', lang)}
+        actions={
+          <Link href="/admin/leaders/levels" className="btn-secondary">
+            {t('levels.definitions.page_title', lang)}
+          </Link>
+        }
       />
       <LeadersManager
         lang={lang}

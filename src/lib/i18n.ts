@@ -770,6 +770,26 @@ const en: Dictionary = {
   'leaders.err.not_found': 'That pipeline entry no longer exists.',
   'leaders.err.notes_too_long': 'Those notes are too long.',
 
+  // Level definitions + content — /admin/leaders/levels
+  'levels.definitions.page_title': 'Level definitions',
+  'levels.definitions.page_subtitle':
+    'Define what each of the five development levels means for your organization.',
+  'levels.definitions.back_link': '← Back to leaders',
+  'levels.definitions.level_tab': 'Level {level}',
+  'levels.definitions.title_label': 'Level title',
+  'levels.definitions.title_placeholder': 'e.g. Foundation',
+  'levels.definitions.description_label': 'Description',
+  'levels.definitions.description_placeholder':
+    'Short overview of what this level means',
+  'levels.definitions.save': 'Save changes',
+  'levels.definitions.saved': 'Saved',
+  'levels.definitions.unsaved': 'Unsaved changes',
+  'levels.definitions.err.title_required': 'Please give the level a title.',
+  'levels.definitions.err.title_too_long': 'That title is too long.',
+  'levels.definitions.err.description_too_long': 'That description is too long.',
+  'levels.definitions.err.not_admin': 'Only admins can edit level definitions.',
+  'levels.definitions.err.not_found': 'That level no longer exists.',
+
   // Skipped-onboarding prompts on /admin dashboard
   'admin.onboardingSkipped.title': 'Finish setting up',
   'admin.onboardingSkipped.admins.title': 'Add your admin team',
@@ -2159,6 +2179,26 @@ const fr: Dictionary = {
     'Le parcours de leadership est disponible uniquement pour les ministères.',
   'leaders.err.not_found': "Cette entrée n'existe plus.",
   'leaders.err.notes_too_long': 'Ces notes sont trop longues.',
+
+  'levels.definitions.page_title': 'Définition des niveaux',
+  'levels.definitions.page_subtitle':
+    'Définissez ce que signifie chacun des cinq niveaux de développement pour votre organisation.',
+  'levels.definitions.back_link': '← Retour aux leaders',
+  'levels.definitions.level_tab': 'Niveau {level}',
+  'levels.definitions.title_label': 'Titre du niveau',
+  'levels.definitions.title_placeholder': 'ex. Fondation',
+  'levels.definitions.description_label': 'Description',
+  'levels.definitions.description_placeholder':
+    'Bref aperçu de ce que représente ce niveau',
+  'levels.definitions.save': 'Enregistrer',
+  'levels.definitions.saved': 'Enregistré',
+  'levels.definitions.unsaved': 'Modifications non enregistrées',
+  'levels.definitions.err.title_required': 'Veuillez donner un titre au niveau.',
+  'levels.definitions.err.title_too_long': 'Ce titre est trop long.',
+  'levels.definitions.err.description_too_long': 'Cette description est trop longue.',
+  'levels.definitions.err.not_admin':
+    'Seuls les administrateurs peuvent modifier les niveaux.',
+  'levels.definitions.err.not_found': "Ce niveau n'existe plus.",
 
   'admin.onboardingSkipped.title': 'Finaliser la mise en place',
   'admin.onboardingSkipped.admins.title': 'Ajoutez votre équipe pastorale',
