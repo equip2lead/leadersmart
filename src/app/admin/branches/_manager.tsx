@@ -188,12 +188,20 @@ export function BranchesManager({
                   </span>
                 )}
               </p>
-              <Link
-                href={`/admin/branches/${b.id}/zones`}
-                className="mt-1 inline-block text-xs text-muted hover:text-indigo-royal-700 hover:underline"
-              >
-                {zoneCountLabel(zoneCounts[b.id] ?? 0, lang)}
-              </Link>
+              <div className="mt-1 flex flex-wrap items-center gap-x-3">
+                <Link
+                  href={`/admin/branches/${b.id}/zones`}
+                  className="text-xs text-muted hover:text-indigo-royal-700 hover:underline"
+                >
+                  {zoneCountLabel(zoneCounts[b.id] ?? 0, lang)}
+                </Link>
+                <Link
+                  href={`/admin/branches/${b.id}/reports`}
+                  className="text-xs text-muted hover:text-indigo-royal-700 hover:underline"
+                >
+                  {t('reports.page_title', lang)}
+                </Link>
+              </div>
 
               <div className="mt-5 flex items-center gap-4 border-t border-gray-100 pt-4">
                 <button
