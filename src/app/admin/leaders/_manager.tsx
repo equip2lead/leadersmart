@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { Sparkles, Trash2 } from 'lucide-react';
 import { t } from '@/lib/i18n';
 import { LEADER_LEVELS, MAX_LEADER_LEVEL } from '@/lib/types';
@@ -153,7 +154,14 @@ export function LeadersManager({
                 </span>
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-center gap-2">
-                    <p className="truncate text-sm font-bold text-ink">{l.name}</p>
+                    <p className="truncate text-sm font-bold text-ink">
+                      <Link
+                        href={`/admin/leaders/${l.id}`}
+                        className="hover:text-indigo-royal-700 hover:underline"
+                      >
+                        {l.name}
+                      </Link>
+                    </p>
                     {!l.isActive && (
                       <span className="rounded-full bg-gray-200 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-gray-600">
                         {t('leaders.card.inactive_badge', lang)}
