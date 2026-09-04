@@ -23,6 +23,26 @@ This is the foundation for the LeaderSmart Next.js app. Built in a previous Clau
 | `src/app/globals.css` | Global Tailwind styles + utility classes |
 | `src/app/layout.tsx` | Root layout with Inter font |
 
+## Database migrations
+
+The project is linked to the Supabase project `oisrzurefglwiaeqedyp`
+(`leadersmart`, EU West). `supabase/config.toml` is committed, but the remote
+ref lives in `supabase/.temp/`, which is machine-local and gitignored — so a
+fresh clone re-links once:
+
+```bash
+supabase login                                    # once per machine
+supabase link --project-ref oisrzurefglwiaeqedyp
+supabase migration list                           # local vs remote
+supabase db push                                  # apply pending local files
+```
+
+**Known gap:** the remote has ~50 migrations recorded that have no local file,
+because everything before September 2026 was applied straight to the database
+rather than through this directory. `supabase/migrations/` is therefore not yet
+a replayable history — `supabase db reset` would not reproduce the schema. Run
+`supabase db pull` to backfill the missing files before relying on it.
+
 ## Quick start
 
 ```bash
