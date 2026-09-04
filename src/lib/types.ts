@@ -201,18 +201,43 @@ export type AssignmentResponseStatus = 'draft' | 'submitted' | 'reviewed';
 
 /** A leader's written answer to a lesson's assignment prompt. Unlike
     LeaderProgress this is a real FK on both sides, so deletes cascade and
-    no trigger is needed. One response per (leader, material). */
+    no trigger is needed.
+
+    Versioned: a lesson accumulates rows, and the highest version is the
+    current one. Submitted and reviewed rows are frozen — RLS lets the author
+    edit only while status is 'draft' — so editing after submission means
+    inserting version + 1, never rewriting history. At most one 'draft' row
+    per (leader, material) exists at a time. */
 export interface AssignmentResponse {
   id: string;
   leader_development_id: string;
   material_id: string;
   response_text: string;
   status: AssignmentResponseStatus;
+  /** Monotonic per (leader, material), starting at 1. */
+  version: number;
   reviewer_comment: string | null;
   reviewed_by: string | null;
   reviewed_at: string | null;
   submitted_at: string;
   updated_at: string;
+}
+
+/** One self-rating event. Append-only: the table has no UPDATE policy, so a
+    corrected score is a new row and the old one survives. Keyed on user_id
+    rather than leader_development_id so history outlives a leader leaving and
+    rejoining the pipeline.
+
+    scorecard_key is a ScorecardBlock id; item_key is an item id within it. */
+export interface UserPillarScore {
+  id: string;
+  user_id: string;
+  material_id: string;
+  scorecard_key: string;
+  item_key: string;
+  /** 1–10, CHECK-constrained in the database. */
+  score: number;
+  created_at: string;
 }
 
 export type ReportStatus = 'draft' | 'submitted' | 'approved' | 'needs_review';
