@@ -153,6 +153,14 @@ export interface LevelMaterial {
   description: string | null;
   sort_order: number;
   created_at: string;
+  // Lessons that live in the app rather than behind `url`. has_lesson is what
+  // the UI branches on — lesson_content can be non-null on a material that is
+  // still being drafted, so the boolean is the switch, not the text.
+  has_lesson: boolean;
+  lesson_content: string | null;
+  lesson_content_fr: string | null;
+  assignment_prompt: string | null;
+  assignment_prompt_fr: string | null;
 }
 
 export interface LevelMilestone {
@@ -178,6 +186,26 @@ export interface LeaderProgress {
   notes: string | null;
   updated_at: string;
   updated_by: string | null;
+}
+
+// Not to be confused with AssignmentStatus above, which is the lifecycle of a
+// pastoral assignment. This one is the state of a leader's written submission.
+export type AssignmentResponseStatus = 'draft' | 'submitted' | 'reviewed';
+
+/** A leader's written answer to a lesson's assignment prompt. Unlike
+    LeaderProgress this is a real FK on both sides, so deletes cascade and
+    no trigger is needed. One response per (leader, material). */
+export interface AssignmentResponse {
+  id: string;
+  leader_development_id: string;
+  material_id: string;
+  response_text: string;
+  status: AssignmentResponseStatus;
+  reviewer_comment: string | null;
+  reviewed_by: string | null;
+  reviewed_at: string | null;
+  submitted_at: string;
+  updated_at: string;
 }
 
 export type ReportStatus = 'draft' | 'submitted' | 'approved' | 'needs_review';
