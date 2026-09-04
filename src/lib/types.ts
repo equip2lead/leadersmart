@@ -123,6 +123,10 @@ export interface LevelDefinition {
   level: number;
   title: string;
   description: string | null;
+  /** French translations. Null for content an org wrote itself — only the
+      seeded defaults ship with both languages. */
+  title_fr: string | null;
+  description_fr: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -132,6 +136,8 @@ export interface LevelCompetency {
   level_definition_id: string;
   name: string;
   description: string | null;
+  name_fr: string | null;
+  description_fr: string | null;
   sort_order: number;
   created_at: string;
 }
@@ -140,6 +146,8 @@ export interface LevelMaterial {
   id: string;
   level_definition_id: string;
   title: string;
+  title_fr: string | null;
+  description_fr: string | null;
   material_type: MaterialType;
   url: string | null;
   description: string | null;
@@ -152,6 +160,8 @@ export interface LevelMilestone {
   level_definition_id: string;
   name: string;
   description: string | null;
+  name_fr: string | null;
+  description_fr: string | null;
   sort_order: number;
   created_at: string;
 }
