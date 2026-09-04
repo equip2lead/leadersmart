@@ -163,6 +163,11 @@ export interface LevelMaterial {
   lesson_content_fr: string | null;
   assignment_prompt: string | null;
   assignment_prompt_fr: string | null;
+  /** Structured lesson body. NULL means this lesson is unstructured and
+      renders from lesson_content. Parse with parseLessonBlocks() rather than
+      casting — see src/lib/lesson-blocks.ts. */
+  lesson_body_blocks: unknown;
+  lesson_body_blocks_fr: unknown;
 }
 
 export interface LevelMilestone {
