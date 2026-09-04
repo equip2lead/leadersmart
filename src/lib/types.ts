@@ -1,4 +1,4 @@
-// LeaderSmart database types
+// Equip2Lead Coach database types
 // Matches the schema in Supabase project oisrzurefglwiaeqedyp
 
 // Role naming lives at two layers:
@@ -292,7 +292,7 @@ export type FireKidsScreeningStatus =
 export interface Volunteer {
   id: string;
   church_id: string;
-  /** Null for the majority — most volunteers have no LeaderSmart login. */
+  /** Null for the majority — most volunteers have no Equip2Lead Coach login. */
   user_id: string | null;
   full_name: string;
   whatsapp_phone: string;

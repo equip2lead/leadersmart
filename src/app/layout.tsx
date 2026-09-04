@@ -26,8 +26,8 @@ const manrope = Manrope({
 
 export const metadata: Metadata = {
   title: {
-    default: 'LeaderSmart — Transform Your Ministry Operations',
-    template: '%s | LeaderSmart',
+    default: 'Equip2Lead Coach — Transform Your Ministry Operations',
+    template: '%s | Equip2Lead Coach',
   },
   description:
     'Everything senior pastors, department heads, and volunteers need to run a ministry in excellence — Sunday after Sunday. Pastoral accountability platform for churches worldwide.',
@@ -44,10 +44,10 @@ export const metadata: Metadata = {
   creator: 'DigiSmart Africa',
   openGraph: {
     type: 'website',
-    title: 'LeaderSmart — Transform Your Ministry Operations',
+    title: 'Equip2Lead Coach — Transform Your Ministry Operations',
     description:
       'Pastoral accountability platform for churches worldwide. Sunday checklists, weekly plans, department coordination, WhatsApp native.',
-    siteName: 'LeaderSmart',
+    siteName: 'Equip2Lead Coach',
   },
 };
 

@@ -11,10 +11,10 @@ import type { AppLanguage } from '@/lib/types';
 // own scale without having to click anything.
 //
 // Each dashboard carries the CUSTOMER's accent colour (FLING pink, Fire
-// orange), not the LeaderSmart palette. That is deliberate: these read
+// orange), not the Equip2Lead Coach palette. That is deliberate: these read
 // as someone else's workspace inside a browser frame. The frame, the
 // chrome, and the section around it stay on the yellow/navy system so
-// the customer colour never leaks into LeaderSmart's own brand.
+// the customer colour never leaks into Equip2Lead Coach's own brand.
 //
 // The 900px breakpoint is an arbitrary variant rather than a
 // tailwind.config screen, because a 200px sidebar stops being readable
@@ -27,13 +27,13 @@ const ANNOUNCE_MS = 500;
 const FLING = {
   accent: '#B91572',
   accentSoft: '#FCE7F3',
-  url: 'app.leadersmart.com/firstladies',
+  url: 'app.equip2lead.coach/firstladies',
 };
 
 const FIRE = {
   accent: '#F97316',
   accentSoft: '#FFEDD5',
-  url: 'app.leadersmart.com/firechurch',
+  url: 'app.equip2lead.coach/firechurch',
 };
 
 const SLIDES = [

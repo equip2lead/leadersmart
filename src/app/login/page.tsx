@@ -144,7 +144,7 @@ export default function LoginPage() {
           className="mb-6 flex items-center justify-center gap-2 text-ink"
         >
           <Flame className="h-8 w-8 text-gold-warm-600" aria-hidden="true" />
-          <span className="text-xl font-bold">LeaderSmart</span>
+          <span className="text-xl font-bold">Equip2Lead Coach</span>
         </Link>
         <Suspense fallback={<div className="card h-96" />}>
           <LoginForm />

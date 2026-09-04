@@ -22,7 +22,13 @@ export function AppShell({
       />
       <div className="flex min-w-0 flex-1 flex-col">
         <header className="flex items-center gap-2 border-b border-gray-100 bg-white px-4 py-3">
-          <span className="text-lg font-bold text-ink md:hidden">LeaderSmart</span>
+          <span className="text-lg font-bold text-ink md:hidden">
+            equip2lead
+            <span className="mx-1.5 font-normal text-gray-300" aria-hidden="true">
+              |
+            </span>
+            <span className="text-indigo-royal-700">Coaching</span>
+          </span>
           <div className="ml-auto">
             <LanguageToggle current={user.preferred_language} />
           </div>

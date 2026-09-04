@@ -15,7 +15,7 @@ export default async function TransferOwnershipPage() {
   const { user, church } = await requireRole(OWNER_ROLES);
   const lang = user.preferred_language;
 
-  const supportEmail = 'support@leadersmart.app';
+  const supportEmail = 'support@equip2lead.coach';
   const subject = encodeURIComponent(
     t('owner.transfer.mailto.subject', lang).replace('{church}', church.name),
   );

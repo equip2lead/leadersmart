@@ -1,10 +1,10 @@
-# LeaderSmart v2 — Phase 1 Analysis (Read-Only Inventory)
+# Equip2Lead Coach v2 — Phase 1 Analysis (Read-Only Inventory)
 
 _Author: Claude Opus 4.7 (analysis session)_
 _Date: 2026-08-27_
-_Live URL: `https://leadersmart.app` · Repo: `equip2lead/leadersmart` · Supabase project: `oisrzurefglwiaeqedyp`_
+_Live URL: `https://app.equip2lead.coach` · Repo: `equip2lead/leadersmart` · Supabase project: `oisrzurefglwiaeqedyp`_
 
-This document is a pre-refactor inventory. **No code was changed to produce it.** It exists so the v2 dashboard redesign — expanding LeaderSmart to serve both Churches and Ministries / Organizations — can be planned against the actual current state rather than a mental model of what the app looks like.
+This document is a pre-refactor inventory. **No code was changed to produce it.** It exists so the v2 dashboard redesign — expanding Equip2Lead Coach to serve both Churches and Ministries / Organizations — can be planned against the actual current state rather than a mental model of what the app looks like.
 
 ---
 
@@ -221,7 +221,7 @@ All 5 support the **on-behalf-of** pattern: an owner or admin_pastor loads the c
 |---|---|---|
 | `/settings` | any signed-in user | Church profile (edit), user profile, change password |
 | `/settings/billing` | Owner | "Coming in Phase 3" stub |
-| `/settings/transfer-ownership` | Owner | Static informational — email `support@leadersmart.app` |
+| `/settings/transfer-ownership` | Owner | Static informational — email `support@equip2lead.coach` |
 | `/settings/danger` | Owner | "Coming in Phase 3" stub |
 
 ### Kids ministry — stub-quality

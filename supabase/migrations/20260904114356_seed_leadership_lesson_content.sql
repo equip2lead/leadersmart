@@ -1,5 +1,5 @@
 -- ============================================================================
--- LeaderSmart: In-app leadership lesson content
+-- Equip2Lead Coach: In-app leadership lesson content
 -- Seeds full lesson content from FIRE Bible Institute "Spiritual Leadership"
 -- course into the level_materials table, adds assignment prompts,
 -- and creates the assignment_responses table for leader submissions.

@@ -1,6 +1,6 @@
-# LeaderSmart Foundation Files
+# Equip2Lead Coach Foundation Files
 
-This is the foundation for the LeaderSmart Next.js app. Built in a previous Claude session with strategy, database design, and architecture decisions already made.
+This is the foundation for the Equip2Lead Coach Next.js app. Built in a previous Claude session with strategy, database design, and architecture decisions already made.
 
 ## What's in this directory
 
@@ -9,7 +9,7 @@ This is the foundation for the LeaderSmart Next.js app. Built in a previous Clau
 | `package.json` | Next.js 15, React 19, Tailwind, Supabase SSR — all dependencies pinned |
 | `tsconfig.json` | TypeScript config with `@/*` path alias |
 | `next.config.mjs` | Next.js config with Supabase image domains |
-| `tailwind.config.ts` | LeaderSmart brand tokens (brand-700 blue, flame-600 orange) |
+| `tailwind.config.ts` | Equip2Lead Coach brand tokens (brand-700 blue, flame-600 orange) |
 | `postcss.config.mjs` | PostCSS for Tailwind |
 | `.env.example` | Environment variable template |
 | `.gitignore` | Standard Next.js gitignore |
@@ -26,7 +26,7 @@ This is the foundation for the LeaderSmart Next.js app. Built in a previous Clau
 ## Database migrations
 
 The project is linked to the Supabase project `oisrzurefglwiaeqedyp`
-(`leadersmart`, EU West). `supabase/config.toml` is committed, but the remote
+(`equip2lead-coach`, EU West). `supabase/config.toml` is committed, but the remote
 ref lives in `supabase/.temp/`, which is machine-local and gitignored — so a
 fresh clone re-links once:
 

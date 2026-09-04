@@ -1,5 +1,5 @@
-// LeaderSmart wordmark — the only logo the landing page uses. There is
-// no glyph mark alongside it; "Smart" carries a yellow highlighter bar
+// Equip2Lead Coach wordmark — the only logo the landing page uses. There is
+// no glyph mark alongside it; "Coach" carries a yellow highlighter bar
 // and the trailing period is yellow, which is the whole identity.
 //
 // The highlight is a sibling span painted *before* the text and lifted
@@ -28,13 +28,13 @@ export function Wordmark({
         tone === 'light' ? 'text-white' : 'text-[#1A1E3F]'
       }`}
     >
-      Leader
+      Equip2Lead{' '}
       <span className="relative inline-block">
         <span
           aria-hidden="true"
           className="absolute inset-x-0 bottom-[8%] h-[35%] rounded-[2px] bg-[#EFCB4A]"
         />
-        <span className="relative">Smart</span>
+        <span className="relative">Coach</span>
       </span>
       <span className="text-[#EFCB4A]">.</span>
     </span>

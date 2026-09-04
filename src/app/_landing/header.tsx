@@ -49,7 +49,7 @@ export function LandingHeader({ lang }: { lang: AppLanguage }) {
             (scrolled ? 'bg-[#FDFCF7]/90 backdrop-blur-md' : 'bg-white')
           }
         >
-          <Link href="/" className="flex items-center" aria-label="LeaderSmart">
+          <Link href="/" className="flex items-center" aria-label="Equip2Lead Coach">
             <span className="sm:hidden">
               <AppIcon />
             </span>

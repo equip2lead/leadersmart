@@ -210,7 +210,7 @@ function Shell({ children }: { children: React.ReactNode }) {
         <div className="mb-6 flex flex-col items-center gap-2">
           <Flame className="h-10 w-10 text-gold-warm-600" aria-hidden="true" />
           <p className="text-xs font-semibold uppercase tracking-wide text-indigo-royal-700">
-            LeaderSmart
+            Equip2Lead Coach
           </p>
         </div>
         <div className="card">{children}</div>

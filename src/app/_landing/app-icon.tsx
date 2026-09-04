@@ -1,5 +1,5 @@
 // Compact "L." mark — the wordmark collapsed to a single glyph for
-// places too tight to spell out LeaderSmart (mobile header, anywhere
+// places too tight to spell out Equip2Lead Coach (mobile header, anywhere
 // the favicon's shape needs echoing in the page itself). Same colours
 // as src/app/favicon.ico and src/app/apple-icon.png.
 

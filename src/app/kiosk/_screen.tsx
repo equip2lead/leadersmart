@@ -348,7 +348,7 @@ export function KioskScreen({
       </main>
 
       <footer className="border-t border-gray-100 bg-white px-4 py-3 text-center text-xs text-muted print:hidden">
-        LeaderSmart · Authenticated kiosk mode
+        Equip2Lead Coach · Authenticated kiosk mode
       </footer>
     </div>
   );

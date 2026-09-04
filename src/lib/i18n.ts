@@ -25,7 +25,7 @@ const en: Dictionary = {
   // that still import from i18n don't collapse; unused by the rebuilt
   // header itself.
   'landing.nav.features': 'Features',
-  'landing.nav.why': 'Why LeaderSmart',
+  'landing.nav.why': 'Why Equip2Lead Coach',
   'landing.nav.contact': 'Contact',
   'landing.nav.startTrial': 'Start Free Trial',
   'landing.nav.menuOpen': 'Open menu',
@@ -137,7 +137,7 @@ const en: Dictionary = {
     "Sunday after Sunday, the same problem. Ushers don't show up. The children's ministry is short-staffed. The Pastor of the Month feels alone. And by Monday morning, no one really knows what happened yesterday.",
   'landing.problem.p2':
     "Every growing ministry has felt this. The training exists. The commitment exists. What's missing is a platform that turns intention into rhythm.",
-  'landing.problem.p3': 'That platform is LeaderSmart.',
+  'landing.problem.p3': 'That platform is Equip2Lead Coach.',
   'landing.problem.imageAlt':
     'A ministry team praying together during Sunday worship',
 
@@ -195,7 +195,7 @@ const en: Dictionary = {
   'landing.dash.title':
     'Whether you lead one church or a global ministry.',
   'landing.dash.subtitle':
-    'The same platform, shaped to your scale. Here is what LeaderSmart looks like for a multi-country network and for a single local church.',
+    'The same platform, shaped to your scale. Here is what Equip2Lead Coach looks like for a multi-country network and for a single local church.',
   'landing.dash.toggle.network': 'Ministry / Network',
   'landing.dash.toggle.church': 'Local Church',
   'landing.dash.announce.network': 'Ministry dashboard now visible',
@@ -288,12 +288,12 @@ const en: Dictionary = {
   'landing.pricing.footnote':
     "Need more than 1,000 WhatsApp messages per month? Contact us — we'll set you up with the right pack.",
 
-  // Why LeaderSmart
-  'landing.why.eyebrow': 'WHY LEADERSMART',
+  // Why Equip2Lead Coach
+  'landing.why.eyebrow': 'WHY EQUIP2LEAD COACH',
   'landing.why.title': 'Built by pastors, for pastors.',
   'landing.why.p1.title': 'We understand Sunday',
   'landing.why.p1.body':
-    'LeaderSmart was designed by pastors who live it. The Sunday Checklist has 17 items — because we counted them ourselves.',
+    'Equip2Lead Coach was designed by pastors who live it. The Sunday Checklist has 17 items — because we counted them ourselves.',
   'landing.why.p2.title': 'We speak your languages',
   'landing.why.p2.body':
     'English and French at launch. Additional languages coming as ministries need them.',
@@ -301,17 +301,17 @@ const en: Dictionary = {
   'landing.why.p3.body':
     'One price, everything included. No fine print, no bait-and-switch tiers.',
   'landing.why.quote':
-    'For years I carried our leadership team on my own back. LeaderSmart lets me delegate without losing accountability. I sleep better.',
+    'For years I carried our leadership team on my own back. Equip2Lead Coach lets me delegate without losing accountability. I sleep better.',
   'landing.why.name': 'Dr. Denis Ekobena',
   'landing.why.role': 'Senior Pastor · Fire Church · Cameroon',
-  'landing.why.since': 'Fire Church has been using LeaderSmart since 2026.',
+  'landing.why.since': 'Fire Church has been using Equip2Lead Coach since 2026.',
 
   // FAQ
   'landing.faq.eyebrow': 'FREQUENTLY ASKED',
   'landing.faq.title': 'Everything you might be wondering.',
   'landing.faq.q1': 'Do I need to install anything?',
   'landing.faq.a1':
-    'No. LeaderSmart works in any web browser and sends WhatsApp messages from any phone. No downloads, no IT setup.',
+    'No. Equip2Lead Coach works in any web browser and sends WhatsApp messages from any phone. No downloads, no IT setup.',
   'landing.faq.q2': 'What if my ministry has multiple branches?',
   'landing.faq.a2':
     'V1 supports one ministry per account. Multi-branch and network features are on our roadmap for 2027.',
@@ -372,7 +372,7 @@ const en: Dictionary = {
 
   // Auth
   'auth.login.title': 'Welcome Back',
-  'auth.login.subtitle': 'Sign in to LeaderSmart',
+  'auth.login.subtitle': 'Sign in to Equip2Lead Coach',
   'auth.login.email': 'Email address',
   'auth.login.password': 'Password',
   'auth.login.remember': 'Remember me',
@@ -401,7 +401,7 @@ const en: Dictionary = {
   // ─────────────────────────────────────────────────────────────
   'onboarding.brandTag': 'Church setup',
   // Step 0 — church vs ministry decision page
-  'onboarding.step_0.title': 'Welcome to LeaderSmart! What are you leading?',
+  'onboarding.step_0.title': 'Welcome to Equip2Lead Coach! What are you leading?',
   'onboarding.step_0.subtitle':
     'This shapes how we set things up for you. You can change it later in settings.',
   'onboarding.step_0.church.title': 'A Church',
@@ -445,7 +445,7 @@ const en: Dictionary = {
 
   // Step 1
   'onboarding.step1.title':
-    "Welcome to LeaderSmart! Let's get your ministry set up.",
+    "Welcome to Equip2Lead Coach! Let's get your ministry set up.",
   'onboarding.step1.subtitle': 'This takes about 3 minutes.',
   'onboarding.step1.nameLabel': 'Church name',
   'onboarding.step1.countryLabel': 'Country',
@@ -976,9 +976,9 @@ const en: Dictionary = {
 
   // Accept invite
   'accept.verifying': 'Verifying your invitation…',
-  'accept.welcome.title': 'Welcome to LeaderSmart',
+  'accept.welcome.title': 'Welcome to Equip2Lead Coach',
   'accept.welcome.greeting': 'Hello {name}, you\'ve been invited to join {church}.',
-  'accept.welcome.invited': 'You\'re joining {church} on LeaderSmart.',
+  'accept.welcome.invited': 'You\'re joining {church} on Equip2Lead Coach.',
   'accept.welcome.roleLine': 'You\'ll be signing in as a {role}.',
   'accept.form.password': 'Create a password',
   'accept.form.confirm': 'Confirm password',
@@ -1147,7 +1147,7 @@ const en: Dictionary = {
   'dept.coLeadersLabel': 'Co-heads',
 
   // Users + invite
-  'users.subtitle': 'Manage who can sign in to your LeaderSmart workspace.',
+  'users.subtitle': 'Manage who can sign in to your Equip2Lead Coach workspace.',
   'users.col.name': 'Name',
   'users.col.email': 'Email',
   'users.col.role': 'Role',
@@ -1217,15 +1217,15 @@ const en: Dictionary = {
   'audit.entity.department_weekly_report': 'Weekly report',
   'owner.billing.title': 'Billing',
   'owner.billing.subtitle': 'Subscription and payment history',
-  'owner.billing.body': 'Payment processing lands with the Phase 3 release. Reach out to the LeaderSmart team if you need billing changes in the meantime.',
+  'owner.billing.body': 'Payment processing lands with the Phase 3 release. Reach out to the Equip2Lead Coach team if you need billing changes in the meantime.',
   'owner.transfer.title': 'Transfer Church Ownership',
   'owner.transfer.subtitle': 'Hand off the Senior Pastor role',
-  'owner.transfer.body': 'Ownership transfer is handled by the LeaderSmart support team. Use the button below to send us the details.',
+  'owner.transfer.body': 'Ownership transfer is handled by the Equip2Lead Coach support team. Use the button below to send us the details.',
   'owner.transfer.how.title': 'How to transfer ownership',
-  'owner.transfer.how.body': 'Email LeaderSmart support with the details below. We\'ll verify the request and complete the transfer within 5 business days.',
-  'owner.transfer.how.item1': 'Church name (as it appears in LeaderSmart)',
+  'owner.transfer.how.body': 'Email Equip2Lead Coach support with the details below. We\'ll verify the request and complete the transfer within 5 business days.',
+  'owner.transfer.how.item1': 'Church name (as it appears in Equip2Lead Coach)',
   'owner.transfer.how.item2': 'Current Senior Pastor (name + email on file)',
-  'owner.transfer.how.item3': 'New Senior Pastor (name + email — must already have a LeaderSmart account or be ready to create one)',
+  'owner.transfer.how.item3': 'New Senior Pastor (name + email — must already have a Equip2Lead Coach account or be ready to create one)',
   'owner.transfer.how.item4': 'Reason for the transfer',
   'owner.transfer.how.item5': 'Verification: a pastoral letter, board resolution, or letterhead statement confirming the change (PDF or photo attachment)',
   'owner.transfer.how.sla': 'You\'ll receive a confirmation once the transfer is complete. Both parties are copied on the confirmation email.',
@@ -1605,7 +1605,7 @@ const fr: Dictionary = {
   // composants qui les importent encore ; non utilisées par le nouveau
   // header.
   'landing.nav.features': 'Fonctionnalités',
-  'landing.nav.why': 'Pourquoi LeaderSmart',
+  'landing.nav.why': 'Pourquoi Equip2Lead Coach',
   'landing.nav.contact': 'Contact',
   'landing.nav.startTrial': 'Essai gratuit',
   'landing.nav.menuOpen': 'Ouvrir le menu',
@@ -1708,7 +1708,7 @@ const fr: Dictionary = {
     "Dimanche après dimanche, le même casse-tête. Les placeurs ne viennent pas. Le ministère des enfants manque de bras. Le Pasteur du Mois se sent seul. Et le lundi matin, personne ne sait vraiment ce qui s\'est passé la veille.",
   'landing.problem.p2':
     "Tout ministère qui grandit connaît cela. La formation est là. L\'engagement est là. Ce qui manque, c\'est une plateforme qui transforme l\'intention en rythme.",
-  'landing.problem.p3': 'Cette plateforme, c\'est LeaderSmart.',
+  'landing.problem.p3': 'Cette plateforme, c\'est Equip2Lead Coach.',
   'landing.problem.imageAlt':
     'Une équipe ministérielle en prière pendant le culte du dimanche',
 
@@ -1768,7 +1768,7 @@ const fr: Dictionary = {
   'landing.dash.title':
     'Que vous dirigiez une église ou un ministère mondial.',
   'landing.dash.subtitle':
-    'La même plateforme, ajustée à votre échelle. Voici LeaderSmart pour un réseau multi-pays et pour une église locale.',
+    'La même plateforme, ajustée à votre échelle. Voici Equip2Lead Coach pour un réseau multi-pays et pour une église locale.',
   'landing.dash.toggle.network': 'Ministère / Réseau',
   'landing.dash.toggle.church': 'Église locale',
   'landing.dash.announce.network': 'Tableau de bord Ministère maintenant affiché',
@@ -1858,11 +1858,11 @@ const fr: Dictionary = {
   'landing.pricing.footnote':
     'Besoin de plus de 1 000 messages WhatsApp par mois ? Écrivez-nous — nous vous proposerons le forfait adapté.',
 
-  'landing.why.eyebrow': 'POURQUOI LEADERSMART',
+  'landing.why.eyebrow': 'POURQUOI EQUIP2LEAD COACH',
   'landing.why.title': 'Conçu par des pasteurs, pour des pasteurs.',
   'landing.why.p1.title': 'Nous connaissons le dimanche',
   'landing.why.p1.body':
-    'LeaderSmart a été conçu par des pasteurs qui vivent ce quotidien. La liste du dimanche contient 17 points — parce que nous les avons comptés nous-mêmes.',
+    'Equip2Lead Coach a été conçu par des pasteurs qui vivent ce quotidien. La liste du dimanche contient 17 points — parce que nous les avons comptés nous-mêmes.',
   'landing.why.p2.title': 'Nous parlons vos langues',
   'landing.why.p2.body':
     'Anglais et français au lancement. D\'autres langues suivront selon les besoins des ministères.',
@@ -1870,16 +1870,16 @@ const fr: Dictionary = {
   'landing.why.p3.body':
     'Un seul prix, tout est inclus. Pas de petits caractères, pas de paliers déguisés.',
   'landing.why.quote':
-    'Pendant des années, j\'ai porté seul mon équipe de direction. LeaderSmart me permet de déléguer sans perdre la responsabilité. Je dors mieux.',
+    'Pendant des années, j\'ai porté seul mon équipe de direction. Equip2Lead Coach me permet de déléguer sans perdre la responsabilité. Je dors mieux.',
   'landing.why.name': 'Dr. Denis Ekobena',
   'landing.why.role': 'Pasteur Principal · Fire Church · Cameroun',
-  'landing.why.since': 'Fire Church utilise LeaderSmart depuis 2026.',
+  'landing.why.since': 'Fire Church utilise Equip2Lead Coach depuis 2026.',
 
   'landing.faq.eyebrow': 'QUESTIONS FRÉQUENTES',
   'landing.faq.title': 'Tout ce que vous vous demandez peut-être.',
   'landing.faq.q1': 'Faut-il installer quelque chose ?',
   'landing.faq.a1':
-    'Non. LeaderSmart fonctionne dans tout navigateur web et envoie les messages WhatsApp depuis n\'importe quel téléphone. Aucun téléchargement, aucune installation IT.',
+    'Non. Equip2Lead Coach fonctionne dans tout navigateur web et envoie les messages WhatsApp depuis n\'importe quel téléphone. Aucun téléchargement, aucune installation IT.',
   'landing.faq.q2':
     'Que se passe-t-il si mon ministère a plusieurs branches ?',
   'landing.faq.a2':
@@ -1940,7 +1940,7 @@ const fr: Dictionary = {
 
   // Auth
   'auth.login.title': 'Bon Retour',
-  'auth.login.subtitle': 'Connectez-vous à LeaderSmart',
+  'auth.login.subtitle': 'Connectez-vous à Equip2Lead Coach',
   'auth.login.email': 'Adresse e-mail',
   'auth.login.password': 'Mot de passe',
   'auth.login.remember': 'Se souvenir de moi',
@@ -1969,9 +1969,9 @@ const fr: Dictionary = {
   // ─────────────────────────────────────────────────────────────
   'onboarding.brandTag': 'Mise en place',
   // Étape 0 — église ou ministère
-  'onboarding.step_0.title': 'Bienvenue sur LeaderSmart ! Que dirigez-vous ?',
+  'onboarding.step_0.title': 'Bienvenue sur Equip2Lead Coach ! Que dirigez-vous ?',
   'onboarding.step_0.subtitle':
-    'Cela détermine comment nous configurons LeaderSmart pour vous. Vous pouvez le modifier dans les paramètres.',
+    'Cela détermine comment nous configurons Equip2Lead Coach pour vous. Vous pouvez le modifier dans les paramètres.',
   'onboarding.step_0.church.title': 'Une Église',
   'onboarding.step_0.church.body':
     "Vous dirigez des services dominicaux, des équipes pastorales et des départements d'église (placeurs, accueil, média).",
@@ -2011,7 +2011,7 @@ const fr: Dictionary = {
   'onboarding.step4.navHint': 'Qui dirige ce mois-ci',
 
   'onboarding.step1.title':
-    'Bienvenue sur LeaderSmart ! Configurons votre ministère.',
+    'Bienvenue sur Equip2Lead Coach ! Configurons votre ministère.',
   'onboarding.step1.subtitle': 'Cela prend environ 3 minutes.',
   'onboarding.step1.nameLabel': 'Nom de l\'église',
   'onboarding.step1.countryLabel': 'Pays',
@@ -2548,9 +2548,9 @@ const fr: Dictionary = {
 
   // Acceptation d\'invitation
   'accept.verifying': 'Vérification de votre invitation…',
-  'accept.welcome.title': 'Bienvenue sur LeaderSmart',
+  'accept.welcome.title': 'Bienvenue sur Equip2Lead Coach',
   'accept.welcome.greeting': 'Bonjour {name}, vous avez été invité à rejoindre {church}.',
-  'accept.welcome.invited': 'Vous rejoignez {church} sur LeaderSmart.',
+  'accept.welcome.invited': 'Vous rejoignez {church} sur Equip2Lead Coach.',
   'accept.welcome.roleLine': 'Vous vous connecterez en tant que {role}.',
   'accept.form.password': 'Créez un mot de passe',
   'accept.form.confirm': 'Confirmez le mot de passe',
@@ -2719,7 +2719,7 @@ const fr: Dictionary = {
   'dept.coLeadersLabel': 'Co-chefs',
 
   // Utilisateurs + invitation
-  'users.subtitle': 'Gérez qui peut se connecter à votre espace LeaderSmart.',
+  'users.subtitle': 'Gérez qui peut se connecter à votre espace Equip2Lead Coach.',
   'users.col.name': 'Nom',
   'users.col.email': 'E-mail',
   'users.col.role': 'Rôle',
@@ -2787,15 +2787,15 @@ const fr: Dictionary = {
   'audit.entity.department_weekly_report': 'Rapport hebdomadaire',
   'owner.billing.title': 'Facturation',
   'owner.billing.subtitle': 'Abonnement et historique de paiement',
-  'owner.billing.body': 'Le traitement des paiements arrive avec la Phase 3. En attendant, contactez l\'équipe LeaderSmart si vous devez modifier votre abonnement.',
+  'owner.billing.body': 'Le traitement des paiements arrive avec la Phase 3. En attendant, contactez l\'équipe Equip2Lead Coach si vous devez modifier votre abonnement.',
   'owner.transfer.title': 'Transfert de Direction de l\'Église',
   'owner.transfer.subtitle': 'Céder le rôle de Pasteur Principal',
-  'owner.transfer.body': 'Le transfert de direction est géré par l\'équipe support de LeaderSmart. Utilisez le bouton ci-dessous pour nous envoyer les détails.',
+  'owner.transfer.body': 'Le transfert de direction est géré par l\'équipe support de Equip2Lead Coach. Utilisez le bouton ci-dessous pour nous envoyer les détails.',
   'owner.transfer.how.title': 'Comment transférer la direction',
-  'owner.transfer.how.body': 'Envoyez un e-mail au support LeaderSmart avec les informations ci-dessous. Nous vérifierons la demande et finaliserons le transfert sous 5 jours ouvrés.',
-  'owner.transfer.how.item1': 'Nom de l\'église (tel qu\'il apparaît dans LeaderSmart)',
+  'owner.transfer.how.body': 'Envoyez un e-mail au support Equip2Lead Coach avec les informations ci-dessous. Nous vérifierons la demande et finaliserons le transfert sous 5 jours ouvrés.',
+  'owner.transfer.how.item1': 'Nom de l\'église (tel qu\'il apparaît dans Equip2Lead Coach)',
   'owner.transfer.how.item2': 'Pasteur Principal actuel (nom + adresse e-mail enregistrée)',
-  'owner.transfer.how.item3': 'Nouveau Pasteur Principal (nom + e-mail — il doit déjà avoir un compte LeaderSmart ou être prêt à en créer un)',
+  'owner.transfer.how.item3': 'Nouveau Pasteur Principal (nom + e-mail — il doit déjà avoir un compte Equip2Lead Coach ou être prêt à en créer un)',
   'owner.transfer.how.item4': 'Motif du transfert',
   'owner.transfer.how.item5': 'Vérification : lettre pastorale, résolution du conseil ou déclaration officielle confirmant le changement (PDF ou photo en pièce jointe)',
   'owner.transfer.how.sla': 'Vous recevrez une confirmation dès que le transfert sera finalisé. Les deux parties sont copiées dans l\'e-mail de confirmation.',

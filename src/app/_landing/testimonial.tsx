@@ -2,7 +2,7 @@ import { Quote } from 'lucide-react';
 import { t } from '@/lib/i18n';
 import type { AppLanguage } from '@/lib/types';
 
-// Why-LeaderSmart points on the left, the founder quote on the right.
+// Why-Equip2Lead Coach points on the left, the founder quote on the right.
 // The quote card wears a short yellow tab on its top edge — a small
 // accent that ties the card to the palette without tinting the whole
 // surface and hurting the quote's contrast.
