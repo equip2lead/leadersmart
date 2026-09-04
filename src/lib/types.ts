@@ -207,6 +207,192 @@ export interface BranchReport {
   created_by: string | null;
 }
 
+// ─────────────────────────────────────────────────────────────
+// Rotation module (Phase 1 foundation). Church-mode feature: the tables
+// exist for every tenant, but nothing surfaces them for ministries.
+// Names follow the spec §5 verbatim so later phases line up.
+// ─────────────────────────────────────────────────────────────
+
+export type ServingGroup = 'A' | 'B' | 'C' | 'D';
+export const SERVING_GROUPS: ServingGroup[] = ['A', 'B', 'C', 'D'];
+
+export type VolunteerStatus = 'active' | 'paused' | 'inactive';
+
+export type RotationAssignmentStatus =
+  | 'scheduled'
+  | 'confirmed'
+  | 'declined'
+  | 'no_response'
+  | 'showed_up'
+  | 'no_show'
+  | 'excused';
+
+export type CoreTeamTermStatus = 'active' | 'completed' | 'withdrawn';
+
+export type FireKidsScreeningStatus =
+  | 'interested'
+  | 'application_submitted'
+  | 'background_check_pending'
+  | 'references_pending'
+  | 'training_scheduled'
+  | 'training_completed'
+  | 'approved'
+  | 'declined';
+
+// rotation_schedules.status reuses the pre-existing schedule_status enum
+// — same two values, already used by the department `schedules` table, so
+// the guarded CREATE TYPE reused it rather than adding a near-duplicate.
+// ScheduleStatus is therefore already declared above.
+
+export interface Volunteer {
+  id: string;
+  church_id: string;
+  /** Null for the majority — most volunteers have no LeaderSmart login. */
+  user_id: string | null;
+  full_name: string;
+  whatsapp_phone: string;
+  email: string | null;
+  serving_group: ServingGroup;
+  status: VolunteerStatus;
+  willing_stations: string[];
+  excluded_stations: string[];
+  /** Powers the /me/[token] personal view in Phase 2. */
+  personal_url_token: string;
+  joined_at: string;
+  /** Internal; never shown to the volunteer. */
+  notes: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface RotationStation {
+  id: string;
+  church_id: string;
+  name: string;
+  department_id: string | null;
+  is_fire_kids: boolean;
+  requires_core: boolean;
+  min_volunteers: number;
+  display_order: number;
+  is_active: boolean;
+  created_at: string;
+}
+
+export interface VolunteerStationPreference {
+  id: string;
+  volunteer_id: string;
+  station_id: string;
+  is_excluded: boolean;
+  created_at: string;
+}
+
+export interface RotationSchedule {
+  id: string;
+  church_id: string;
+  service_date: string;
+  status: ScheduleStatus;
+  published_at: string | null;
+  published_by: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface RotationAssignment {
+  id: string;
+  church_id: string;
+  volunteer_id: string | null;
+  station_id: string;
+  schedule_id: string | null;
+  service_date: string;
+  service_time: string | null;
+  call_time: string | null;
+  status: RotationAssignmentStatus;
+  is_core_team: boolean;
+  is_published: boolean;
+  published_at: string | null;
+  confirmed_at: string | null;
+  declined_reason: string | null;
+  attended_at: string | null;
+  /** Set when this row replaces another — a swap. */
+  substitute_for_id: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CoreTeamTerm {
+  id: string;
+  church_id: string;
+  volunteer_id: string;
+  department_id: string;
+  term_start_date: string;
+  term_end_date: string;
+  serves_per_month: number;
+  status: CoreTeamTermStatus;
+  training_completed_at: string | null;
+  approved_by_user_id: string | null;
+  approved_at: string | null;
+  notes: string | null;
+  created_at: string;
+}
+
+/** Restricted: readable only by owner, admin_pastor, or a holder of the
+    fire_kids_coordinator role. Enforced by RLS, not by this type. */
+export interface FireKidsScreening {
+  id: string;
+  church_id: string;
+  volunteer_id: string;
+  status: FireKidsScreeningStatus;
+  application_submitted_at: string | null;
+  background_check_status: string | null;
+  background_check_completed_at: string | null;
+  reference_1_name: string | null;
+  reference_1_phone: string | null;
+  reference_1_checked_at: string | null;
+  reference_2_name: string | null;
+  reference_2_phone: string | null;
+  reference_2_checked_at: string | null;
+  training_session_date: string | null;
+  training_completed_at: string | null;
+  approved_by_user_id: string | null;
+  approved_at: string | null;
+  declined_reason: string | null;
+  notes: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface RotationConfig {
+  church_id: string;
+  groups_enabled: boolean;
+  fifth_sunday_all_serve: boolean;
+  reminder_days_before: number;
+  confirmation_reminder_days: number;
+  auto_assign_no_preference: boolean;
+  whatsapp_send_day: string;
+  core_team_cadence: string;
+  group_balance_threshold_pct: number;
+  senior_pastor_approves_firekids: boolean;
+  volunteers_see_teammates: boolean;
+  no_response_default: string;
+  church_slug: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+/** Append-only. RLS refuses UPDATE and DELETE for everyone. */
+export interface RotationHistoryLog {
+  id: string;
+  church_id: string;
+  assignment_id: string | null;
+  volunteer_id: string | null;
+  event_type: string;
+  from_value: string | null;
+  to_value: string | null;
+  actor_user_id: string | null;
+  note: string | null;
+  created_at: string;
+}
+
 export interface ChurchService {
   id: string;
   church_id: string;
@@ -230,6 +416,9 @@ export interface User {
   phone: string | null;
   photo_url: string | null;
   role: UserRole;
+  /** Rotation group A-D. Null for users who don't serve on rotation —
+      Principle 5 allows any role, including owner, to have one. */
+  serving_group: ServingGroup | null;
   preferred_language: AppLanguage;
   is_active: boolean;
   last_login_at: string | null;
