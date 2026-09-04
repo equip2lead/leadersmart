@@ -4,6 +4,7 @@ import { ADMIN_ROLES } from '@/lib/roles';
 import { createClient } from '@/lib/supabase/server';
 import { t } from '@/lib/i18n';
 import { PageHeading } from '@/components/page-heading';
+import { pickLang } from '@/lib/leaders';
 import type {
   LevelCompetency,
   LevelDefinition,
@@ -72,12 +73,16 @@ export default async function LevelDefinitionsPage() {
     id: r.id,
     label: r.name,
     description: r.description,
+    displayLabel: pickLang(r.name, r.name_fr, lang) ?? r.name,
+    displayDescription: pickLang(r.description, r.description_fr, lang),
     sortOrder: r.sort_order,
   }));
   const materials = group((matRes.data ?? []) as LevelMaterial[], (r) => ({
     id: r.id,
     label: r.title,
     description: r.description,
+    displayLabel: pickLang(r.title, r.title_fr, lang) ?? r.title,
+    displayDescription: pickLang(r.description, r.description_fr, lang),
     sortOrder: r.sort_order,
     materialType: r.material_type,
     url: r.url,
@@ -86,6 +91,8 @@ export default async function LevelDefinitionsPage() {
     id: r.id,
     label: r.name,
     description: r.description,
+    displayLabel: pickLang(r.name, r.name_fr, lang) ?? r.name,
+    displayDescription: pickLang(r.description, r.description_fr, lang),
     sortOrder: r.sort_order,
   }));
 

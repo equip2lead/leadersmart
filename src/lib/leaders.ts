@@ -5,6 +5,20 @@ import type { AppLanguage } from './types';
 // Shared between /admin/leaders and the ministry dashboard so the two
 // surfaces can't disagree about what a level looks like.
 
+// Leadership level content is author-written and lives in its own _fr
+// columns rather than the i18n dictionary, so it needs its own picker.
+// Falls back to English whenever the translation is missing or blank —
+// content a church adds itself has no French, and a blank cell would be
+// worse than an untranslated one.
+export function pickLang(
+  en: string | null,
+  fr: string | null,
+  lang: AppLanguage,
+): string | null {
+  if (lang === 'fr' && fr && fr.trim()) return fr;
+  return en;
+}
+
 /** Initials for an avatar circle: first letter of the first two words. */
 export function initialsOf(fullName: string): string {
   const parts = fullName.trim().split(/\s+/).filter(Boolean);

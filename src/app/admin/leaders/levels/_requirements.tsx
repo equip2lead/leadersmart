@@ -18,8 +18,14 @@ import {
 // table a row came from, except where materials genuinely differ.
 export type RequirementRow = {
   id: string;
+  /** Canonical English — what the edit form binds to and what the server
+      writes back. Never localised, or saving in French mode would
+      overwrite the English column with a translation. */
   label: string;
   description: string | null;
+  /** Localised for display only. */
+  displayLabel: string;
+  displayDescription: string | null;
   sortOrder: number;
   materialType?: MaterialType;
   url?: string | null;
@@ -141,15 +147,17 @@ export function RequirementSection({
 
               <div className="min-w-0 flex-1">
                 <p className="flex flex-wrap items-center gap-2 text-sm font-semibold text-ink">
-                  {r.label}
+                  {r.displayLabel}
                   {r.materialType && (
                     <span className="rounded-full bg-indigo-royal-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-indigo-royal-700">
                       {t(`levels.materials.type.${r.materialType}`, lang)}
                     </span>
                   )}
                 </p>
-                {r.description && (
-                  <p className="mt-0.5 text-xs text-body">{r.description}</p>
+                {r.displayDescription && (
+                  <p className="mt-0.5 text-xs text-body">
+                    {r.displayDescription}
+                  </p>
                 )}
                 {r.url && (
                   <a
@@ -322,7 +330,10 @@ export function RequirementSection({
           onClose={() => !pending && setDeleting(null)}
         >
           <p className="mt-2 text-sm text-body">
-            {t('levels.req.delete_body', lang).replace('{name}', deleting.label)}
+            {t('levels.req.delete_body', lang).replace(
+              '{name}',
+              deleting.displayLabel,
+            )}
           </p>
           {error && (
             <p role="alert" className="mt-4 rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">

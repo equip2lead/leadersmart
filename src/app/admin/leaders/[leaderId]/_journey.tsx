@@ -1,6 +1,6 @@
 import { Check, Lock, Sparkles } from 'lucide-react';
 import { t } from '@/lib/i18n';
-import { levelTone } from '@/lib/leaders';
+import { levelTone, pickLang } from '@/lib/leaders';
 import { MAX_LEADER_LEVEL } from '@/lib/types';
 import type { AppLanguage, LevelDefinition } from '@/lib/types';
 
@@ -51,6 +51,8 @@ export function LevelJourney({
 
       <ol className="mt-5 space-y-2">
         {definitions.map((d) => {
+          const title = pickLang(d.title, d.title_fr, lang) ?? d.title;
+          const description = pickLang(d.description, d.description_fr, lang);
           const state =
             d.level < currentLevel
               ? 'completed'
@@ -92,10 +94,10 @@ export function LevelJourney({
                     (state === 'locked' ? 'text-muted' : 'text-ink')
                   }
                 >
-                  {d.title}
+                  {title}
                 </p>
-                {d.description && (
-                  <p className="truncate text-xs text-muted">{d.description}</p>
+                {description && (
+                  <p className="truncate text-xs text-muted">{description}</p>
                 )}
               </div>
 

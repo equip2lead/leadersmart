@@ -4,7 +4,7 @@ import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { Check } from 'lucide-react';
 import { t } from '@/lib/i18n';
-import { levelTone } from '@/lib/leaders';
+import { levelTone, pickLang } from '@/lib/leaders';
 import type { AppLanguage, LevelDefinition } from '@/lib/types';
 import { updateLevelDefinition } from './actions';
 import { RequirementSection, type RequirementRow } from './_requirements';
@@ -113,7 +113,11 @@ export function LevelsManager({
               >
                 {d.level}
               </span>
-              <span className="max-w-[10rem] truncate">{d.title}</span>
+              {/* Localised for the tab, while the form below stays bound
+                  to the English columns it writes back to. */}
+              <span className="max-w-[10rem] truncate">
+                {pickLang(d.title, d.title_fr, lang) ?? d.title}
+              </span>
             </button>
           );
         })}

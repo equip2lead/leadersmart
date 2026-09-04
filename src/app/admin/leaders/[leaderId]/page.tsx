@@ -5,7 +5,12 @@ import { ADMIN_ROLES } from '@/lib/roles';
 import { createClient } from '@/lib/supabase/server';
 import { t } from '@/lib/i18n';
 import { PageHeading } from '@/components/page-heading';
-import { formatStartedDate, initialsOf, levelTone } from '@/lib/leaders';
+import {
+  formatStartedDate,
+  initialsOf,
+  levelTone,
+  pickLang,
+} from '@/lib/leaders';
 import type {
   LeaderDevelopment,
   LeaderProgress,
@@ -106,15 +111,15 @@ export default async function LeaderDetailPage({
     ...((compRes.data ?? []) as LevelCompetency[]).map((r) => ({
       requirementType: 'competency' as const,
       requirementId: r.id,
-      label: r.name,
-      description: r.description,
+      label: pickLang(r.name, r.name_fr, lang) ?? r.name,
+      description: pickLang(r.description, r.description_fr, lang),
       ...withProgress('competency', r.id),
     })),
     ...((matRes.data ?? []) as LevelMaterial[]).map((r) => ({
       requirementType: 'material' as const,
       requirementId: r.id,
-      label: r.title,
-      description: r.description,
+      label: pickLang(r.title, r.title_fr, lang) ?? r.title,
+      description: pickLang(r.description, r.description_fr, lang),
       materialType: r.material_type,
       url: r.url,
       ...withProgress('material', r.id),
@@ -122,8 +127,8 @@ export default async function LeaderDetailPage({
     ...((mileRes.data ?? []) as LevelMilestone[]).map((r) => ({
       requirementType: 'milestone' as const,
       requirementId: r.id,
-      label: r.name,
-      description: r.description,
+      label: pickLang(r.name, r.name_fr, lang) ?? r.name,
+      description: pickLang(r.description, r.description_fr, lang),
       ...withProgress('milestone', r.id),
     })),
   ];
@@ -172,10 +177,24 @@ export default async function LeaderDetailPage({
         <h2 className="mt-1 text-lg font-bold text-ink">
           {t('leader_progress.level_heading', lang)
             .replace('{level}', String(entry.current_level))
-            .replace('{title}', definition?.title ?? '—')}
+            .replace(
+              '{title}',
+              pickLang(definition?.title ?? null, definition?.title_fr ?? null, lang) ??
+                '—',
+            )}
         </h2>
-        {definition?.description && (
-          <p className="mt-1 text-sm text-body">{definition.description}</p>
+        {pickLang(
+          definition?.description ?? null,
+          definition?.description_fr ?? null,
+          lang,
+        ) && (
+          <p className="mt-1 text-sm text-body">
+            {pickLang(
+              definition?.description ?? null,
+              definition?.description_fr ?? null,
+              lang,
+            )}
+          </p>
         )}
 
         <div className="mt-4">
