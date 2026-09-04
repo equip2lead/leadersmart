@@ -153,6 +153,8 @@ export interface LevelMaterial {
   description: string | null;
   sort_order: number;
   created_at: string;
+  /** Maintained by the set_updated_at trigger — never write it from app code. */
+  updated_at: string;
   // Lessons that live in the app rather than behind `url`. has_lesson is what
   // the UI branches on — lesson_content can be non-null on a material that is
   // still being drafted, so the boolean is the switch, not the text.
