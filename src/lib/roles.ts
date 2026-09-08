@@ -35,6 +35,15 @@ export const KIDS_ROLES: readonly UserRole[] = [
 // picked the right one, so 'senior_pastor' here would be ambiguous.
 export const OWNER_ROLES: readonly UserRole[] = ['owner'];
 
+// Mentor review rights: who may read any leader's assignment response and
+// record a verdict on it. Deliberately NOT ADMIN_ROLES. The RLS helper
+// has_admin_rights() is `role IN ('owner', 'admin_pastor')`, and a legacy
+// 'senior_pastor' or 'admin' that passed an ADMIN_ROLES check here would be
+// waved through the page only to be handed an empty result set by the
+// database — a silent, unexplainable blank screen. Matching the SQL exactly
+// means the app-side refusal and the RLS refusal always agree.
+export const REVIEW_ROLES: readonly UserRole[] = ['owner', 'admin_pastor'];
+
 // Roles that unlock the Fire Kids Coordinator toolset.
 export const FIRE_KIDS_ROLES: readonly UserRole[] = [
   'owner',
@@ -64,6 +73,10 @@ export function isOwner(role: UserRole): boolean {
 
 export function isAdmin(role: UserRole): boolean {
   return ADMIN_ROLES.includes(role);
+}
+
+export function canReviewAssignments(role: UserRole): boolean {
+  return REVIEW_ROLES.includes(role);
 }
 
 export function isPastor(role: UserRole): boolean {

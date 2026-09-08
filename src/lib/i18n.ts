@@ -866,6 +866,77 @@ const en: Dictionary = {
   'leader_progress.err.notes_too_long': 'That note is too long.',
   'leader_progress.err.invalid_requirement': 'That requirement no longer exists.',
 
+  // ─────────────────────────────────────────────────────────────
+  // Lesson viewer — /admin/leaders/[leaderId]/lesson/[materialId].
+  // The reading pane plus the assignment panel beside it.
+  // ─────────────────────────────────────────────────────────────
+  'lesson.back_to_leader': '← Back to leader',
+  'lesson.breadcrumb_leaders': 'Leaders',
+  'lesson.level_badge': 'Level {level}',
+  'lesson.no_content': 'This lesson has no written content yet.',
+  'lesson.assignment_prompt_label': 'Assignment',
+  'lesson.no_assignment': 'This lesson has no assignment.',
+  'lesson.your_response_label': 'Your response',
+  'lesson.response_placeholder': 'Write your response here…',
+  'lesson.char_counter': '{count} / {max} characters',
+  'lesson.char_over': '{count} / {max} characters — please shorten',
+  'lesson.save_draft': 'Save draft',
+  'lesson.submit_for_review': 'Submit for review',
+  'lesson.draft_saved': 'Draft saved.',
+  'lesson.submitted_at': 'Submitted {date}',
+  'lesson.reviewed_at': 'Reviewed {date}',
+  'lesson.reviewer_comment_label': 'Mentor feedback',
+  'lesson.revise_and_resubmit': 'Revise and resubmit',
+  'lesson.awaiting_review': 'Awaiting review',
+  'lesson.status_draft': 'Draft',
+  'lesson.status_submitted': 'Submitted',
+  'lesson.status_reviewed': 'Reviewed',
+  'lesson.read_lesson_cta': 'Read lesson →',
+  'lesson.version_label': 'Version {version}',
+  'lesson.readonly_notice':
+    'Submitted responses are kept as written. Use “Revise and resubmit” to send a new version.',
+  'lesson.err.not_allowed': 'You do not have access to this lesson.',
+  'lesson.err.not_found': 'That lesson no longer exists.',
+  'lesson.err.empty_response': 'Write a response before saving.',
+  'lesson.err.too_long': 'That response is too long.',
+  'lesson.err.no_assignment': 'This lesson has no assignment to answer.',
+
+  // ─────────────────────────────────────────────────────────────
+  // Mentor review dashboard — /admin/leaders/submissions
+  // ─────────────────────────────────────────────────────────────
+  'submissions.page_title': 'Assignment reviews',
+  'submissions.page_subtitle':
+    'Responses submitted by leaders awaiting your review',
+  'submissions.tab_pending': 'Pending review',
+  'submissions.tab_reviewed': 'Reviewed',
+  'submissions.tab_all': 'All',
+  'submissions.empty_pending': "No pending submissions — you're all caught up!",
+  'submissions.empty_reviewed': 'Nothing reviewed yet.',
+  'submissions.empty_all': 'No leader has submitted an assignment yet.',
+  'submissions.column_leader': 'Leader',
+  'submissions.column_lesson': 'Lesson',
+  'submissions.column_submitted': 'Submitted',
+  'submissions.review_button': 'Review',
+  'submissions.close_button': 'Close',
+  'submissions.approve_button': 'Approve',
+  'submissions.send_back_button': 'Send back for revision',
+  'submissions.reviewer_comment_label': 'Feedback for the leader',
+  'submissions.reviewer_comment_required':
+    'Feedback is required when sending a response back for revision.',
+  'submissions.reviewer_comment_placeholder':
+    'What did they do well, and what should they work on?',
+  'submissions.open_lesson': 'Open lesson',
+  'submissions.sidebar_link': 'Reviews',
+  'submissions.pending_badge': '{count}',
+  'submissions.pending_badge_title': '{count} awaiting review',
+  'submissions.reviewed_by': 'Reviewed by {name} · {date}',
+  'submissions.err.not_allowed': 'Only owners and admin pastors can review responses.',
+  'submissions.err.not_found': 'That response no longer exists.',
+  'submissions.err.not_submitted': 'That response is not awaiting review.',
+  'submissions.err.comment_required':
+    'Feedback is required when sending a response back for revision.',
+  'submissions.err.comment_too_long': 'That feedback is too long.',
+
   // Level journey overview on the leader detail page
   'leader_journey.title': 'Development journey',
   'leader_journey.state.completed': 'Completed',
@@ -2435,6 +2506,74 @@ const fr: Dictionary = {
   'leader_progress.err.not_found': "Ce leader n'existe plus.",
   'leader_progress.err.notes_too_long': 'Cette note est trop longue.',
   'leader_progress.err.invalid_requirement': "Cette exigence n'existe plus.",
+
+  // Visionneuse de leçon — /admin/leaders/[leaderId]/lesson/[materialId]
+  'lesson.back_to_leader': '← Retour au leader',
+  'lesson.breadcrumb_leaders': 'Leaders',
+  'lesson.level_badge': 'Niveau {level}',
+  'lesson.no_content': "Cette leçon n'a pas encore de contenu rédigé.",
+  'lesson.assignment_prompt_label': 'Devoir',
+  'lesson.no_assignment': "Cette leçon n'a pas de devoir.",
+  'lesson.your_response_label': 'Votre réponse',
+  'lesson.response_placeholder': 'Rédigez votre réponse ici…',
+  'lesson.char_counter': '{count} / {max} caractères',
+  'lesson.char_over': '{count} / {max} caractères — veuillez raccourcir',
+  'lesson.save_draft': 'Enregistrer le brouillon',
+  'lesson.submit_for_review': 'Soumettre pour révision',
+  'lesson.draft_saved': 'Brouillon enregistré.',
+  'lesson.submitted_at': 'Soumis le {date}',
+  'lesson.reviewed_at': 'Révisé le {date}',
+  'lesson.reviewer_comment_label': 'Retour du mentor',
+  'lesson.revise_and_resubmit': 'Réviser et resoumettre',
+  'lesson.awaiting_review': 'En attente de révision',
+  'lesson.status_draft': 'Brouillon',
+  'lesson.status_submitted': 'Soumis',
+  'lesson.status_reviewed': 'Révisé',
+  'lesson.read_lesson_cta': 'Lire la leçon →',
+  'lesson.version_label': 'Version {version}',
+  'lesson.readonly_notice':
+    'Les réponses soumises sont conservées telles quelles. Utilisez « Réviser et resoumettre » pour envoyer une nouvelle version.',
+  'lesson.err.not_allowed': "Vous n'avez pas accès à cette leçon.",
+  'lesson.err.not_found': "Cette leçon n'existe plus.",
+  'lesson.err.empty_response': 'Rédigez une réponse avant d’enregistrer.',
+  'lesson.err.too_long': 'Cette réponse est trop longue.',
+  'lesson.err.no_assignment': "Cette leçon n'a pas de devoir à traiter.",
+
+  // Tableau de bord de révision du mentor — /admin/leaders/submissions
+  'submissions.page_title': 'Révision des devoirs',
+  'submissions.page_subtitle':
+    'Réponses soumises par les leaders en attente de votre révision',
+  'submissions.tab_pending': 'En attente',
+  'submissions.tab_reviewed': 'Révisés',
+  'submissions.tab_all': 'Tous',
+  'submissions.empty_pending':
+    'Aucune soumission en attente — vous êtes à jour !',
+  'submissions.empty_reviewed': 'Rien de révisé pour le moment.',
+  'submissions.empty_all': "Aucun leader n'a encore soumis de devoir.",
+  'submissions.column_leader': 'Leader',
+  'submissions.column_lesson': 'Leçon',
+  'submissions.column_submitted': 'Soumis',
+  'submissions.review_button': 'Réviser',
+  'submissions.close_button': 'Fermer',
+  'submissions.approve_button': 'Approuver',
+  'submissions.send_back_button': 'Renvoyer pour correction',
+  'submissions.reviewer_comment_label': 'Retour pour le leader',
+  'submissions.reviewer_comment_required':
+    'Un retour est obligatoire pour renvoyer une réponse pour correction.',
+  'submissions.reviewer_comment_placeholder':
+    "Qu'ont-ils bien fait, et sur quoi doivent-ils travailler ?",
+  'submissions.open_lesson': 'Ouvrir la leçon',
+  'submissions.sidebar_link': 'Révisions',
+  'submissions.pending_badge': '{count}',
+  'submissions.pending_badge_title': '{count} en attente de révision',
+  'submissions.reviewed_by': 'Révisé par {name} · {date}',
+  'submissions.err.not_allowed':
+    'Seuls les propriétaires et pasteurs administrateurs peuvent réviser les réponses.',
+  'submissions.err.not_found': "Cette réponse n'existe plus.",
+  'submissions.err.not_submitted': "Cette réponse n'est pas en attente de révision.",
+  'submissions.err.comment_required':
+    'Un retour est obligatoire pour renvoyer une réponse pour correction.',
+  'submissions.err.comment_too_long': 'Ce retour est trop long.',
 
   'leader_journey.title': 'Parcours de développement',
   'leader_journey.state.completed': 'Terminé',
