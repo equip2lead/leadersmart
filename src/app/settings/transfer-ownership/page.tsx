@@ -15,6 +15,12 @@ export default async function TransferOwnershipPage() {
   const { user, church } = await requireRole(OWNER_ROLES);
   const lang = user.preferred_language;
 
+  // TODO(before-first-real-user): Set up the support@leadersmart.app mailbox
+  // (Google Workspace / Cloudflare Email Routing / Vercel forwarding). This
+  // address is not yet receiving mail, so the mailto: below currently goes
+  // nowhere. Acceptable only while the platform has no real customers — an
+  // owner who requests an ownership transfer gets silence, not a reply.
+  // See NOTES.md.
   const supportEmail = 'support@leadersmart.app';
   const subject = encodeURIComponent(
     t('owner.transfer.mailto.subject', lang).replace('{church}', church.name),
