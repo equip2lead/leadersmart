@@ -1,5 +1,6 @@
 import { Sidebar } from './sidebar';
 import { LanguageToggle } from './language-toggle';
+import { LeaderSmartWordmark } from './leadersmart-wordmark';
 import { canReviewAssignments } from '@/lib/roles';
 import { createClient } from '@/lib/supabase/server';
 import type { Church, User } from '@/lib/types';
@@ -53,12 +54,9 @@ export async function AppShell({
       />
       <div className="flex min-w-0 flex-1 flex-col">
         <header className="flex items-center gap-2 border-b border-gray-100 bg-white px-4 py-3">
-          <span className="text-lg font-bold text-ink md:hidden">
-            equip2lead
-            <span className="mx-1.5 font-normal text-gray-300" aria-hidden="true">
-              |
-            </span>
-            <span className="text-indigo-royal-700">Coaching</span>
+          {/* Mirrors the sidebar's brand block, which is hidden below md. */}
+          <span className="md:hidden">
+            <LeaderSmartWordmark size="sm" />
           </span>
           <div className="ml-auto">
             <LanguageToggle current={user.preferred_language} />

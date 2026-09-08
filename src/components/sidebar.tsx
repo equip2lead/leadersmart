@@ -29,6 +29,7 @@ import {
   type LucideIcon,
 } from 'lucide-react';
 import { cn } from '@/lib/cn';
+import { LeaderSmartWordmark } from './leadersmart-wordmark';
 import { t } from '@/lib/i18n';
 import { canReviewAssignments, isAdmin, isLeader, isOwner } from '@/lib/roles';
 import { getVocab } from '@/lib/vocabulary';
@@ -298,16 +299,7 @@ export function Sidebar({
     <aside className="hidden w-64 shrink-0 flex-col border-r border-gray-100 bg-white md:flex">
       <div className="flex items-center gap-2 border-b border-gray-100 px-6 py-5">
         <Flame className="h-6 w-6 text-gold-warm-600" aria-hidden="true" />
-        {/* Brand lockup matches app.equip2lead.coach: lowercase wordmark,
-            hairline divider, then the product. The divider is decorative —
-            a screen reader should hear "equip2lead Coaching", not "bar". */}
-        <span className="text-lg font-bold text-ink">
-          equip2lead
-          <span className="mx-1.5 font-normal text-gray-300" aria-hidden="true">
-            |
-          </span>
-          <span className="text-indigo-royal-700">Coaching</span>
-        </span>
+        <LeaderSmartWordmark />
       </div>
 
       <div className="border-b border-gray-100 px-6 py-4">
