@@ -1,8 +1,8 @@
 {
-  "name": "equip2lead-coach",
+  "name": "leadersmart",
   "version": "1.0.0",
   "private": true,
-  "description": "Equip2Lead Coach — Ministry operations and pastoral accountability platform for African churches",
+  "description": "LeaderSmart — Ministry operations and pastoral accountability platform for African churches",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

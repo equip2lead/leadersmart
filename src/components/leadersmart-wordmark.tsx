@@ -5,10 +5,10 @@
 // carries a yellow highlighter bar and the trailing period is yellow, and
 // that is the whole identity. There is no glyph in the mark itself.
 //
-// Deliberately NOT src/app/_landing/wordmark.tsx. That component is the
-// public site's mark and currently reads "Equip2Lead Coach."; the two names
-// are diverged on purpose right now, so sharing one component would silently
-// couple the app header to the next landing rename.
+// NOTE: src/app/_landing/wordmark.tsx now renders exactly this mark again.
+// This file was split off while the app and the landing carried different
+// names; that divergence is gone, so the two are duplicates and should be
+// collapsed into one component.
 //
 // The highlight is a sibling span painted *before* the text and lifted back
 // with `relative` on the text itself, rather than a negative z-index. A

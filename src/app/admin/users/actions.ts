@@ -70,7 +70,7 @@ export async function inviteUser(formData: FormData): Promise<InviteResult> {
     process.env.NEXT_PUBLIC_APP_URL ||
     process.env.NEXT_PUBLIC_SITE_URL ||
     process.env.NEXT_PUBLIC_VERCEL_URL ||
-    'https://app.equip2lead.coach';
+    'https://leadersmart.app';
   const baseUrl = rawBase.startsWith('http') ? rawBase : `https://${rawBase}`;
   const redirectTo = `${baseUrl.replace(/\/$/, '')}/auth/accept-invite`;
 
