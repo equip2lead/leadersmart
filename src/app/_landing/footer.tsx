@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { Linkedin, Twitter, Youtube, type LucideIcon } from 'lucide-react';
 import { t } from '@/lib/i18n';
 import type { AppLanguage } from '@/lib/types';
-import { Wordmark } from './wordmark';
+import { Wordmark } from '@/components/wordmark';
 
 // Navy footer. The wordmark runs in `light` tone here — white type, but
 // the yellow highlighter bar and period stay yellow, which is what keeps

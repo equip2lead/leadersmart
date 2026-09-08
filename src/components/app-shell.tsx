@@ -1,6 +1,6 @@
 import { Sidebar } from './sidebar';
 import { LanguageToggle } from './language-toggle';
-import { LeaderSmartWordmark } from './leadersmart-wordmark';
+import { Wordmark } from './wordmark';
 import { canReviewAssignments } from '@/lib/roles';
 import { createClient } from '@/lib/supabase/server';
 import type { Church, User } from '@/lib/types';
@@ -56,7 +56,7 @@ export async function AppShell({
         <header className="flex items-center gap-2 border-b border-gray-100 bg-white px-4 py-3">
           {/* Mirrors the sidebar's brand block, which is hidden below md. */}
           <span className="md:hidden">
-            <LeaderSmartWordmark size="sm" />
+            <Wordmark size="xs" />
           </span>
           <div className="ml-auto">
             <LanguageToggle current={user.preferred_language} />

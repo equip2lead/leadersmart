@@ -6,7 +6,7 @@ import { ChevronDown, Menu, X } from 'lucide-react';
 import { t } from '@/lib/i18n';
 import type { AppLanguage } from '@/lib/types';
 import { LangToggle } from './lang-toggle';
-import { Wordmark } from './wordmark';
+import { Wordmark } from '@/components/wordmark';
 import { AppIcon } from './app-icon';
 
 // Floating rounded-pill header. Sits ~24px below the viewport top on
