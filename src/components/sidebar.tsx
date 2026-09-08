@@ -25,11 +25,12 @@ import {
   AlertTriangle,
   History,
   BarChart3,
+  MessageSquareQuote,
   type LucideIcon,
 } from 'lucide-react';
 import { cn } from '@/lib/cn';
 import { t } from '@/lib/i18n';
-import { isAdmin, isLeader, isOwner } from '@/lib/roles';
+import { canReviewAssignments, isAdmin, isLeader, isOwner } from '@/lib/roles';
 import { getVocab } from '@/lib/vocabulary';
 import type { AppLanguage, OrganizationType, UserRole } from '@/lib/types';
 
@@ -39,6 +40,9 @@ type NavItem = {
   /** Static entries carry a key; vocabulary-driven ones a resolved label. */
   labelKey?: string;
   label?: string;
+  /** Rendered as a pill after the label when greater than zero. Zero and
+      undefined both render nothing — "Reviews (0)" is noise, not news. */
+  badge?: number;
 };
 type NavSection = { titleKey: string; items: NavItem[] };
 
@@ -48,6 +52,8 @@ type NavSection = { titleKey: string; items: NavItem[] };
 function adminSections(
   orgType: OrganizationType,
   lang: AppLanguage,
+  role: UserRole,
+  pendingReviews: number,
 ): NavSection[] {
   const v = getVocab(orgType, lang);
   // Service times are church-only: ministries don't run a weekly service
@@ -77,6 +83,21 @@ function adminSections(
         ? []
         : [{ href: '/admin/branches', labelKey: 'nav.branches', icon: Globe }]),
       { href: '/admin/leaders', labelKey: 'leaders.sidebar_link', icon: Sparkles },
+      // Reviews sits between Leaders and Reports & Analytics, and is
+      // universal — a ministry mentors its leaders exactly as a church does.
+      // Gated on REVIEW_ROLES rather than isAdmin so the link matches the
+      // page's own guard, and a legacy admin is not offered a door that
+      // refuses them.
+      ...(canReviewAssignments(role)
+        ? [
+            {
+              href: '/admin/leaders/submissions',
+              labelKey: 'submissions.sidebar_link',
+              icon: MessageSquareQuote,
+              badge: pendingReviews,
+            },
+          ]
+        : []),
       { href: '/admin/analytics', labelKey: 'nav.reportsAnalytics', icon: BarChart3 },
     ],
   },
@@ -190,12 +211,20 @@ function NavList({
   pathname: string;
   lang: AppLanguage;
 }) {
+  // A plain prefix test lights up every ancestor: on
+  // /admin/leaders/submissions both "Leaders" and "Reviews" would match.
+  // Only the most specific match in this list wins, so a nested section link
+  // takes the highlight from the parent it lives under.
+  const matchLength = (href: string) =>
+    pathname === href || (href !== '/' && pathname.startsWith(`${href}/`))
+      ? href.length
+      : -1;
+  const best = Math.max(-1, ...items.map((i) => matchLength(i.href)));
+
   return (
     <ul className="space-y-1">
       {items.map((item) => {
-        const active =
-          pathname === item.href ||
-          (item.href !== '/' && pathname.startsWith(`${item.href}/`));
+        const active = best > -1 && matchLength(item.href) === best;
         const Icon = item.icon;
         const label = item.label ?? (item.labelKey ? t(item.labelKey, lang) : '');
         return (
@@ -211,6 +240,20 @@ function NavList({
             >
               <Icon className="h-4 w-4" aria-hidden="true" />
               {label}
+              {item.badge != null && item.badge > 0 && (
+                <span
+                  className="ml-auto rounded-full bg-gold-warm-100 px-1.5 py-0.5 text-[10px] font-bold text-gold-warm-700"
+                  title={t('submissions.pending_badge_title', lang).replace(
+                    '{count}',
+                    String(item.badge),
+                  )}
+                >
+                  {t('submissions.pending_badge', lang).replace(
+                    '{count}',
+                    String(item.badge),
+                  )}
+                </span>
+              )}
             </Link>
           </li>
         );
@@ -233,12 +276,16 @@ export function Sidebar({
   churchName,
   lang,
   orgType,
+  pendingReviews = 0,
 }: {
   role: UserRole;
   userName: string;
   churchName: string;
   lang: AppLanguage;
   orgType: OrganizationType;
+  /** Assignment responses awaiting this church's review. Counted by the
+      shell, not here — the sidebar is a client component and cannot query. */
+  pendingReviews?: number;
 }) {
   const pathname = usePathname();
   const showOwnerTools = isOwner(role);
@@ -281,7 +328,7 @@ export function Sidebar({
       <nav className="flex-1 overflow-y-auto p-3">
         {showAdminSidebar ? (
           <>
-            {adminSections(orgType, lang).map((section) => (
+            {adminSections(orgType, lang, role, pendingReviews).map((section) => (
               <div key={section.titleKey}>
                 <SectionHeader title={t(section.titleKey, lang)} />
                 <NavList items={section.items} pathname={pathname} lang={lang} />
