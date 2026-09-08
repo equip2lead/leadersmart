@@ -1,8 +1,9 @@
 'use client';
 
 import { useState, useTransition } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { ExternalLink, StickyNote } from 'lucide-react';
+import { BookOpen, ExternalLink, StickyNote } from 'lucide-react';
 import { t } from '@/lib/i18n';
 import { PROGRESS_STATUSES } from '@/lib/types';
 import type {
@@ -22,6 +23,9 @@ export type ChecklistItem = {
   notes: string | null;
   materialType?: MaterialType;
   url?: string | null;
+  /** Set only on materials with has_lesson — the in-app lesson route. Null
+      leaves the row exactly as it was: an external link, or plain text. */
+  lessonHref?: string | null;
 };
 
 function mapError(code: string, lang: AppLanguage): string {
@@ -119,7 +123,16 @@ export function Checklist({
                     <div className="flex flex-wrap items-start justify-between gap-3">
                       <div className="min-w-0 flex-1">
                         <p className="flex flex-wrap items-center gap-2 text-sm font-semibold text-ink">
-                          {item.label}
+                          {item.lessonHref ? (
+                            <Link
+                              href={item.lessonHref}
+                              className="text-indigo-royal-700 hover:underline"
+                            >
+                              {item.label}
+                            </Link>
+                          ) : (
+                            item.label
+                          )}
                           {item.materialType && (
                             <span className="rounded-full bg-indigo-royal-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-indigo-royal-700">
                               {t(
@@ -144,6 +157,19 @@ export function Checklist({
                             <ExternalLink className="h-3 w-3" aria-hidden="true" />
                             {item.url}
                           </a>
+                        )}
+                        {/* The title above is already a link. This repeats it
+                            as an explicit affordance, because a title that
+                            happens to be blue is not an obvious invitation to
+                            read something. */}
+                        {item.lessonHref && (
+                          <Link
+                            href={item.lessonHref}
+                            className="mt-1.5 inline-flex items-center gap-1.5 text-xs font-semibold text-indigo-royal-700 hover:underline"
+                          >
+                            <BookOpen className="h-3.5 w-3.5" aria-hidden="true" />
+                            {t('lesson.read_lesson_cta', lang)}
+                          </Link>
                         )}
                       </div>
 

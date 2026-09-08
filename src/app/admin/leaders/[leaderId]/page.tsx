@@ -122,6 +122,12 @@ export default async function LeaderDetailPage({
       description: pickLang(r.description, r.description_fr, lang),
       materialType: r.material_type,
       url: r.url,
+      // has_lesson is the switch, matching the lesson route's own guard: a
+      // material with drafted lesson_content but the flag still off stays a
+      // plain row here and 404s there.
+      lessonHref: r.has_lesson
+        ? `/admin/leaders/${entry.id}/lesson/${r.id}`
+        : null,
       ...withProgress('material', r.id),
     })),
     ...((mileRes.data ?? []) as LevelMilestone[]).map((r) => ({
