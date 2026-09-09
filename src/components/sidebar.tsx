@@ -11,6 +11,7 @@ import {
   Star,
   Users,
   CalendarDays,
+  Calendar,
   Baby,
   Settings,
   LogOut,
@@ -76,6 +77,11 @@ function adminSections(
         ? [{ href: '/settings/services', labelKey: 'nav.serviceTimes', icon: Clock }]
         : []),
       { href: '/admin/users', labelKey: 'nav.users', icon: UserCog },
+      // Events sits between Users and Leaders and is universal: both a church
+      // and a ministry execute events, and only the type list differs (see
+      // eventTypesFor). Ungated beyond the admin sidebar itself — reading the
+      // list is a whole-church right, so anyone who sees this nav sees the page.
+      { href: '/admin/events', labelKey: 'events.sidebar_link', icon: Calendar },
       // Branches are a ministry concept (Q5a) — churches see no link and
       // the page redirects them.
       // Branches stay ministry-only; the leader pipeline is available to
