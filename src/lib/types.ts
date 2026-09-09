@@ -499,6 +499,50 @@ export interface User {
   updated_at: string;
 }
 
+// ── Events ──────────────────────────────────────────────────────────────
+// Phase 1 records what the team executed, not who attended: no attendance
+// counts, no offerings, no ticketing. One row per occurrence — recurrence is
+// not modelled.
+
+export type EventStatus = 'draft' | 'published' | 'completed' | 'cancelled';
+export const EVENT_STATUSES: EventStatus[] = [
+  'draft',
+  'published',
+  'completed',
+  'cancelled',
+];
+
+export interface Event {
+  id: string;
+  church_id: string;
+  /** Ministry-side scope. Mutually exclusive with department_id — the
+      events_scope_is_one_of CHECK enforces it, not the UI. */
+  branch_id: string | null;
+  /** Church-side scope. See branch_id. */
+  department_id: string | null;
+  title: string;
+  /** A vocabulary key, not an enum: which values are offered depends on the
+      tenant's organization_type. See src/lib/vocabulary.ts. */
+  event_type: string;
+  /** DATE — 'YYYY-MM-DD', no timezone. */
+  event_date: string;
+  /** TIME — 'HH:MM:SS', no date and no zone. */
+  start_time: string | null;
+  end_time: string | null;
+  location: string | null;
+  description: string | null;
+  coordinator_user_id: string | null;
+  status: EventStatus;
+  /** How it actually went. Only meaningful once status is 'completed'. */
+  post_event_notes: string | null;
+  completed_at: string | null;
+  cancelled_at: string | null;
+  created_at: string;
+  /** Maintained by the events_set_updated_at trigger — never written by app code. */
+  updated_at: string;
+  created_by: string | null;
+}
+
 export interface Department {
   id: string;
   church_id: string;

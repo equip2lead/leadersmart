@@ -140,3 +140,68 @@ export function roleDisplayName(
   if (role === 'owner' || role === 'senior_pastor') return v.ownerLabel;
   return null;
 }
+
+// ── Event types ─────────────────────────────────────────────────────────────
+// Same principle as the vocabulary above: the database stores one free string
+// in events.event_type, and org type decides only which options are *offered*.
+// A church picks from services and baptisms, a ministry from conferences and
+// retreats, and neither list is a constraint the schema knows about.
+
+export const CHURCH_EVENT_TYPES = [
+  'sunday_service',
+  'prayer_meeting',
+  'outreach',
+  'baptism',
+  'wedding',
+  'other',
+] as const;
+
+export const MINISTRY_EVENT_TYPES = [
+  'conference',
+  'retreat',
+  'training',
+  'campaign',
+  'workshop',
+  'other',
+] as const;
+
+/** Every key either list can produce. Server actions validate against this
+    union rather than one org's list: a tenant can switch organization_type
+    (see the 'reset_org_type' audit action), and an event authored before the
+    switch has to stay editable afterwards instead of failing validation on a
+    value it was legitimately created with. */
+export const ALL_EVENT_TYPES: readonly string[] = [
+  ...new Set<string>([...CHURCH_EVENT_TYPES, ...MINISTRY_EVENT_TYPES]),
+];
+
+export function isKnownEventType(value: string): boolean {
+  return ALL_EVENT_TYPES.includes(value);
+}
+
+/** The dropdown list for a tenant. `current` re-inserts a value the tenant
+    already has but that its list no longer offers — again, the org-type-switch
+    case. Without it, opening the edit form would silently reset the type to
+    whatever happened to be first. */
+export function eventTypesFor(
+  orgType: OrganizationType,
+  current?: string | null,
+): readonly string[] {
+  const base: readonly string[] =
+    orgType === 'church' ? CHURCH_EVENT_TYPES : MINISTRY_EVENT_TYPES;
+  if (current && isKnownEventType(current) && !base.includes(current)) {
+    return [current, ...base];
+  }
+  return base;
+}
+
+/** Label for a stored type. Resolves any known key regardless of org type, so
+    a church event still reads correctly after a switch to ministry. An
+    unrecognised value renders as itself rather than as a missing-key string. */
+export function eventTypeLabel(
+  eventType: string,
+  lang: AppLanguage,
+): string {
+  const key = `events.type.${eventType}`;
+  const label = t(key, lang);
+  return label === key ? eventType : label;
+}
