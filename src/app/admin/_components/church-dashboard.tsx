@@ -22,6 +22,11 @@ import {
   LeadersViewAllLink,
   fetchLeaderSummary,
 } from './leaders-panel';
+import {
+  UpcomingEventsBody,
+  UpcomingEventsViewAll,
+  fetchUpcomingEvents,
+} from './upcoming-events-panel';
 
 type PastorRef = { full_name: string | null } | null;
 type ActiveAssignment = {
@@ -100,6 +105,7 @@ export async function ChurchDashboard({
 }) {
   const lang = user.preferred_language;
   const leaderSummary = await fetchLeaderSummary(church.id);
+  const upcomingEvents = await fetchUpcomingEvents(church.id);
   const supabase = await createClient();
 
   const thisWeek = currentWeekStart();
@@ -303,6 +309,18 @@ export async function ChurchDashboard({
         </div>
         <div className="mt-4">
           <LeadersPanelBody summary={leaderSummary} lang={lang} />
+        </div>
+      </section>
+
+      <section className="mt-8">
+        <div className="flex items-center justify-between gap-3">
+          <h2 className="text-lg font-semibold text-ink">
+            {t('dashboard.upcoming_events_title', lang)}
+          </h2>
+          {upcomingEvents.length > 0 && <UpcomingEventsViewAll lang={lang} />}
+        </div>
+        <div className="mt-4">
+          <UpcomingEventsBody events={upcomingEvents} lang={lang} />
         </div>
       </section>
 

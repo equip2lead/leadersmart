@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { BarChart3, Globe, Sparkles } from 'lucide-react';
+import { BarChart3, CalendarDays, Globe, Sparkles } from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
 import { t } from '@/lib/i18n';
 import { flagForCode } from '@/lib/countries';
@@ -17,6 +17,11 @@ import {
   LeadersViewAllLink,
   fetchLeaderSummary,
 } from './leaders-panel';
+import {
+  UpcomingEventsBody,
+  UpcomingEventsViewAll,
+  fetchUpcomingEvents,
+} from './upcoming-events-panel';
 import type { AppLanguage, Branch, Church, User } from '@/lib/types';
 
 // How many branch tiles fit before the grid rolls up into a "+N more"
@@ -82,6 +87,7 @@ export async function MinistryDashboard({
   const zoneCounts = tallyByBranch(zoneRows ?? []);
 
   const leaderSummary = await fetchLeaderSummary(church.id);
+  const upcomingEvents = await fetchUpcomingEvents(church.id);
 
   // This month's report status per visible branch. A branch with no row
   // yet is "pending" — that is a display state, not a stored one.
@@ -245,6 +251,19 @@ export async function MinistryDashboard({
               )}
             </ul>
           )}
+        </Panel>
+
+        {/* Replaces the "Upcoming" placeholder this dashboard was specced with
+            — dashboard.ministry.upcoming_* were never rendered by any
+            component, so there was nothing on screen to swap out. */}
+        <Panel
+          icon={CalendarDays}
+          title={t('dashboard.upcoming_events_title', lang)}
+          action={
+            upcomingEvents.length > 0 ? <UpcomingEventsViewAll lang={lang} /> : null
+          }
+        >
+          <UpcomingEventsBody events={upcomingEvents} lang={lang} />
         </Panel>
 
         <Panel
