@@ -18,6 +18,12 @@ type FeatureDef = {
   titleKey: string;
   descKey: string;
   comingSoon?: boolean;
+  /** Overrides the generic "Soon" pill. Rotation uses it to say what it
+      actually is — an optional module — rather than implying it is unbuilt. */
+  badgeKey?: string;
+  /** A second line under the description, for a caveat the description itself
+      should not have to carry. */
+  noteKey?: string;
 };
 
 // Nine modules. Icon tiles rotate yellow-soft / sage-soft / navy across
@@ -67,7 +73,11 @@ const FEATURES: FeatureDef[] = [
     icon: Repeat,
     titleKey: 'landing.feature.rotation.title',
     descKey: 'landing.feature.rotation.desc',
+    // Not "Soon": the module exists and is church-only by design, so the pill
+    // says what it is rather than implying it is still being built.
     comingSoon: true,
+    badgeKey: 'landing.rotation.badge',
+    noteKey: 'landing.rotation.subheading',
   },
 ];
 
@@ -108,13 +118,18 @@ export function Features({ lang }: { lang: AppLanguage }) {
                 {t(f.titleKey, lang)}
                 {f.comingSoon && (
                   <span className="inline-flex items-center rounded-full bg-[#D8E5D0] px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-[#1A1E3F]">
-                    {t('landing.features.comingSoon', lang)}
+                    {t(f.badgeKey ?? 'landing.features.comingSoon', lang)}
                   </span>
                 )}
               </h3>
               <p className="mt-2 text-[15px] leading-relaxed text-[#3D4470]">
                 {t(f.descKey, lang)}
               </p>
+              {f.noteKey && (
+                <p className="mt-2 text-[13px] leading-relaxed text-[#3D4470]/75">
+                  {t(f.noteKey, lang)}
+                </p>
+              )}
             </div>
           ))}
         </div>
