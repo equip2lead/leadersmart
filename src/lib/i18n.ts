@@ -866,6 +866,28 @@ const en: Dictionary = {
   'leader_progress.err.notes_too_long': 'That note is too long.',
   'leader_progress.err.invalid_requirement': 'That requirement no longer exists.',
 
+  // Optional modules — the Settings section a church uses to opt into
+  // features. Ministries never see it.
+  'settings.optional_modules.section_title': 'Optional modules',
+  'settings.optional_modules.subtitle':
+    'Turn features on when your team is ready to use them.',
+  'settings.rotation.toggle_label': 'Rotation module',
+  'settings.rotation.toggle_description':
+    'Manage rotating serving teams (Groups A/B/C/D), volunteer sign-ups, and Sunday assignments. Perfect for churches with multiple serving teams that alternate weeks.',
+  'settings.rotation.on': 'On',
+  'settings.rotation.off': 'Off',
+  'settings.rotation.saved': 'Saved.',
+  'settings.rotation.err.not_admin':
+    'Only owners and admin pastors can change modules.',
+  'settings.rotation.err.not_church':
+    'The Rotation module is not available for ministries.',
+  'rotation.sidebar_link': 'Rotation',
+  'rotation.disabled_toast':
+    'Rotation module is turned off. Turn it on in Settings to use this feature.',
+  'landing.rotation.badge': 'Optional module',
+  'landing.rotation.subheading':
+    'Optional module for churches with rotating serving teams. Not needed for ministries.',
+
   // ─────────────────────────────────────────────────────────────
   // Events — /admin/events. Phase 1 tracks what the team executed:
   // who coordinated it and whether it happened. No attendance
@@ -2627,6 +2649,27 @@ const fr: Dictionary = {
   'leader_progress.err.not_found': "Ce leader n'existe plus.",
   'leader_progress.err.notes_too_long': 'Cette note est trop longue.',
   'leader_progress.err.invalid_requirement': "Cette exigence n'existe plus.",
+
+  // Modules optionnels — section Paramètres
+  'settings.optional_modules.section_title': 'Modules optionnels',
+  'settings.optional_modules.subtitle':
+    'Activez les fonctionnalités quand votre équipe est prête à les utiliser.',
+  'settings.rotation.toggle_label': 'Module de rotation',
+  'settings.rotation.toggle_description':
+    "Gérez les équipes de service en rotation (groupes A/B/C/D), les inscriptions des bénévoles et les affectations du dimanche. Idéal pour les églises ayant plusieurs équipes qui alternent chaque semaine.",
+  'settings.rotation.on': 'Activé',
+  'settings.rotation.off': 'Désactivé',
+  'settings.rotation.saved': 'Enregistré.',
+  'settings.rotation.err.not_admin':
+    'Seuls les propriétaires et pasteurs administrateurs peuvent modifier les modules.',
+  'settings.rotation.err.not_church':
+    "Le module de rotation n'est pas disponible pour les ministères.",
+  'rotation.sidebar_link': 'Rotation',
+  'rotation.disabled_toast':
+    "Le module de rotation est désactivé. Activez-le dans les Paramètres pour utiliser cette fonctionnalité.",
+  'landing.rotation.badge': 'Module optionnel',
+  'landing.rotation.subheading':
+    "Module optionnel pour les églises ayant des équipes de service en rotation. Inutile pour les ministères.",
 
   // Événements — /admin/events
   'events.page_title': 'Événements',

@@ -2,6 +2,7 @@ import { Sidebar } from './sidebar';
 import { LanguageToggle } from './language-toggle';
 import { Wordmark } from './wordmark';
 import { canReviewAssignments } from '@/lib/roles';
+import { canUseRotation } from '@/lib/rotation';
 import { createClient } from '@/lib/supabase/server';
 import type { Church, User } from '@/lib/types';
 
@@ -51,6 +52,7 @@ export async function AppShell({
         lang={user.preferred_language}
         orgType={church.organization_type}
         pendingReviews={pendingReviews}
+        rotationEnabled={canUseRotation(church)}
       />
       <div className="flex min-w-0 flex-1 flex-col">
         <header className="flex items-center gap-2 border-b border-gray-100 bg-white px-4 py-3">

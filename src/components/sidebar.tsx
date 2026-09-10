@@ -12,6 +12,7 @@ import {
   Users,
   CalendarDays,
   Calendar,
+  Repeat,
   Baby,
   Settings,
   LogOut,
@@ -56,6 +57,7 @@ function adminSections(
   lang: AppLanguage,
   role: UserRole,
   pendingReviews: number,
+  rotationEnabled: boolean,
 ): NavSection[] {
   const v = getVocab(orgType, lang);
   // Service times are church-only: ministries don't run a weekly service
@@ -82,6 +84,13 @@ function adminSections(
       // eventTypesFor). Ungated beyond the admin sidebar itself — reading the
       // list is a whole-church right, so anyone who sees this nav sees the page.
       { href: '/admin/events', labelKey: 'events.sidebar_link', icon: Calendar },
+      // Rotation is church-only AND opt-in. Both conditions are already folded
+      // into rotationEnabled by canUseRotation() upstream, so this cannot
+      // drift from what the route guard enforces — a link the guard would
+      // bounce is worse than no link.
+      ...(rotationEnabled
+        ? [{ href: '/rotation', labelKey: 'rotation.sidebar_link', icon: Repeat }]
+        : []),
       // Branches are a ministry concept (Q5a) — churches see no link and
       // the page redirects them.
       // Branches stay ministry-only; the leader pipeline is available to
@@ -284,12 +293,15 @@ export function Sidebar({
   lang,
   orgType,
   pendingReviews = 0,
+  rotationEnabled = false,
 }: {
   role: UserRole;
   userName: string;
   churchName: string;
   lang: AppLanguage;
   orgType: OrganizationType;
+  /** Already the AND of org type and opt-in — see canUseRotation(). */
+  rotationEnabled?: boolean;
   /** Assignment responses awaiting this church's review. Counted by the
       shell, not here — the sidebar is a client component and cannot query. */
   pendingReviews?: number;
@@ -326,7 +338,7 @@ export function Sidebar({
       <nav className="flex-1 overflow-y-auto p-3">
         {showAdminSidebar ? (
           <>
-            {adminSections(orgType, lang, role, pendingReviews).map((section) => (
+            {adminSections(orgType, lang, role, pendingReviews, rotationEnabled).map((section) => (
               <div key={section.titleKey}>
                 <SectionHeader title={t(section.titleKey, lang)} />
                 <NavList items={section.items} pathname={pathname} lang={lang} />
