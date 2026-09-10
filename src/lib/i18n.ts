@@ -968,6 +968,61 @@ const en: Dictionary = {
   'rotation.admin.err.not_found': 'That volunteer no longer exists.',
   'rotation.admin.err.no_selection': 'Select at least one volunteer first.',
 
+  // Rotation P2 — year planning + schedule
+  'rotation.admin.nav_schedule': 'Schedule',
+  'rotation.admin.nav_plan_year': 'Plan year',
+
+  'rotation.admin.plan_year.page_title': 'Plan year',
+  'rotation.admin.plan_year.subtitle':
+    'Fifth Sundays belong to Group E. Save them so the schedule knows which weeks A–D rest.',
+  'rotation.admin.plan_year.year_selector': 'Year',
+  'rotation.admin.plan_year.save_button': 'Save year plan',
+  'rotation.admin.plan_year.month_column': 'Month',
+  'rotation.admin.plan_year.date_column': 'Fifth Sunday',
+  'rotation.admin.plan_year.status_column': 'Status',
+  'rotation.admin.plan_year.status_saved': 'Saved',
+  'rotation.admin.plan_year.status_not_saved': 'Not saved',
+  'rotation.admin.plan_year.toast_saved': 'Saved {count} dates for {year}.',
+  'rotation.admin.plan_year.none': 'No fifth Sundays in {year}.',
+  'rotation.admin.plan_year.count_note':
+    '{count} fifth Sundays this year. Four or five is normal.',
+
+  'rotation.admin.schedule.page_title': 'Rotation schedule',
+  'rotation.admin.schedule.subtitle': 'Who is serving, and where, week by week.',
+  'rotation.admin.schedule.month_selector': 'Month',
+  'rotation.admin.schedule.generate_button': 'Generate assignments for {month}',
+  'rotation.admin.schedule.generating': 'Generating…',
+  'rotation.admin.schedule.filter_all': 'All',
+  'rotation.admin.schedule.filter_unassigned': 'Unassigned only',
+  'rotation.admin.schedule.filter_by_group': 'By group',
+  'rotation.admin.schedule.publish_button': 'Publish',
+  'rotation.admin.schedule.unpublish_button': 'Unpublish',
+  'rotation.admin.schedule.published_badge': 'Published',
+  'rotation.admin.schedule.draft_badge': 'Draft',
+  'rotation.admin.schedule.row_header': '{date} — {group}',
+  'rotation.admin.schedule.fifth_sunday_marker': '5th Sunday',
+  'rotation.admin.schedule.unassigned': 'Unassigned',
+  'rotation.admin.schedule.understaffed': 'Understaffed',
+  'rotation.admin.schedule.understaffed_detail': '{have} of {need}',
+  'rotation.admin.schedule.empty_group_warning':
+    'No {group} volunteers signed up for {date}.',
+  'rotation.admin.schedule.empty_group_e_prompt':
+    'Consider recruiting Group E volunteers, or fall back to all-serve manually.',
+  'rotation.admin.schedule.toast_generated': 'Generated {count} assignments.',
+  'rotation.admin.schedule.toast_nothing': 'Nothing to generate.',
+  'rotation.admin.schedule.no_sundays': 'No Sundays in this month.',
+  'rotation.admin.schedule.no_stations':
+    'No serving stations are set up yet, so there is nothing to assign.',
+  'rotation.admin.schedule.not_generated':
+    'Nothing generated for this month yet.',
+  'rotation.admin.schedule.unpublish_note':
+    'Volunteers may already have seen this week.',
+  'rotation.admin.schedule.published_lock':
+    'Published weeks are left untouched when you regenerate.',
+
+  'rotation.admin.err.invalid_year': 'That year is not valid.',
+  'rotation.admin.err.invalid_month': 'That month is not valid.',
+
   // Optional modules — the Settings section a church uses to opt into
   // features. Ministries never see it.
   'settings.optional_modules.section_title': 'Optional modules',
@@ -2858,6 +2913,62 @@ const fr: Dictionary = {
   'rotation.admin.err.not_owner': 'Seul le propriétaire peut supprimer un bénévole.',
   'rotation.admin.err.not_found': "Ce bénévole n'existe plus.",
   'rotation.admin.err.no_selection': "Sélectionnez d'abord au moins un bénévole.",
+
+  // Rotation P2 — planification et planning
+  'rotation.admin.nav_schedule': 'Planning',
+  'rotation.admin.nav_plan_year': "Planifier l'année",
+
+  'rotation.admin.plan_year.page_title': "Planifier l'année",
+  'rotation.admin.plan_year.subtitle':
+    'Les cinquièmes dimanches reviennent au groupe E. Enregistrez-les pour que le planning sache quelles semaines A–D se reposent.',
+  'rotation.admin.plan_year.year_selector': 'Année',
+  'rotation.admin.plan_year.save_button': "Enregistrer le plan de l'année",
+  'rotation.admin.plan_year.month_column': 'Mois',
+  'rotation.admin.plan_year.date_column': 'Cinquième dimanche',
+  'rotation.admin.plan_year.status_column': 'Statut',
+  'rotation.admin.plan_year.status_saved': 'Enregistré',
+  'rotation.admin.plan_year.status_not_saved': 'Non enregistré',
+  'rotation.admin.plan_year.toast_saved': '{count} dates enregistrées pour {year}.',
+  'rotation.admin.plan_year.none': 'Aucun cinquième dimanche en {year}.',
+  'rotation.admin.plan_year.count_note':
+    '{count} cinquièmes dimanches cette année. Quatre ou cinq est normal.',
+
+  'rotation.admin.schedule.page_title': 'Planning de rotation',
+  'rotation.admin.schedule.subtitle':
+    'Qui sert, et où, semaine après semaine.',
+  'rotation.admin.schedule.month_selector': 'Mois',
+  'rotation.admin.schedule.generate_button': 'Générer les affectations de {month}',
+  'rotation.admin.schedule.generating': 'Génération…',
+  'rotation.admin.schedule.filter_all': 'Tous',
+  'rotation.admin.schedule.filter_unassigned': 'Non attribués uniquement',
+  'rotation.admin.schedule.filter_by_group': 'Par groupe',
+  'rotation.admin.schedule.publish_button': 'Publier',
+  'rotation.admin.schedule.unpublish_button': 'Dépublier',
+  'rotation.admin.schedule.published_badge': 'Publié',
+  'rotation.admin.schedule.draft_badge': 'Brouillon',
+  'rotation.admin.schedule.row_header': '{date} — {group}',
+  'rotation.admin.schedule.fifth_sunday_marker': '5e dimanche',
+  'rotation.admin.schedule.unassigned': 'Non attribué',
+  'rotation.admin.schedule.understaffed': 'Effectif insuffisant',
+  'rotation.admin.schedule.understaffed_detail': '{have} sur {need}',
+  'rotation.admin.schedule.empty_group_warning':
+    'Aucun bénévole du {group} inscrit pour le {date}.',
+  'rotation.admin.schedule.empty_group_e_prompt':
+    'Envisagez de recruter des bénévoles pour le groupe E, ou revenez manuellement au service de tous.',
+  'rotation.admin.schedule.toast_generated': '{count} affectations générées.',
+  'rotation.admin.schedule.toast_nothing': 'Rien à générer.',
+  'rotation.admin.schedule.no_sundays': 'Aucun dimanche ce mois-ci.',
+  'rotation.admin.schedule.no_stations':
+    "Aucun poste de service n'est configuré, il n'y a donc rien à attribuer.",
+  'rotation.admin.schedule.not_generated':
+    "Rien n'a encore été généré pour ce mois.",
+  'rotation.admin.schedule.unpublish_note':
+    'Les bénévoles ont peut-être déjà vu cette semaine.',
+  'rotation.admin.schedule.published_lock':
+    'Les semaines publiées ne sont pas modifiées lors d’une régénération.',
+
+  'rotation.admin.err.invalid_year': "Cette année n'est pas valide.",
+  'rotation.admin.err.invalid_month': "Ce mois n'est pas valide.",
 
   // Modules optionnels — section Paramètres
   'settings.optional_modules.section_title': 'Modules optionnels',

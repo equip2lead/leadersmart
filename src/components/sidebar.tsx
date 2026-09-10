@@ -125,6 +125,16 @@ function adminSections(
               labelKey: 'rotation.admin.nav_volunteers',
               icon: Repeat,
             },
+            {
+              href: '/admin/rotation/schedule',
+              labelKey: 'rotation.admin.nav_schedule',
+              icon: CalendarDays,
+            },
+            {
+              href: '/admin/rotation/plan-year',
+              labelKey: 'rotation.admin.nav_plan_year',
+              icon: CalendarCheck,
+            },
           ],
         },
       ]
