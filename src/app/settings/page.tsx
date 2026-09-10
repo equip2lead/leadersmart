@@ -4,9 +4,11 @@ import { isAdmin } from '@/lib/roles';
 import { t } from '@/lib/i18n';
 import { PageHeading } from '@/components/page-heading';
 import { getVocab } from '@/lib/vocabulary';
-import { ROTATION_DISABLED_NOTICE, canToggleRotation } from '@/lib/rotation';
+import { ROTATION_DISABLED_NOTICE, canToggleRotation, canUseRotation } from '@/lib/rotation';
+import { createClient } from '@/lib/supabase/server';
 import { ChurchProfileForm } from './_church-form';
 import { ModulesForm } from './_modules-form';
+import { RotationOptIn } from './_rotation-optin';
 import { UserProfileForm } from './_user-form';
 import { PasswordForm } from './_password-form';
 
@@ -24,6 +26,22 @@ export default async function SettingsPage({
   // Owner + admin_pastor only, and churches only. A ministry never sees the
   // section at all — the module is not theirs to enable.
   const showModules = canEditChurch && canToggleRotation(church);
+
+  // Anyone in an opted-in church can join the rotation — it is not an admin
+  // action. Their existing volunteer row, if any, decides whether the section
+  // offers the form or their personal link.
+  const showOptIn = canUseRotation(church);
+  let volunteerToken: string | null = null;
+  if (showOptIn) {
+    const supabase = await createClient();
+    const { data } = await supabase
+      .from('volunteers')
+      .select('personal_url_token')
+      .eq('church_id', church.id)
+      .eq('user_id', user.id)
+      .maybeSingle();
+    volunteerToken = (data?.personal_url_token as string | undefined) ?? null;
+  }
 
   return (
     <div className="px-4 py-6 sm:px-8 sm:py-8">
@@ -71,6 +89,15 @@ export default async function SettingsPage({
               lang={lang}
               initialRotationEnabled={church.rotation_enabled}
             />
+          </section>
+        )}
+
+        {showOptIn && (
+          <section className="card">
+            <h2 className="text-lg font-semibold text-ink">
+              {t('rotation.optin.section_title', lang)}
+            </h2>
+            <RotationOptIn lang={lang} existingToken={volunteerToken} />
           </section>
         )}
 

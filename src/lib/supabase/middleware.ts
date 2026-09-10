@@ -33,8 +33,18 @@ export async function updateSession(request: NextRequest) {
 
   const { pathname } = request.nextUrl;
 
-  // Routes that don't require auth
-  const publicRoutes = ['/', '/login', '/signup', '/auth'];
+  // Routes that don't require auth.
+  //
+  // /rotation and /me are the volunteer-facing surfaces: a volunteer is
+  // usually not an app user, and requiring an account is exactly what stops
+  // people signing up. Neither is unguarded — /rotation/[slug] resolves the
+  // church from the slug and refuses one that is a ministry or has not opted
+  // in, and /me/[token] treats the token as the whole credential. Their
+  // protection is in the page, not in this redirect.
+  //
+  // The ADMIN rotation screens live under /admin/rotation and stay behind
+  // both this check and their own layout guard.
+  const publicRoutes = ['/', '/login', '/signup', '/auth', '/rotation', '/me'];
   const isPublic = publicRoutes.some(
     (route) => pathname === route || pathname.startsWith(`${route}/`),
   );

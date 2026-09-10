@@ -866,6 +866,108 @@ const en: Dictionary = {
   'leader_progress.err.notes_too_long': 'That note is too long.',
   'leader_progress.err.invalid_requirement': 'That requirement no longer exists.',
 
+  // ── Rotation Phase 2 ────────────────────────────────────────
+  'rotation.group.A': 'Group A',
+  'rotation.group.B': 'Group B',
+  'rotation.group.C': 'Group C',
+  'rotation.group.D': 'Group D',
+  'rotation.group.E': 'Group E',
+  'rotation.group_short.A': 'A',
+  'rotation.group_short.B': 'B',
+  'rotation.group_short.C': 'C',
+  'rotation.group_short.D': 'D',
+  'rotation.group_short.E': 'E',
+
+  'rotation.signup.title': 'Join the serving rotation',
+  'rotation.signup.description':
+    'Tell us how you would like to serve and we will let you know which Sundays you are on.',
+  'rotation.signup.name_label': 'Full name',
+  'rotation.signup.phone_label': 'Phone number',
+  'rotation.signup.phone_hint': 'Used to reach you about your assignments.',
+  'rotation.signup.email_label': 'Email (optional)',
+  'rotation.signup.stations_label': 'Where are you willing to serve?',
+  'rotation.signup.stations_hint': 'Pick as many as you like. Leave blank if you have no preference.',
+  'rotation.signup.groups_label': 'Which group would you like to join?',
+  'rotation.signup.groups_hint':
+    'Leave this blank and we will place you in the group that needs people most.',
+  'rotation.signup.group_e_label': 'Fifth Sunday (Group E)',
+  'rotation.signup.group_e_hint':
+    'Group E serves only on months with a fifth Sunday. You can join it as well as a regular group.',
+  'rotation.signup.consent_label':
+    'I understand I may be contacted about serving assignments',
+  'rotation.signup.submit': 'Sign up to serve',
+  'rotation.signup.not_accepting_title': 'Not accepting sign-ups yet',
+  'rotation.signup.not_accepting_body':
+    "This church isn't accepting rotation sign-ups yet. Check back soon.",
+  'rotation.signup.no_stations':
+    'No serving stations have been set up yet — you can still sign up.',
+
+  'rotation.signup.err.name_required': 'Please give your name.',
+  'rotation.signup.err.name_too_long': 'That name is too long.',
+  'rotation.signup.err.phone_required': 'Please give a phone number.',
+  'rotation.signup.err.phone_too_long': 'That phone number is too long.',
+  'rotation.signup.err.invalid_email': "That email address doesn't look right.",
+  'rotation.signup.err.consent_required': 'Please tick the box to continue.',
+  'rotation.signup.err.not_accepting':
+    'This church is no longer accepting sign-ups.',
+  'rotation.signup.err.signup_failed': 'Something went wrong. Please try again.',
+
+  'rotation.welcome.title': "You're on the team",
+  'rotation.welcome.body': 'Thank you for signing up to serve, {name}.',
+  'rotation.welcome.bookmark_prompt': 'Bookmark this link to see your schedule',
+  'rotation.welcome.copy_url': 'Copy link',
+  'rotation.welcome.copied': 'Copied',
+  'rotation.welcome.open_link': 'Open my schedule',
+  'rotation.welcome.whatsapp_note':
+    'WhatsApp reminders are coming later. For now, this link is how you check your Sundays.',
+
+  'rotation.me.title': 'My serving schedule',
+  'rotation.me.groups_heading': 'Your groups',
+  'rotation.me.stations_heading': 'Where you serve',
+  'rotation.me.upcoming_heading': 'Upcoming',
+  'rotation.me.past_heading': 'Past',
+  'rotation.me.empty': 'No assignments yet. You will see them here once the schedule is published.',
+  'rotation.me.no_stations': 'No preference recorded — you may be placed anywhere.',
+  'rotation.me.past_empty': 'Nothing yet.',
+
+  'rotation.optin.section_title': 'Serving rotation',
+  'rotation.optin.body':
+    'Join the Sunday serving rotation. Your name and contact details are filled in from your profile.',
+  'rotation.optin.submit': 'Join the rotation',
+  'rotation.optin.already': "You're already signed up.",
+  'rotation.optin.view_schedule': 'View my schedule',
+
+  'rotation.admin.volunteers.page_title': 'Rotation volunteers',
+  'rotation.admin.volunteers.page_subtitle':
+    'Everyone who has signed up to serve, and the groups they belong to.',
+  'rotation.admin.volunteers.empty_title': 'No volunteers yet',
+  'rotation.admin.volunteers.empty_body':
+    'Share your sign-up link and volunteers will appear here.',
+  'rotation.admin.volunteers.signup_link_label': 'Public sign-up link',
+  'rotation.admin.volunteers.col_name': 'Name',
+  'rotation.admin.volunteers.col_contact': 'Contact',
+  'rotation.admin.volunteers.col_groups': 'Groups',
+  'rotation.admin.volunteers.col_stations': 'Stations',
+  'rotation.admin.volunteers.col_joined': 'Signed up',
+  'rotation.admin.volunteers.add_to_group_e': 'Add to Group E',
+  'rotation.admin.volunteers.remove_from_group_e': 'Remove from Group E',
+  'rotation.admin.volunteers.selected': '{count} selected',
+  'rotation.admin.volunteers.deactivate': 'Deactivate',
+  'rotation.admin.volunteers.reactivate': 'Reactivate',
+  'rotation.admin.volunteers.delete': 'Delete',
+  'rotation.admin.volunteers.confirm_delete':
+    'Delete this volunteer permanently? Their assignment history goes with them.',
+  'rotation.admin.volunteers.status_paused': 'Paused',
+  'rotation.admin.volunteers.status_inactive': 'Inactive',
+  'rotation.admin.volunteers.no_stations': 'Any',
+  'rotation.admin.sidebar_section': 'Rotation',
+  'rotation.admin.nav_volunteers': 'Volunteers',
+
+  'rotation.admin.err.not_admin': 'Only owners and admin pastors can manage rotation.',
+  'rotation.admin.err.not_owner': 'Only the owner can delete a volunteer.',
+  'rotation.admin.err.not_found': 'That volunteer no longer exists.',
+  'rotation.admin.err.no_selection': 'Select at least one volunteer first.',
+
   // Optional modules — the Settings section a church uses to opt into
   // features. Ministries never see it.
   'settings.optional_modules.section_title': 'Optional modules',
@@ -2649,6 +2751,113 @@ const fr: Dictionary = {
   'leader_progress.err.not_found': "Ce leader n'existe plus.",
   'leader_progress.err.notes_too_long': 'Cette note est trop longue.',
   'leader_progress.err.invalid_requirement': "Cette exigence n'existe plus.",
+
+  // ── Rotation Phase 2 ────────────────────────────────────────
+  'rotation.group.A': 'Groupe A',
+  'rotation.group.B': 'Groupe B',
+  'rotation.group.C': 'Groupe C',
+  'rotation.group.D': 'Groupe D',
+  'rotation.group.E': 'Groupe E',
+  'rotation.group_short.A': 'A',
+  'rotation.group_short.B': 'B',
+  'rotation.group_short.C': 'C',
+  'rotation.group_short.D': 'D',
+  'rotation.group_short.E': 'E',
+
+  'rotation.signup.title': 'Rejoindre la rotation de service',
+  'rotation.signup.description':
+    'Dites-nous comment vous souhaitez servir et nous vous indiquerons vos dimanches.',
+  'rotation.signup.name_label': 'Nom complet',
+  'rotation.signup.phone_label': 'Numéro de téléphone',
+  'rotation.signup.phone_hint': 'Utilisé pour vous joindre au sujet de vos affectations.',
+  'rotation.signup.email_label': 'E-mail (facultatif)',
+  'rotation.signup.stations_label': 'Où êtes-vous prêt à servir ?',
+  'rotation.signup.stations_hint':
+    'Choisissez-en autant que vous voulez. Laissez vide si vous n’avez pas de préférence.',
+  'rotation.signup.groups_label': 'Quel groupe souhaitez-vous rejoindre ?',
+  'rotation.signup.groups_hint':
+    'Laissez vide et nous vous placerons dans le groupe qui en a le plus besoin.',
+  'rotation.signup.group_e_label': 'Cinquième dimanche (groupe E)',
+  'rotation.signup.group_e_hint':
+    'Le groupe E ne sert que les mois comptant un cinquième dimanche. Vous pouvez le rejoindre en plus d’un groupe régulier.',
+  'rotation.signup.consent_label':
+    'Je comprends que je peux être contacté au sujet des affectations de service',
+  'rotation.signup.submit': "S'inscrire pour servir",
+  'rotation.signup.not_accepting_title': 'Inscriptions non ouvertes',
+  'rotation.signup.not_accepting_body':
+    "Cette église n'accepte pas encore les inscriptions à la rotation. Revenez bientôt.",
+  'rotation.signup.no_stations':
+    "Aucun poste de service n'a encore été configuré — vous pouvez tout de même vous inscrire.",
+
+  'rotation.signup.err.name_required': 'Veuillez indiquer votre nom.',
+  'rotation.signup.err.name_too_long': 'Ce nom est trop long.',
+  'rotation.signup.err.phone_required': 'Veuillez indiquer un numéro de téléphone.',
+  'rotation.signup.err.phone_too_long': 'Ce numéro est trop long.',
+  'rotation.signup.err.invalid_email': "Cette adresse e-mail semble incorrecte.",
+  'rotation.signup.err.consent_required': 'Veuillez cocher la case pour continuer.',
+  'rotation.signup.err.not_accepting':
+    "Cette église n'accepte plus les inscriptions.",
+  'rotation.signup.err.signup_failed': "Une erreur s'est produite. Veuillez réessayer.",
+
+  'rotation.welcome.title': "Vous faites partie de l'équipe",
+  'rotation.welcome.body': 'Merci de vous être inscrit pour servir, {name}.',
+  'rotation.welcome.bookmark_prompt':
+    'Ajoutez ce lien à vos favoris pour consulter votre planning',
+  'rotation.welcome.copy_url': 'Copier le lien',
+  'rotation.welcome.copied': 'Copié',
+  'rotation.welcome.open_link': 'Ouvrir mon planning',
+  'rotation.welcome.whatsapp_note':
+    'Les rappels WhatsApp arriveront plus tard. Pour l’instant, ce lien est votre moyen de consulter vos dimanches.',
+
+  'rotation.me.title': 'Mon planning de service',
+  'rotation.me.groups_heading': 'Vos groupes',
+  'rotation.me.stations_heading': 'Où vous servez',
+  'rotation.me.upcoming_heading': 'À venir',
+  'rotation.me.past_heading': 'Passé',
+  'rotation.me.empty':
+    'Aucune affectation pour le moment. Elles apparaîtront ici une fois le planning publié.',
+  'rotation.me.no_stations':
+    "Aucune préférence enregistrée — vous pouvez être placé n'importe où.",
+  'rotation.me.past_empty': 'Rien pour le moment.',
+
+  'rotation.optin.section_title': 'Rotation de service',
+  'rotation.optin.body':
+    'Rejoignez la rotation de service du dimanche. Vos coordonnées sont reprises de votre profil.',
+  'rotation.optin.submit': 'Rejoindre la rotation',
+  'rotation.optin.already': 'Vous êtes déjà inscrit.',
+  'rotation.optin.view_schedule': 'Voir mon planning',
+
+  'rotation.admin.volunteers.page_title': 'Bénévoles de la rotation',
+  'rotation.admin.volunteers.page_subtitle':
+    'Toutes les personnes inscrites pour servir, et les groupes auxquels elles appartiennent.',
+  'rotation.admin.volunteers.empty_title': 'Aucun bénévole',
+  'rotation.admin.volunteers.empty_body':
+    'Partagez votre lien d’inscription et les bénévoles apparaîtront ici.',
+  'rotation.admin.volunteers.signup_link_label': "Lien d'inscription public",
+  'rotation.admin.volunteers.col_name': 'Nom',
+  'rotation.admin.volunteers.col_contact': 'Contact',
+  'rotation.admin.volunteers.col_groups': 'Groupes',
+  'rotation.admin.volunteers.col_stations': 'Postes',
+  'rotation.admin.volunteers.col_joined': 'Inscrit le',
+  'rotation.admin.volunteers.add_to_group_e': 'Ajouter au groupe E',
+  'rotation.admin.volunteers.remove_from_group_e': 'Retirer du groupe E',
+  'rotation.admin.volunteers.selected': '{count} sélectionné(s)',
+  'rotation.admin.volunteers.deactivate': 'Désactiver',
+  'rotation.admin.volunteers.reactivate': 'Réactiver',
+  'rotation.admin.volunteers.delete': 'Supprimer',
+  'rotation.admin.volunteers.confirm_delete':
+    "Supprimer définitivement ce bénévole ? Son historique d'affectations disparaîtra avec lui.",
+  'rotation.admin.volunteers.status_paused': 'En pause',
+  'rotation.admin.volunteers.status_inactive': 'Inactif',
+  'rotation.admin.volunteers.no_stations': 'Indifférent',
+  'rotation.admin.sidebar_section': 'Rotation',
+  'rotation.admin.nav_volunteers': 'Bénévoles',
+
+  'rotation.admin.err.not_admin':
+    'Seuls les propriétaires et pasteurs administrateurs peuvent gérer la rotation.',
+  'rotation.admin.err.not_owner': 'Seul le propriétaire peut supprimer un bénévole.',
+  'rotation.admin.err.not_found': "Ce bénévole n'existe plus.",
+  'rotation.admin.err.no_selection': "Sélectionnez d'abord au moins un bénévole.",
 
   // Modules optionnels — section Paramètres
   'settings.optional_modules.section_title': 'Modules optionnels',

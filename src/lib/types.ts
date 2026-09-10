@@ -288,8 +288,18 @@ export interface BranchReport {
 // Names follow the spec §5 verbatim so later phases line up.
 // ─────────────────────────────────────────────────────────────
 
-export type ServingGroup = 'A' | 'B' | 'C' | 'D';
-export const SERVING_GROUPS: ServingGroup[] = ['A', 'B', 'C', 'D'];
+export type ServingGroup = 'A' | 'B' | 'C' | 'D' | 'E';
+
+/** The weekly rotation. These four take their turn in order, one per Sunday.
+    E is deliberately absent — it is not a fifth slot in the cycle. */
+export const ROTATION_GROUPS: ServingGroup[] = ['A', 'B', 'C', 'D'];
+
+/** The fifth-Sunday group. On a month's fifth Sunday, E serves and A-D rest,
+    which is why a volunteer can hold E alongside a rotation group without the
+    two ever colliding on one date. */
+export const FIFTH_SUNDAY_GROUP: ServingGroup = 'E';
+
+export const SERVING_GROUPS: ServingGroup[] = [...ROTATION_GROUPS, FIFTH_SUNDAY_GROUP];
 
 export type VolunteerStatus = 'active' | 'paused' | 'inactive';
 
@@ -452,6 +462,35 @@ export interface RotationConfig {
   church_slug: string | null;
   created_at: string;
   updated_at: string;
+}
+
+/** One Sunday that belongs to Group E, for one church.
+
+    Stored rather than computed because a church may exempt a particular fifth
+    Sunday (a conference weekend, say) without discarding the whole year plan —
+    that is what is_active is for. */
+export interface FifthSundayDate {
+  id: string;
+  church_id: string;
+  /** DATE — 'YYYY-MM-DD'. */
+  service_date: string;
+  /** Denormalised from service_date so the year filter is an index lookup. */
+  year: number;
+  is_active: boolean;
+  created_at: string;
+}
+
+/** A volunteer's membership in one group.
+
+    volunteers.serving_group is still the primary group and is NOT NULL; this
+    table is what makes "in A and also in E" expressible, which one column
+    cannot say. Both are written together on sign-up. */
+export interface VolunteerGroupMembership {
+  id: string;
+  church_id: string;
+  volunteer_id: string;
+  serving_group: ServingGroup;
+  joined_at: string;
 }
 
 /** Append-only. RLS refuses UPDATE and DELETE for everyone. */

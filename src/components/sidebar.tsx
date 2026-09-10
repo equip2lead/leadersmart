@@ -84,13 +84,7 @@ function adminSections(
       // eventTypesFor). Ungated beyond the admin sidebar itself — reading the
       // list is a whole-church right, so anyone who sees this nav sees the page.
       { href: '/admin/events', labelKey: 'events.sidebar_link', icon: Calendar },
-      // Rotation is church-only AND opt-in. Both conditions are already folded
-      // into rotationEnabled by canUseRotation() upstream, so this cannot
-      // drift from what the route guard enforces — a link the guard would
-      // bounce is worse than no link.
-      ...(rotationEnabled
-        ? [{ href: '/rotation', labelKey: 'rotation.sidebar_link', icon: Repeat }]
-        : []),
+
       // Branches are a ministry concept (Q5a) — churches see no link and
       // the page redirects them.
       // Branches stay ministry-only; the leader pipeline is available to
@@ -117,6 +111,24 @@ function adminSections(
       { href: '/admin/analytics', labelKey: 'nav.reportsAnalytics', icon: BarChart3 },
     ],
   },
+  // Rotation is church-only AND opt-in, both already folded into
+  // rotationEnabled by canUseRotation() upstream — so the section cannot drift
+  // from what /admin/rotation's guard enforces. It is a section rather than a
+  // single link because Phase 2 adds Schedule and Plan year beneath it.
+  ...(rotationEnabled
+    ? [
+        {
+          titleKey: 'rotation.admin.sidebar_section',
+          items: [
+            {
+              href: '/admin/rotation/volunteers',
+              labelKey: 'rotation.admin.nav_volunteers',
+              icon: Repeat,
+            },
+          ],
+        },
+      ]
+    : []),
   {
     titleKey: v.showPom ? 'nav.section.pastor' : 'nav.section.leaderWorkflow',
     items: [
