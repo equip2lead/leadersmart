@@ -51,6 +51,11 @@ export interface Church {
   timezone: string;
   currency: string;
   logo_url: string | null;
+  /** Opt-in for the Rotation module. Meaningful only when organization_type
+      is 'church' — a ministry is excluded structurally, whatever this says.
+      Read it through canUseRotation() rather than directly, so the two
+      conditions are never checked apart. */
+  rotation_enabled: boolean;
   created_at: string;
   updated_at: string;
 }
