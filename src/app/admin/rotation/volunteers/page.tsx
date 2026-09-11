@@ -95,6 +95,7 @@ export default async function RotationVolunteersPage() {
     stations: (stationsByVolunteer.get(v.id) ?? []).sort(),
     status: v.status,
     joinedAt: v.joined_at,
+    isTestData: v.is_test_data,
   }));
 
   return (

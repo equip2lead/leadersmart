@@ -960,6 +960,14 @@ const en: Dictionary = {
   'rotation.admin.volunteers.status_paused': 'Paused',
   'rotation.admin.volunteers.status_inactive': 'Inactive',
   'rotation.admin.volunteers.no_stations': 'Any',
+  'rotation.admin.volunteers.test_badge': 'Test',
+  'rotation.admin.volunteers.test_badge_title':
+    'Seeded fixture, not a real sign-up.',
+  'rotation.admin.volunteers.purge_test_data': 'Remove test data',
+  'rotation.admin.volunteers.purge_count': '{count} test volunteers',
+  'rotation.admin.volunteers.confirm_purge':
+    'Delete every test volunteer in this church? Their groups, preferences and assignments go with them. Real sign-ups are not touched.',
+  'rotation.admin.volunteers.purged': 'Removed {count} test volunteers.',
   'rotation.admin.sidebar_section': 'Rotation',
   'rotation.admin.nav_volunteers': 'Volunteers',
 
@@ -2905,6 +2913,14 @@ const fr: Dictionary = {
   'rotation.admin.volunteers.status_paused': 'En pause',
   'rotation.admin.volunteers.status_inactive': 'Inactif',
   'rotation.admin.volunteers.no_stations': 'Indifférent',
+  'rotation.admin.volunteers.test_badge': 'Test',
+  'rotation.admin.volunteers.test_badge_title':
+    "Donnée de test, pas une véritable inscription.",
+  'rotation.admin.volunteers.purge_test_data': 'Supprimer les données de test',
+  'rotation.admin.volunteers.purge_count': '{count} bénévoles de test',
+  'rotation.admin.volunteers.confirm_purge':
+    "Supprimer tous les bénévoles de test de cette église ? Leurs groupes, préférences et affectations disparaîtront avec eux. Les inscriptions réelles ne sont pas touchées.",
+  'rotation.admin.volunteers.purged': '{count} bénévoles de test supprimés.',
   'rotation.admin.sidebar_section': 'Rotation',
   'rotation.admin.nav_volunteers': 'Bénévoles',
 

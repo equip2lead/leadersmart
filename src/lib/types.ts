@@ -346,6 +346,9 @@ export interface Volunteer {
   joined_at: string;
   /** Internal; never shown to the volunteer. */
   notes: string | null;
+  /** TRUE only for deliberately seeded fixtures, so they can be purged
+      exactly rather than by matching names. Real sign-ups never set it. */
+  is_test_data: boolean;
   created_at: string;
   updated_at: string;
 }

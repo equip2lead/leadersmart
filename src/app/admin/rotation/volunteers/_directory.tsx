@@ -8,7 +8,12 @@ import { initialsOf } from '@/lib/leaders';
 import { formatEventDate } from '@/lib/events';
 import { FIFTH_SUNDAY_GROUP } from '@/lib/types';
 import type { AppLanguage, ServingGroup, VolunteerStatus } from '@/lib/types';
-import { deleteVolunteer, setGroupEMembership, setVolunteerStatus } from './actions';
+import {
+  deleteVolunteer,
+  purgeTestVolunteers,
+  setGroupEMembership,
+  setVolunteerStatus,
+} from './actions';
 
 export type VolunteerRow = {
   id: string;
@@ -19,6 +24,8 @@ export type VolunteerRow = {
   stations: string[];
   status: VolunteerStatus;
   joinedAt: string;
+  /** Seeded fixture rather than a real sign-up. */
+  isTestData: boolean;
 };
 
 function mapError(code: string, lang: AppLanguage): string {
@@ -51,7 +58,11 @@ export function VolunteerDirectory({
   const [selected, setSelected] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [confirmDelete, setConfirmDelete] = useState<string | null>(null);
+  const [confirmPurge, setConfirmPurge] = useState(false);
+  const [notice, setNotice] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
+
+  const testCount = rows.filter((r) => r.isTestData).length;
 
   const allSelected = rows.length > 0 && selected.length === rows.length;
 
@@ -75,6 +86,81 @@ export function VolunteerDirectory({
         <p role="alert" className="mb-4 rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">
           {error}
         </p>
+      )}
+
+      {notice && (
+        <p role="status" className="mb-4 rounded-lg bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
+          {notice}
+        </p>
+      )}
+
+      {/* Only shown while fixtures actually exist, so it disappears for good
+          once a church is running on real sign-ups. */}
+      {canDelete && testCount > 0 && (
+        <div className="mb-4 flex flex-wrap items-center gap-3 rounded-xl border border-gray-200 bg-gray-50 px-4 py-3">
+          <span className="text-sm text-body">
+            {t('rotation.admin.volunteers.purge_count', lang).replace(
+              '{count}',
+              String(testCount),
+            )}
+          </span>
+          <button
+            type="button"
+            className="ml-auto text-xs font-semibold text-muted hover:text-red-700 disabled:opacity-50"
+            disabled={pending}
+            onClick={() => setConfirmPurge(true)}
+          >
+            {t('rotation.admin.volunteers.purge_test_data', lang)}
+          </button>
+        </div>
+      )}
+
+      {confirmPurge && (
+        <div
+          role="alertdialog"
+          aria-label={t('rotation.admin.volunteers.confirm_purge', lang)}
+          className="mb-4 rounded-xl border border-red-200 bg-red-50 p-4"
+        >
+          <p className="text-sm text-ink">
+            {t('rotation.admin.volunteers.confirm_purge', lang)}
+          </p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            <button
+              type="button"
+              disabled={pending}
+              onClick={() => {
+                setError(null);
+                setNotice(null);
+                startTransition(async () => {
+                  const res = await purgeTestVolunteers();
+                  if (!res.ok) {
+                    setError(mapError(res.error, lang));
+                    return;
+                  }
+                  setConfirmPurge(false);
+                  setNotice(
+                    t('rotation.admin.volunteers.purged', lang).replace(
+                      '{count}',
+                      String(res.count),
+                    ),
+                  );
+                  router.refresh();
+                });
+              }}
+              className="inline-flex items-center gap-2 rounded-lg bg-red-600 px-4 py-2 text-sm font-semibold text-white hover:bg-red-700 disabled:opacity-50"
+            >
+              {t('rotation.admin.volunteers.purge_test_data', lang)}
+            </button>
+            <button
+              type="button"
+              disabled={pending}
+              onClick={() => setConfirmPurge(false)}
+              className="text-sm font-medium text-muted hover:text-ink"
+            >
+              {t('events.form.cancel', lang)}
+            </button>
+          </div>
+        </div>
       )}
 
       {/* The bulk bar appears only with a selection, so it never takes space
@@ -173,7 +259,17 @@ export function VolunteerDirectory({
                       {initialsOf(r.fullName)}
                     </span>
                     <div className="min-w-0">
-                      <p className="font-semibold text-ink">{r.fullName}</p>
+                      <p className="flex flex-wrap items-center gap-1.5 font-semibold text-ink">
+                        {r.fullName}
+                        {r.isTestData && (
+                          <span
+                            title={t('rotation.admin.volunteers.test_badge_title', lang)}
+                            className="rounded-full bg-gray-200 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-body"
+                          >
+                            {t('rotation.admin.volunteers.test_badge', lang)}
+                          </span>
+                        )}
+                      </p>
                       {r.status !== 'active' && (
                         <p className="text-[11px] font-medium text-muted">
                           {t(

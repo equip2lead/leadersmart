@@ -173,3 +173,45 @@ export async function deleteVolunteer(
   revalidatePath('/admin/rotation/volunteers');
   return { ok: true };
 }
+
+/**
+ * Delete every seeded fixture in this church.
+ *
+ * Scoped by is_test_data, not by a name pattern. That is the entire reason the
+ * column exists: a fixture named "Clarisse Atangana" is indistinguishable from
+ * a real sign-up by inspection, and a LIKE-based purge against realistic names
+ * is one typo away from deleting a congregation's actual volunteers.
+ *
+ * Owner only, matching the single-delete rule — this removes more, not less.
+ */
+export async function purgeTestVolunteers(): Promise<
+  { ok: true; count: number } | { ok: false; error: string }
+> {
+  const me = await getMe();
+  if (!canUseRotation(me.church)) return { ok: false, error: 'not_admin' };
+  if (!isOwner(me.user.role)) return { ok: false, error: 'not_owner' };
+
+  const supabase = await createClient();
+  // Memberships, preferences and assignments all cascade from volunteers.
+  const { data, error } = await supabase
+    .from('volunteers')
+    .delete()
+    .eq('church_id', me.church.id)
+    .eq('is_test_data', true)
+    .select('id');
+  if (error) return { ok: false, error: error.message };
+
+  const count = (data ?? []).length;
+  await logAudit({
+    churchId: me.church.id,
+    userId: me.user.id,
+    action: 'update',
+    entityType: 'volunteer',
+    entityId: me.church.id,
+    afterValue: { purged_test_volunteers: count },
+  });
+
+  revalidatePath('/admin/rotation/volunteers');
+  revalidatePath('/admin/rotation/schedule');
+  return { ok: true, count };
+}
