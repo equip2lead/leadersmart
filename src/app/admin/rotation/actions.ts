@@ -411,3 +411,151 @@ export async function publishSchedule(scheduleId: string): Promise<RotationResul
 export async function unpublishSchedule(scheduleId: string): Promise<RotationResult> {
   return setPublished(scheduleId, false);
 }
+
+/**
+ * Move one assignment to a different station, and optionally a different
+ * Sunday.
+ *
+ * The rule that makes this more than an UPDATE: a volunteer may only serve on
+ * a Sunday their group is rostered for. Dragging someone from a Group A week
+ * into a Group C week is not a small mistake to be tidied up later — it puts a
+ * name on a rota they will not turn up for. So the target Sunday's group is
+ * checked against the volunteer's own memberships, and a mismatch is refused
+ * with a reason the UI can show.
+ *
+ * Everything is re-derived from the database rather than trusted from the
+ * payload: the assignment, its volunteer, the target station and the target
+ * Sunday are each confirmed to belong to the caller's church before anything
+ * is written.
+ */
+export async function swapAssignment(
+  assignmentId: string,
+  toStationId: string,
+  toDate: string,
+): Promise<RotationResult> {
+  const { me, error } = await requireRotationAdmin();
+  if (!me) return { ok: false, error };
+
+  const supabase = await createClient();
+  const churchId = me.church.id;
+
+  const { data: assignment } = await supabase
+    .from('rotation_assignments')
+    .select('id, volunteer_id, station_id, service_date, is_published')
+    .eq('id', assignmentId)
+    .eq('church_id', churchId)
+    .maybeSingle();
+  if (!assignment) return { ok: false, error: 'not_found' };
+  // A published week has been announced. Moving someone out of it silently is
+  // exactly the surprise publishing is meant to prevent.
+  if (assignment.is_published) return { ok: false, error: 'already_published' };
+
+  const { data: station } = await supabase
+    .from('rotation_stations')
+    .select('id')
+    .eq('id', toStationId)
+    .eq('church_id', churchId)
+    .eq('is_active', true)
+    .eq('is_fire_kids', false)
+    .maybeSingle();
+  if (!station) return { ok: false, error: 'invalid_station' };
+
+  const { data: target } = await supabase
+    .from('rotation_schedules')
+    .select('id, serving_group, status')
+    .eq('church_id', churchId)
+    .eq('service_date', toDate)
+    .maybeSingle();
+  if (!target) return { ok: false, error: 'invalid_target_date' };
+  if (target.status === 'published') return { ok: false, error: 'already_published' };
+
+  const volunteerId = assignment.volunteer_id as string | null;
+  if (!volunteerId) return { ok: false, error: 'not_found' };
+
+  // The group check. Memberships are the authority, not volunteers
+  // .serving_group, because someone in both A and E legitimately belongs on
+  // either kind of Sunday.
+  const targetGroup = target.serving_group as ServingGroup | null;
+  if (targetGroup) {
+    const { data: membership } = await supabase
+      .from('volunteer_group_memberships')
+      .select('id')
+      .eq('volunteer_id', volunteerId)
+      .eq('serving_group', targetGroup)
+      .maybeSingle();
+    if (!membership) return { ok: false, error: 'wrong_group' };
+  }
+
+  // Nobody serves two stations on one day. A move onto a Sunday they are
+  // already rostered for would do exactly that.
+  if (assignment.service_date !== toDate) {
+    const { data: clash } = await supabase
+      .from('rotation_assignments')
+      .select('id')
+      .eq('church_id', churchId)
+      .eq('volunteer_id', volunteerId)
+      .eq('service_date', toDate)
+      .maybeSingle();
+    if (clash) return { ok: false, error: 'already_serving' };
+  }
+
+  const { data: updated, error: upErr } = await supabase
+    .from('rotation_assignments')
+    .update({
+      station_id: toStationId,
+      service_date: toDate,
+      schedule_id: target.id as string,
+    })
+    .eq('id', assignmentId)
+    .select('id')
+    .maybeSingle();
+  if (upErr) return { ok: false, error: upErr.message };
+  if (!updated) return { ok: false, error: 'not_admin' };
+
+  revalidatePath('/admin/rotation/schedule');
+  return { ok: true };
+}
+
+/**
+ * Regenerate a single Sunday.
+ *
+ * Reuses generateSchedule for the whole month rather than duplicating the
+ * algorithm for one date: generateSchedule already skips published weeks and
+ * replaces only unpublished drafts, so running it after clearing this week is
+ * equivalent to resetting just this one. Reimplementing a one-date variant
+ * would mean two copies of the fairness rules, and two copies drift.
+ */
+export async function resetWeek(date: string): Promise<RotationResult> {
+  const { me, error } = await requireRotationAdmin();
+  if (!me) return { ok: false, error };
+  if (!/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(date)) {
+    return { ok: false, error: 'invalid_target_date' };
+  }
+
+  const supabase = await createClient();
+  const { data: schedule } = await supabase
+    .from('rotation_schedules')
+    .select('id, status')
+    .eq('church_id', me.church.id)
+    .eq('service_date', date)
+    .maybeSingle();
+  if (!schedule) return { ok: false, error: 'not_found' };
+  if (schedule.status === 'published') return { ok: false, error: 'already_published' };
+
+  // Clear this week's drafts, then let the month generator refill it. Deleting
+  // first is what makes this a reset rather than a top-up.
+  const { error: delErr } = await supabase
+    .from('rotation_assignments')
+    .delete()
+    .eq('church_id', me.church.id)
+    .eq('service_date', date)
+    .eq('is_published', false);
+  if (delErr) return { ok: false, error: delErr.message };
+
+  const [y, m] = date.split('-').map(Number);
+  const res = await generateSchedule(y, m);
+  if (!res.ok) return { ok: false, error: res.error };
+
+  revalidatePath('/admin/rotation/schedule');
+  return { ok: true };
+}

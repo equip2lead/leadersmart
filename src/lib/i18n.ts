@@ -1030,6 +1030,25 @@ const en: Dictionary = {
 
   'rotation.admin.err.invalid_year': 'That year is not valid.',
   'rotation.admin.err.invalid_month': 'That month is not valid.',
+  'rotation.admin.err.wrong_group':
+    'That volunteer is not in the group serving that Sunday.',
+  'rotation.admin.err.already_published':
+    'That week is published. Unpublish it before changing assignments.',
+  'rotation.admin.err.already_serving':
+    'That volunteer is already serving somewhere that Sunday.',
+  'rotation.admin.err.invalid_station': 'That station is not in your church.',
+  'rotation.admin.err.invalid_target_date': 'That Sunday has no schedule yet.',
+
+  'rotation.admin.dnd.reset_week': 'Reset week',
+  'rotation.admin.dnd.undo': 'Undo',
+  'rotation.admin.dnd.swap_success': 'Moved {name}.',
+  'rotation.admin.dnd.move_to': 'Move to…',
+  'rotation.admin.dnd.move_menu_label': 'Move {name} to another station',
+  'rotation.admin.dnd.drag_hint':
+    'Drag a name to another station, or use its menu to move it.',
+  'rotation.admin.dnd.undo_none': 'Nothing to undo.',
+  'rotation.admin.dnd.confirm_reset':
+    'Regenerate this Sunday from scratch? Manual moves on it are lost.',
 
   // Optional modules — the Settings section a church uses to opt into
   // features. Ministries never see it.
@@ -2985,6 +3004,25 @@ const fr: Dictionary = {
 
   'rotation.admin.err.invalid_year': "Cette année n'est pas valide.",
   'rotation.admin.err.invalid_month': "Ce mois n'est pas valide.",
+  'rotation.admin.err.wrong_group':
+    "Ce bénévole n'est pas dans le groupe qui sert ce dimanche-là.",
+  'rotation.admin.err.already_published':
+    'Cette semaine est publiée. Dépubliez-la avant de modifier les affectations.',
+  'rotation.admin.err.already_serving':
+    'Ce bénévole sert déjà quelque part ce dimanche-là.',
+  'rotation.admin.err.invalid_station': "Ce poste n'appartient pas à votre église.",
+  'rotation.admin.err.invalid_target_date': "Ce dimanche n'a pas encore de planning.",
+
+  'rotation.admin.dnd.reset_week': 'Réinitialiser la semaine',
+  'rotation.admin.dnd.undo': 'Annuler',
+  'rotation.admin.dnd.swap_success': '{name} déplacé.',
+  'rotation.admin.dnd.move_to': 'Déplacer vers…',
+  'rotation.admin.dnd.move_menu_label': 'Déplacer {name} vers un autre poste',
+  'rotation.admin.dnd.drag_hint':
+    'Faites glisser un nom vers un autre poste, ou utilisez son menu pour le déplacer.',
+  'rotation.admin.dnd.undo_none': 'Rien à annuler.',
+  'rotation.admin.dnd.confirm_reset':
+    'Régénérer ce dimanche depuis zéro ? Les déplacements manuels seront perdus.',
 
   // Modules optionnels — section Paramètres
   'settings.optional_modules.section_title': 'Modules optionnels',

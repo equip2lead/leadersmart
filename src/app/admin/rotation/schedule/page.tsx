@@ -103,15 +103,21 @@ export default async function SchedulePage({
     const forDate = assignments.filter((a) => a.service_date === date);
 
     const cells: CellData[] = stations.map((s) => {
-      const names = forDate
+      // The assignment id travels with the name because that is what a move
+      // updates — a person's name is not addressable, and the same volunteer
+      // can hold assignments on several Sundays.
+      const people = forDate
         .filter((a) => a.station_id === s.id && a.volunteer_id)
-        .map((a) => nameById.get(a.volunteer_id as string) ?? '—');
+        .map((a) => ({
+          assignmentId: a.id,
+          name: nameById.get(a.volunteer_id as string) ?? '—',
+        }));
       return {
         stationId: s.id,
-        names,
+        people,
         // Derived, not stored: counting what landed against what the station
         // asks for cannot go stale the way a saved flag would.
-        understaffed: names.length > 0 && names.length < s.minVolunteers,
+        understaffed: people.length > 0 && people.length < s.minVolunteers,
       };
     });
 
