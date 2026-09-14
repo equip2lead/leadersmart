@@ -546,6 +546,47 @@ export interface User {
   updated_at: string;
 }
 
+// ── WhatsApp ────────────────────────────────────────────────────────────
+// Per-tenant sending credentials and a delivery log. The token is never
+// carried in a payload that reaches a browser — see src/lib/whatsapp/factory.ts,
+// which is the only module that reads it.
+
+export type WhatsAppProviderKey = 'wamatas' | 'genuka' | 'meta_cloud';
+
+export interface ChurchWhatsAppConfig {
+  church_id: string;
+  provider: WhatsAppProviderKey;
+  /** Only ever set TRUE by a successful test send: having credentials is not
+      evidence they work. */
+  is_enabled: boolean;
+  wamatas_access_token: string | null;
+  wamatas_instance_id: string | null;
+  last_test_sent_at: string | null;
+  last_test_status: string | null;
+  created_at: string;
+  updated_at: string;
+  updated_by: string | null;
+}
+
+export type WhatsAppSendStatus = 'sent' | 'failed';
+
+/** Append-only: the table has no INSERT, UPDATE or DELETE policy, so rows come
+    from the service role inside server actions and cannot be revised after. */
+export interface WhatsAppSendLog {
+  id: string;
+  church_id: string;
+  volunteer_id: string | null;
+  user_id: string | null;
+  purpose: string;
+  phone: string;
+  message_preview: string | null;
+  provider: string;
+  provider_message_id: string | null;
+  status: WhatsAppSendStatus;
+  error_message: string | null;
+  created_at: string;
+}
+
 // ── Events ──────────────────────────────────────────────────────────────
 // Phase 1 records what the team executed, not who attended: no attendance
 // counts, no offerings, no ticketing. One row per occurrence — recurrence is

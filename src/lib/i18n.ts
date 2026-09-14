@@ -1065,6 +1065,64 @@ const en: Dictionary = {
     'Only owners and admin pastors can change modules.',
   'settings.rotation.err.not_church':
     'The Rotation module is not available for ministries.',
+
+  // WhatsApp — per-tenant sending credentials and the test flow.
+  'settings.whatsapp.section_title': 'WhatsApp',
+  'settings.whatsapp.description':
+    'Connect a WhatsApp sender so the platform can message volunteers about their assignments.',
+  'settings.whatsapp.owner_only': 'Only the owner can change these settings.',
+  'settings.whatsapp.provider_label': 'Provider',
+  'settings.whatsapp.provider_wamatas': 'Wamatas',
+  'settings.whatsapp.provider_genuka': 'Genuka',
+  'settings.whatsapp.provider_meta': 'Meta Cloud API',
+  'settings.whatsapp.coming_soon': 'Coming soon',
+  'settings.whatsapp.access_token_label': 'Access token',
+  'settings.whatsapp.access_token_hint': 'Stored securely. Shown here as the last 4 characters only.',
+  'settings.whatsapp.access_token_saved': 'Saved: ···{hint}',
+  'settings.whatsapp.access_token_replace': 'Leave blank to keep the saved token.',
+  'settings.whatsapp.instance_id_label': 'Instance ID',
+  'settings.whatsapp.reveal': 'Show',
+  'settings.whatsapp.hide': 'Hide',
+  'settings.whatsapp.save': 'Save credentials',
+  'settings.whatsapp.saved': 'Credentials saved.',
+  'settings.whatsapp.enable_toggle': 'Enable WhatsApp',
+  'settings.whatsapp.enable_hint':
+    'Turns on automatically after a successful test. Switch it off to stop all sending.',
+  'settings.whatsapp.enable_blocked': 'Send a successful test first.',
+  'settings.whatsapp.test_button': 'Send test message',
+  'settings.whatsapp.test_sending': 'Sending…',
+  'settings.whatsapp.test_phone_prompt': 'Phone number to test',
+  'settings.whatsapp.test_phone_hint': 'Include the country code, e.g. +237…',
+  'settings.whatsapp.test_success': 'Test sent. Provider reference: {providerMessageId}',
+  'settings.whatsapp.test_failed': 'Test failed: {error}',
+  'settings.whatsapp.last_test': 'Last test: {time} — {status}',
+  'settings.whatsapp.never_tested': 'Never tested.',
+  'settings.whatsapp.status_success': 'success',
+  'settings.whatsapp.not_configured': 'Not configured yet.',
+
+  'settings.whatsapp.err.not_owner': 'Only the owner can change WhatsApp settings.',
+  'settings.whatsapp.err.missing_credentials':
+    'Enter both an access token and an instance ID first.',
+  'settings.whatsapp.err.invalid_phone': "That phone number doesn't look right.",
+  'settings.whatsapp.err.not_configured':
+    'Save your credentials before sending a test.',
+  'settings.whatsapp.err.provider_unavailable':
+    'That provider is not available yet.',
+  'settings.whatsapp.err.timeout': 'The provider did not respond in time.',
+  'settings.whatsapp.err.network_error': 'Could not reach the provider.',
+  'settings.whatsapp.err.send_failed': 'The provider rejected the message.',
+
+  'whatsapp.messages.test':
+    'LeaderSmart test — if you see this, WhatsApp is connected.',
+  'whatsapp.messages.rotation_assignment':
+    "Hi {name}, you're serving at {station} on {date} at {time}. Thanks!",
+  'whatsapp.messages.rotation_assignment_no_time':
+    "Hi {name}, you're serving at {station} on {date}. Thanks!",
+
+  'rotation.admin.schedule.publish_whatsapp_summary':
+    'Schedule published. WhatsApp: {sent} sent, {failed} failed.',
+  'rotation.admin.schedule.publish_no_whatsapp': 'Schedule published.',
+
   'rotation.sidebar_link': 'Rotation',
   'rotation.disabled_toast':
     'Rotation module is turned off. Turn it on in Settings to use this feature.',
@@ -3038,6 +3096,67 @@ const fr: Dictionary = {
     'Seuls les propriétaires et pasteurs administrateurs peuvent modifier les modules.',
   'settings.rotation.err.not_church':
     "Le module de rotation n'est pas disponible pour les ministères.",
+
+  // WhatsApp
+  'settings.whatsapp.section_title': 'WhatsApp',
+  'settings.whatsapp.description':
+    'Connectez un expéditeur WhatsApp pour que la plateforme puisse informer les bénévoles de leurs affectations.',
+  'settings.whatsapp.owner_only': 'Seul le propriétaire peut modifier ces paramètres.',
+  'settings.whatsapp.provider_label': 'Fournisseur',
+  'settings.whatsapp.provider_wamatas': 'Wamatas',
+  'settings.whatsapp.provider_genuka': 'Genuka',
+  'settings.whatsapp.provider_meta': 'API Meta Cloud',
+  'settings.whatsapp.coming_soon': 'Bientôt',
+  'settings.whatsapp.access_token_label': "Jeton d'accès",
+  'settings.whatsapp.access_token_hint':
+    'Stocké de façon sécurisée. Affiché ici uniquement par ses 4 derniers caractères.',
+  'settings.whatsapp.access_token_saved': 'Enregistré : ···{hint}',
+  'settings.whatsapp.access_token_replace':
+    'Laissez vide pour conserver le jeton enregistré.',
+  'settings.whatsapp.instance_id_label': "Identifiant d'instance",
+  'settings.whatsapp.reveal': 'Afficher',
+  'settings.whatsapp.hide': 'Masquer',
+  'settings.whatsapp.save': 'Enregistrer les identifiants',
+  'settings.whatsapp.saved': 'Identifiants enregistrés.',
+  'settings.whatsapp.enable_toggle': 'Activer WhatsApp',
+  'settings.whatsapp.enable_hint':
+    "S'active automatiquement après un test réussi. Désactivez-le pour arrêter tout envoi.",
+  'settings.whatsapp.enable_blocked': "Envoyez d'abord un test réussi.",
+  'settings.whatsapp.test_button': 'Envoyer un message test',
+  'settings.whatsapp.test_sending': 'Envoi…',
+  'settings.whatsapp.test_phone_prompt': 'Numéro de téléphone à tester',
+  'settings.whatsapp.test_phone_hint': "Indiquez l'indicatif pays, ex. +237…",
+  'settings.whatsapp.test_success': 'Test envoyé. Référence du fournisseur : {providerMessageId}',
+  'settings.whatsapp.test_failed': 'Échec du test : {error}',
+  'settings.whatsapp.last_test': 'Dernier test : {time} — {status}',
+  'settings.whatsapp.never_tested': 'Jamais testé.',
+  'settings.whatsapp.status_success': 'réussi',
+  'settings.whatsapp.not_configured': 'Pas encore configuré.',
+
+  'settings.whatsapp.err.not_owner':
+    'Seul le propriétaire peut modifier les paramètres WhatsApp.',
+  'settings.whatsapp.err.missing_credentials':
+    "Saisissez d'abord un jeton d'accès et un identifiant d'instance.",
+  'settings.whatsapp.err.invalid_phone': 'Ce numéro de téléphone semble incorrect.',
+  'settings.whatsapp.err.not_configured':
+    "Enregistrez vos identifiants avant d'envoyer un test.",
+  'settings.whatsapp.err.provider_unavailable':
+    "Ce fournisseur n'est pas encore disponible.",
+  'settings.whatsapp.err.timeout': "Le fournisseur n'a pas répondu à temps.",
+  'settings.whatsapp.err.network_error': 'Impossible de joindre le fournisseur.',
+  'settings.whatsapp.err.send_failed': 'Le fournisseur a rejeté le message.',
+
+  'whatsapp.messages.test':
+    'Test LeaderSmart — si vous voyez ceci, WhatsApp est connecté.',
+  'whatsapp.messages.rotation_assignment':
+    'Bonjour {name}, vous servez au poste {station} le {date} à {time}. Merci !',
+  'whatsapp.messages.rotation_assignment_no_time':
+    'Bonjour {name}, vous servez au poste {station} le {date}. Merci !',
+
+  'rotation.admin.schedule.publish_whatsapp_summary':
+    'Planning publié. WhatsApp : {sent} envoyés, {failed} échoués.',
+  'rotation.admin.schedule.publish_no_whatsapp': 'Planning publié.',
+
   'rotation.sidebar_link': 'Rotation',
   'rotation.disabled_toast':
     "Le module de rotation est désactivé. Activez-le dans les Paramètres pour utiliser cette fonctionnalité.",
