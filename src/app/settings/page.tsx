@@ -1,6 +1,6 @@
 import { AlertCircle } from 'lucide-react';
 import { getMe } from '@/lib/auth';
-import { isAdmin } from '@/lib/roles';
+import { isAdmin, isOwner } from '@/lib/roles';
 import { t } from '@/lib/i18n';
 import { PageHeading } from '@/components/page-heading';
 import { getVocab } from '@/lib/vocabulary';
@@ -9,6 +9,8 @@ import { createClient } from '@/lib/supabase/server';
 import { ChurchProfileForm } from './_church-form';
 import { ModulesForm } from './_modules-form';
 import { RotationOptIn } from './_rotation-optin';
+import { WhatsAppForm } from './_whatsapp-form';
+import { getWhatsAppConfigSummary } from '@/lib/whatsapp/factory';
 import { UserProfileForm } from './_user-form';
 import { PasswordForm } from './_password-form';
 
@@ -42,6 +44,14 @@ export default async function SettingsPage({
       .maybeSingle();
     volunteerToken = (data?.personal_url_token as string | undefined) ?? null;
   }
+
+  // Owner only — this section holds credentials that can message the whole
+  // volunteer list, which is a narrower trust than "can administer". Available
+  // to both org types: a ministry may want notifications too.
+  const showWhatsApp = isOwner(user.role);
+  const whatsAppSummary = showWhatsApp
+    ? await getWhatsAppConfigSummary(church.id)
+    : null;
 
   return (
     <div className="px-4 py-6 sm:px-8 sm:py-8">
@@ -98,6 +108,19 @@ export default async function SettingsPage({
               {t('rotation.optin.section_title', lang)}
             </h2>
             <RotationOptIn lang={lang} existingToken={volunteerToken} />
+          </section>
+        )}
+
+        {showWhatsApp && (
+          <section className="card">
+            <h2 className="text-lg font-semibold text-ink">
+              {t('settings.whatsapp.section_title', lang)}
+            </h2>
+            <WhatsAppForm
+              lang={lang}
+              summary={whatsAppSummary}
+              defaultTestPhone={user.phone ?? ''}
+            />
           </section>
         )}
 
