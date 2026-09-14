@@ -234,6 +234,29 @@ export function ScheduleGrid({
     });
   }
 
+  /** Publishing reports how the WhatsApp notifications went. A church with
+      none configured gets the plain confirmation — no mention of a feature it
+      never set up. */
+  function publish(scheduleId: string) {
+    setError(null);
+    setMessage(null);
+    startTransition(async () => {
+      const res = await publishSchedule(scheduleId);
+      if (!res.ok) {
+        setError(errorText(res.error, lang));
+        return;
+      }
+      setMessage(
+        res.notified
+          ? t('rotation.admin.schedule.publish_whatsapp_summary', lang)
+              .replace('{sent}', String(res.notified.sent))
+              .replace('{failed}', String(res.notified.failed))
+          : t('rotation.admin.schedule.publish_no_whatsapp', lang),
+      );
+      router.refresh();
+    });
+  }
+
   function generate() {
     setError(null);
     setMessage(null);
@@ -530,11 +553,9 @@ export function ScheduleGrid({
                               type="button"
                               disabled={pending}
                               onClick={() =>
-                                run(() =>
-                                  r.published
-                                    ? unpublishSchedule(r.scheduleId as string)
-                                    : publishSchedule(r.scheduleId as string),
-                                )
+                                r.published
+                                  ? run(() => unpublishSchedule(r.scheduleId as string))
+                                  : publish(r.scheduleId as string)
                               }
                               className="whitespace-nowrap text-xs font-semibold text-indigo-royal-700 hover:underline disabled:opacity-50"
                               title={

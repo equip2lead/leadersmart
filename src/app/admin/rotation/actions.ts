@@ -6,6 +6,7 @@ import { canReviewAssignments } from '@/lib/roles';
 import { createClient } from '@/lib/supabase/server';
 import { canUseRotation } from '@/lib/rotation';
 import { logAudit } from '@/lib/audit';
+import { notifyRotationAssignments } from '@/lib/whatsapp/rotation-notify';
 import {
   fifthSundaysInYear,
   planMonth,
@@ -26,6 +27,13 @@ import type { ServingGroup } from '@/lib/types';
 // belongs to it.
 
 export type RotationResult = { ok: true } | { ok: false; error: string };
+
+/** Publishing also notifies volunteers, so its result carries how that went.
+    `notified` is null when the church has no WhatsApp configured — which is
+    different from "configured and nothing sent", and the UI says so. */
+export type PublishResult =
+  | { ok: true; notified: { sent: number; failed: number } | null }
+  | { ok: false; error: string };
 export type PlanYearResult =
   | { ok: true; count: number }
   | { ok: false; error: string };
@@ -394,8 +402,39 @@ async function setPublished(
   return { ok: true };
 }
 
-export async function publishSchedule(scheduleId: string): Promise<RotationResult> {
-  return setPublished(scheduleId, true);
+export async function publishSchedule(
+  scheduleId: string,
+): Promise<PublishResult> {
+  const me = await getMe();
+
+  const flipped = await setPublished(scheduleId, true);
+  if (!flipped.ok) return flipped;
+
+  // The date is re-read rather than threaded out of setPublished, so the
+  // notification is driven by what is actually stored rather than by what the
+  // caller believed it was publishing.
+  const supabase = await createClient();
+  const { data: schedule } = await supabase
+    .from('rotation_schedules')
+    .select('service_date')
+    .eq('id', scheduleId)
+    .eq('church_id', me.church.id)
+    .maybeSingle();
+  if (!schedule) return { ok: true, notified: null };
+
+  // Deliberately after the transition and deliberately unable to fail it: the
+  // schedule is published either way, and a church without WhatsApp must not
+  // see an error for a feature it never configured.
+  const summary = await notifyRotationAssignments(
+    me.church.id,
+    schedule.service_date as string,
+    me.church.language,
+  );
+
+  return {
+    ok: true,
+    notified: summary.attempted === 0 ? null : { sent: summary.sent, failed: summary.failed },
+  };
 }
 
 /**
