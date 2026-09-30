@@ -61,9 +61,13 @@ export async function logWhatsAppSend(entry: LogEntry): Promise<void> {
       error_message: entry.result.ok
         ? (entry.result.warning ?? null)
         : entry.result.error,
-      // Stored on success and failure alike: a rejection body is as
-      // diagnostic as an acceptance.
-      raw_response: (entry.result.raw ?? null) as object | null,
+      // Failures only. A successful body is ~1KB of echoed message content
+      // with nothing left to learn from it now that the id field is known;
+      // a rejection body is still the only evidence of why. The adapter has
+      // already stripped the credentials the gateway echoes back.
+      raw_response: (entry.result.ok ? null : (entry.result.raw ?? null)) as
+        | object
+        | null,
     });
   } catch {
     // Swallowed on purpose — see the doc comment.

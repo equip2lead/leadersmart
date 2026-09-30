@@ -33,18 +33,50 @@ type WamatasIdBearing = {
   key?: { id?: string };
 };
 
+/** The envelope Wamatas actually returns, as observed:
+ *
+ *   { status: "success",
+ *     message: { key: { id: "3EB0…" }, status: "SUCCESS", … },
+ *     result:  { status: 1, message: { key: { id: "3EB0…" } }, … },
+ *     request: { …, instance_id, access_token } }
+ *
+ * Two corrections to the earlier guess. `message` is an object on success —
+ * it was typed as a string, which is why nothing looked inside it and every
+ * id was missed. And `result` sits at the top level, not under `data`.
+ *
+ * `message` stays a union because the failure bodies observed earlier put a
+ * human-readable string there ("Account does not exist").
+ */
+type WamatasMessage = WamatasIdBearing & {
+  status?: string;
+  messageTimestamp?: string;
+};
+
 type WamatasResponse = WamatasIdBearing & {
-  status?: string | boolean;
-  message?: string;
+  status?: string | boolean | number;
+  message?: string | WamatasMessage;
   error?: string;
-  // Gateways in this family nest the payload inconsistently — sometimes
-  // `data`, sometimes `data.data`, sometimes `data.result`. All three are
-  // probed rather than assumed.
+  result?: WamatasIdBearing & {
+    status?: string | number;
+    message?: WamatasMessage;
+  };
+  // Retained from the earlier shape: other gateways in this family nest under
+  // `data`, and a church could be pointed at a compatible endpoint.
   data?: WamatasIdBearing & {
     data?: WamatasIdBearing;
     result?: WamatasIdBearing;
   };
+  /** Wamatas echoes the original request, credentials included. Never stored —
+      see redactBody. */
+  request?: Record<string, unknown>;
 };
+
+/** `message` is an object on success and a string on failure, so every read of
+    it has to say which it is expecting. */
+function messageObject(body: WamatasResponse): WamatasMessage | null {
+  const m = body.message;
+  return m && typeof m === 'object' ? m : null;
+}
 
 /** Every place a message id has been observed or is plausible for a
     WhatsApp-Web-based gateway, checked outermost-first.
@@ -55,6 +87,15 @@ type WamatasResponse = WamatasIdBearing & {
     send, and an empty string is not a reference. */
 function messageIdFrom(body: WamatasResponse): string | null {
   const candidates: Array<string | undefined> = [
+    // OBSERVED. This is where Wamatas puts it — confirmed against three live
+    // sends. First, not a fallback.
+    messageObject(body)?.key?.id,
+    body.result?.message?.key?.id,
+    // Everything below is speculative, kept only so a variant endpoint does
+    // not silently regress to no id at all.
+    messageObject(body)?.id,
+    body.result?.id,
+    body.result?.message_id,
     body.data?.id,
     body.data?.message_id,
     body.data?.messageId,
@@ -93,7 +134,31 @@ function isSuccess(body: WamatasResponse): boolean {
 }
 
 function errorFrom(body: WamatasResponse, fallback: string): string {
-  return body.error ?? body.message ?? fallback;
+  if (typeof body.error === 'string' && body.error) return body.error;
+  // `message` carries a human-readable reason on failure but an object on
+  // success. Stringifying the object would put "[object Object]" in the log's
+  // error column, which says nothing.
+  if (typeof body.message === 'string' && body.message) return body.message;
+  return fallback;
+}
+
+/**
+ * Strip credentials from a response before it is stored or returned.
+ *
+ * Wamatas echoes the original request back, `access_token` and `instance_id`
+ * included. The send log is readable by any admin, while the credentials
+ * themselves are owner-only — so storing the body unmodified quietly handed
+ * every admin_pastor the token and defeated that gate.
+ *
+ * The whole `request` block goes rather than just the two known fields: it is
+ * an echo of what we already sent, so it has no diagnostic value we do not
+ * already have, and an allowlist would silently start leaking again the day
+ * the gateway adds a third credential field.
+ */
+function redactBody(body: WamatasResponse): unknown {
+  if (!body || typeof body !== 'object') return body;
+  const { request: _request, ...rest } = body;
+  return { ...rest, request: '[redacted]' };
 }
 
 async function post(
@@ -129,6 +194,7 @@ async function post(
         error: `non_json_response_${res.status}`,
         retryable: res.status >= 500,
         // Truncated: an HTML error page is worth a glance, not a column.
+        // Not JSON, so nothing to redact structurally — truncated instead.
         raw: { non_json_body: text.slice(0, 500) },
       };
     }
@@ -140,11 +206,11 @@ async function post(
         // 4xx means the request itself is wrong — a bad token, a bad number.
         // Only 5xx and 429 are worth trying again.
         retryable: res.status >= 500 || res.status === 429,
-        raw: body,
+        raw: redactBody(body),
       };
     }
 
-    return { ok: true, body, raw: body };
+    return { ok: true, body, raw: redactBody(body) };
   } catch (err) {
     // AbortError is the timeout above; everything else here is a network
     // failure. Both are worth retrying.
@@ -198,26 +264,19 @@ export function createWamatasProvider(config: WamatasConfig): WhatsAppProvider {
 
       const providerMessageId = messageIdFrom(res.body);
 
-      // TEMPORARY — remove once a real id field is identified from stored
-      // raw_response values. Logs the body of a send that Wamatas accepted
-      // without naming a message, which is the case this whole change exists
-      // to investigate.
-      if (!providerMessageId) {
-        console.warn(
-          '[wamatas:sendText] accepted with no message id — body:',
-          JSON.stringify(res.body),
-        );
-      }
-
       // No fabricated id. Null says "the provider named no message", which is
       // a fact a query can act on; the old 'unknown' placeholder said the same
       // thing in a way that looked like data and hid that every send was
       // untracked.
+      //
+      // No raw body on the success path. Now that the id field is known, a
+      // successful body is ~1KB of echoed message content per send with
+      // nothing left to learn from it — twenty volunteers would be twenty
+      // copies of the same rota text. Failures still carry theirs.
       return {
         ok: true,
         providerMessageId,
         ...(providerMessageId ? {} : { warning: 'no_message_id_in_response' as const }),
-        raw: res.raw,
       };
     },
 
