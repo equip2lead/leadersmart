@@ -1067,6 +1067,15 @@ const en: Dictionary = {
   'rotation.admin.dnd.undo_none': 'Nothing to undo.',
   'rotation.admin.dnd.confirm_reset':
     'Regenerate this Sunday from scratch? Manual moves on it are lost.',
+  'rotation.admin.dnd.substitute_modal_title': 'Substitute assignment',
+  'rotation.admin.dnd.substitute_modal_body':
+    '{name} is in {volunteer_group}. This Sunday is {target_group}. Assigning them will be a substitute — a one-off, not part of their regular rotation. Continue?',
+  'rotation.admin.dnd.substitute_confirm_button': 'Confirm as substitute',
+  'rotation.admin.dnd.substitute_badge': 'SUB',
+  'rotation.admin.dnd.substitute_badge_title':
+    'Substitute — not part of this volunteer\u2019s regular rotation.',
+  'rotation.admin.dnd.substitute_done': '{name} added as a substitute.',
+  'rotation.admin.dnd.no_group': 'no group',
 
   // Optional modules — the Settings section a church uses to opt into
   // features. Ministries never see it.
@@ -3119,6 +3128,15 @@ const fr: Dictionary = {
   'rotation.admin.dnd.undo_none': 'Rien à annuler.',
   'rotation.admin.dnd.confirm_reset':
     'Régénérer ce dimanche depuis zéro ? Les déplacements manuels seront perdus.',
+  'rotation.admin.dnd.substitute_modal_title': 'Affectation de remplacement',
+  'rotation.admin.dnd.substitute_modal_body':
+    "{name} fait partie du {volunteer_group}. Ce dimanche est pour le {target_group}. L'affecter en fera un remplaçant — une exception ponctuelle, hors de sa rotation habituelle. Continuer ?",
+  'rotation.admin.dnd.substitute_confirm_button': 'Confirmer le remplacement',
+  'rotation.admin.dnd.substitute_badge': 'REMPL',
+  'rotation.admin.dnd.substitute_badge_title':
+    'Remplacement — hors de la rotation habituelle de ce bénévole.',
+  'rotation.admin.dnd.substitute_done': '{name} ajouté comme remplaçant.',
+  'rotation.admin.dnd.no_group': 'aucun groupe',
 
   // Modules optionnels — section Paramètres
   'settings.optional_modules.section_title': 'Modules optionnels',

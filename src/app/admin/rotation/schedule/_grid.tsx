@@ -26,11 +26,28 @@ import {
 } from '../actions';
 import { AssignmentChip, StationCell, type ChipTarget } from './_chip';
 
+/** A drop the server flagged as a group mismatch, held while the admin decides.
+    Keeping the whole thing rather than just the ids means the dialog can name
+    the person and both groups without another round trip. */
+type PendingSubstitute = {
+  assignmentId: string;
+  toStationId: string;
+  toDate: string;
+  volunteerName: string;
+  volunteerGroups: ServingGroup[];
+  targetGroup: ServingGroup;
+};
+
 export type StationCol = { id: string; name: string; minVolunteers: number };
 
 /** One assigned person in one cell. Carries the assignment id because that is
     what a move updates — a name is not addressable. */
-export type CellPerson = { assignmentId: string; name: string };
+export type CellPerson = {
+  assignmentId: string;
+  name: string;
+  /** Serving outside their own group's Sunday. */
+  isSubstitute: boolean;
+};
 
 export type CellData = {
   stationId: string;
@@ -101,6 +118,7 @@ export function ScheduleGrid({
   const [dragging, setDragging] = useState<CellPerson | null>(null);
   const [history, setHistory] = useState<HistoryEntry[]>([]);
   const [confirmReset, setConfirmReset] = useState<string | null>(null);
+  const [pendingSub, setPendingSub] = useState<PendingSubstitute | null>(null);
   const [pending, startTransition] = useTransition();
 
   // A small activation distance so a click on the grip is still a click; only
@@ -161,6 +179,8 @@ export function ScheduleGrid({
     toStationId: string,
     toDate: string,
     opts: { record?: boolean } = { record: true },
+    /** Only ever true on the second attempt, after the dialog was accepted. */
+    force = false,
   ) {
     const found = locate(assignmentId);
     if (!found) return;
@@ -170,7 +190,21 @@ export function ScheduleGrid({
     setMessage(null);
 
     startTransition(async () => {
-      const res = await swapAssignment(assignmentId, toStationId, toDate);
+      const res = await swapAssignment(assignmentId, toStationId, toDate, force);
+
+      // Three outcomes, not two. A group mismatch is a question rather than a
+      // refusal: the chip stays where it was and the dialog asks.
+      if (!res.ok && res.kind === 'group_mismatch') {
+        setPendingSub({
+          assignmentId,
+          toStationId,
+          toDate,
+          volunteerName: res.volunteerName,
+          volunteerGroups: res.volunteerGroups,
+          targetGroup: res.targetGroup,
+        });
+        return;
+      }
       if (!res.ok) {
         setError(errorText(res.error, lang));
         return;
@@ -189,10 +223,26 @@ export function ScheduleGrid({
         );
       }
       setMessage(
-        t('rotation.admin.dnd.swap_success', lang).replace('{name}', found.person.name),
+        force
+          ? t('rotation.admin.dnd.substitute_done', lang).replace(
+              '{name}',
+              found.person.name,
+            )
+          : t('rotation.admin.dnd.swap_success', lang).replace(
+              '{name}',
+              found.person.name,
+            ),
       );
       router.refresh();
     });
+  }
+
+  /** Re-runs the held drop with the override the dialog just authorised. */
+  function confirmSubstitute() {
+    const p = pendingSub;
+    if (!p) return;
+    setPendingSub(null);
+    move(p.assignmentId, p.toStationId, p.toDate, { record: true }, true);
   }
 
   function undo() {
@@ -407,6 +457,61 @@ export function ScheduleGrid({
         ))}
       </div>
 
+      {/* The substitute decision. A dialog rather than an inline banner because
+          it is answering a question the admin did not ask for — it has to
+          interrupt, not sit below the fold of a wide grid. */}
+      {pendingSub && (
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 p-0 sm:items-center sm:p-4">
+          <div
+            role="alertdialog"
+            aria-modal="true"
+            aria-label={t('rotation.admin.dnd.substitute_modal_title', lang)}
+            className="w-full rounded-t-2xl bg-white p-5 shadow-card sm:max-w-md sm:rounded-2xl sm:p-6"
+          >
+            <h2 className="text-lg font-semibold text-ink">
+              {t('rotation.admin.dnd.substitute_modal_title', lang)}
+            </h2>
+            <p className="mt-2 text-sm leading-relaxed text-body">
+              {t('rotation.admin.dnd.substitute_modal_body', lang)
+                .replace('{name}', pendingSub.volunteerName)
+                .replace(
+                  '{volunteer_group}',
+                  // A volunteer with no memberships at all is possible — the
+                  // directory falls back to their primary group, but this path
+                  // reads the join table directly.
+                  pendingSub.volunteerGroups.length > 0
+                    ? pendingSub.volunteerGroups
+                        .map((g) => t(`rotation.group.${g}`, lang))
+                        .join(', ')
+                    : t('rotation.admin.dnd.no_group', lang),
+                )
+                .replace(
+                  '{target_group}',
+                  t(`rotation.group.${pendingSub.targetGroup}`, lang),
+                )}
+            </p>
+            <div className="mt-5 flex flex-wrap justify-end gap-2">
+              <button
+                type="button"
+                disabled={pending}
+                onClick={() => setPendingSub(null)}
+                className="text-sm font-medium text-muted hover:text-ink"
+              >
+                {t('events.form.cancel', lang)}
+              </button>
+              <button
+                type="button"
+                disabled={pending}
+                onClick={confirmSubstitute}
+                className="inline-flex items-center gap-2 rounded-lg bg-gold-warm-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-gold-warm-700 disabled:opacity-50"
+              >
+                {t('rotation.admin.dnd.substitute_confirm_button', lang)}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {confirmReset && (
         <div
           role="alertdialog"
@@ -526,6 +631,7 @@ export function ScheduleGrid({
                                       lang={lang}
                                       assignmentId={p.assignmentId}
                                       name={p.name}
+                                      isSubstitute={p.isSubstitute}
                                       disabled={r.published || pending}
                                       targets={targetsFor(r.date, s.id)}
                                       onMove={move}

@@ -403,6 +403,10 @@ export interface RotationAssignment {
   attended_at: string | null;
   /** Set when this row replaces another — a swap. */
   substitute_for_id: string | null;
+  /** Why this assignment is unusual — set for substitutes, null for a normal
+      rostering. Free text rather than a flag, because "why is this odd" is the
+      question it will actually be asked. */
+  notes: string | null;
   created_at: string;
   updated_at: string;
 }

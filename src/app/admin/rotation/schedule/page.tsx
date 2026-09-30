@@ -111,6 +111,10 @@ export default async function SchedulePage({
         .map((a) => ({
           assignmentId: a.id,
           name: nameById.get(a.volunteer_id as string) ?? '—',
+          // Derived from the note rather than a boolean column: the note is
+          // what actually records why, and a separate flag could disagree
+          // with it.
+          isSubstitute: (a.notes ?? '').startsWith('substitute'),
         }));
       return {
         stationId: s.id,

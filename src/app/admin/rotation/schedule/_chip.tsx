@@ -21,6 +21,7 @@ export function AssignmentChip({
   assignmentId,
   name,
   disabled,
+  isSubstitute,
   targets,
   onMove,
 }: {
@@ -29,6 +30,9 @@ export function AssignmentChip({
   name: string;
   /** Published weeks are frozen — the chip renders but does not move. */
   disabled: boolean;
+  /** Serving outside their own group's Sunday. Badged so a glance down the
+      grid separates deliberate cover from a scheduling mistake. */
+  isSubstitute: boolean;
   /** Every other cell this chip could go to, already labelled. */
   targets: ChipTarget[];
   onMove: (assignmentId: string, stationId: string, date: string) => void;
@@ -65,6 +69,15 @@ export function AssignmentChip({
       )}
 
       <span className="min-w-0 flex-1 truncate">{name}</span>
+
+      {isSubstitute && (
+        <span
+          title={t('rotation.admin.dnd.substitute_badge_title', lang)}
+          className="shrink-0 rounded bg-gold-warm-200 px-1 py-0.5 text-[9px] font-bold leading-none text-gold-warm-800"
+        >
+          {t('rotation.admin.dnd.substitute_badge', lang)}
+        </span>
+      )}
 
       {!disabled && targets.length > 0 && (
         <>

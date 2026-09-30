@@ -28,6 +28,28 @@ import type { ServingGroup } from '@/lib/types';
 
 export type RotationResult = { ok: true } | { ok: false; error: string };
 
+/**
+ * A swap either lands, fails, or needs a decision.
+ *
+ * The third case is the point of this type. A group mismatch is not an error —
+ * churches run substitutes all the time — but it is not something to do
+ * silently either, so the server reports what it found and lets the caller ask.
+ *
+ * `kind` discriminates rather than the presence of a `warning` field: two
+ * ok:false variants distinguished only by which optional property is set are
+ * a type TypeScript cannot narrow and a reader cannot skim.
+ */
+export type SwapResult =
+  | { ok: true }
+  | { ok: false; kind: 'error'; error: string }
+  | {
+      ok: false;
+      kind: 'group_mismatch';
+      volunteerName: string;
+      volunteerGroups: ServingGroup[];
+      targetGroup: ServingGroup;
+    };
+
 /** Publishing also notifies volunteers, so its result carries how that went.
     `notified` is null when the church has no WhatsApp configured — which is
     different from "configured and nothing sent", and the UI says so. */
@@ -471,9 +493,14 @@ export async function swapAssignment(
   assignmentId: string,
   toStationId: string,
   toDate: string,
-): Promise<RotationResult> {
+  /** Set only after an admin has been shown the mismatch and accepted it.
+      Never defaulted true — the confirmation is the whole safeguard. */
+  forceSubstitute = false,
+): Promise<SwapResult> {
+  const fail = (error: string): SwapResult => ({ ok: false, kind: 'error', error });
+
   const { me, error } = await requireRotationAdmin();
-  if (!me) return { ok: false, error };
+  if (!me) return fail(error);
 
   const supabase = await createClient();
   const churchId = me.church.id;
@@ -484,10 +511,10 @@ export async function swapAssignment(
     .eq('id', assignmentId)
     .eq('church_id', churchId)
     .maybeSingle();
-  if (!assignment) return { ok: false, error: 'not_found' };
+  if (!assignment) return fail('not_found');
   // A published week has been announced. Moving someone out of it silently is
   // exactly the surprise publishing is meant to prevent.
-  if (assignment.is_published) return { ok: false, error: 'already_published' };
+  if (assignment.is_published) return fail('already_published');
 
   const { data: station } = await supabase
     .from('rotation_stations')
@@ -497,7 +524,7 @@ export async function swapAssignment(
     .eq('is_active', true)
     .eq('is_fire_kids', false)
     .maybeSingle();
-  if (!station) return { ok: false, error: 'invalid_station' };
+  if (!station) return fail('invalid_station');
 
   const { data: target } = await supabase
     .from('rotation_schedules')
@@ -505,24 +532,53 @@ export async function swapAssignment(
     .eq('church_id', churchId)
     .eq('service_date', toDate)
     .maybeSingle();
-  if (!target) return { ok: false, error: 'invalid_target_date' };
-  if (target.status === 'published') return { ok: false, error: 'already_published' };
+  if (!target) return fail('invalid_target_date');
+  if (target.status === 'published') return fail('already_published');
 
   const volunteerId = assignment.volunteer_id as string | null;
-  if (!volunteerId) return { ok: false, error: 'not_found' };
+  if (!volunteerId) return fail('not_found');
 
-  // The group check. Memberships are the authority, not volunteers
-  // .serving_group, because someone in both A and E legitimately belongs on
-  // either kind of Sunday.
+  // The group check is now soft. Churches run substitutes constantly — a
+  // Group A person covering a Group B Sunday is ordinary life, not an error —
+  // so a mismatch is reported back for a human to accept rather than refused.
+  //
+  // It is still a speed bump, not a shrug: nothing goes through without
+  // forceSubstitute, which only the confirmation dialog sets. Memberships stay
+  // the authority, so someone in both A and E still matches either Sunday and
+  // is never asked to confirm anything.
   const targetGroup = target.serving_group as ServingGroup | null;
+  let isSubstitute = false;
+  // The groups the volunteer actually holds, kept for the substitute note —
+  // "original group A" is only meaningful if it names their real group.
+  let heldGroups: ServingGroup[] = [];
+
   if (targetGroup) {
-    const { data: membership } = await supabase
+    const { data: memberships } = await supabase
       .from('volunteer_group_memberships')
-      .select('id')
-      .eq('volunteer_id', volunteerId)
-      .eq('serving_group', targetGroup)
-      .maybeSingle();
-    if (!membership) return { ok: false, error: 'wrong_group' };
+      .select('serving_group')
+      .eq('volunteer_id', volunteerId);
+    const held = ((memberships ?? []) as Array<{ serving_group: ServingGroup }>).map(
+      (m) => m.serving_group,
+    );
+    heldGroups = held;
+
+    if (!held.includes(targetGroup)) {
+      if (!forceSubstitute) {
+        const { data: person } = await supabase
+          .from('volunteers')
+          .select('full_name')
+          .eq('id', volunteerId)
+          .maybeSingle();
+        return {
+          ok: false,
+          kind: 'group_mismatch',
+          volunteerName: (person?.full_name as string | undefined) ?? '—',
+          volunteerGroups: held,
+          targetGroup,
+        };
+      }
+      isSubstitute = true;
+    }
   }
 
   // Nobody serves two stations on one day. A move onto a Sunday they are
@@ -535,7 +591,7 @@ export async function swapAssignment(
       .eq('volunteer_id', volunteerId)
       .eq('service_date', toDate)
       .maybeSingle();
-    if (clash) return { ok: false, error: 'already_serving' };
+    if (clash) return fail('already_serving');
   }
 
   const { data: updated, error: upErr } = await supabase
@@ -544,12 +600,18 @@ export async function swapAssignment(
       station_id: toStationId,
       service_date: toDate,
       schedule_id: target.id as string,
+      // Written on every swap, not only substitutions: moving someone back
+      // onto their own group's Sunday has to clear a stale substitute note, or
+      // the badge would outlive the reason for it.
+      notes: isSubstitute
+        ? `substitute — original group ${heldGroups.join('/') || '?'}`
+        : null,
     })
     .eq('id', assignmentId)
     .select('id')
     .maybeSingle();
-  if (upErr) return { ok: false, error: upErr.message };
-  if (!updated) return { ok: false, error: 'not_admin' };
+  if (upErr) return fail(upErr.message);
+  if (!updated) return fail('not_admin');
 
   revalidatePath('/admin/rotation/schedule');
   return { ok: true };
