@@ -893,6 +893,8 @@ const en: Dictionary = {
   'rotation.signup.group_e_label': 'Fifth Sunday (Group E)',
   'rotation.signup.group_e_hint':
     'Group E serves only on months with a fifth Sunday. You can join it as well as a regular group.',
+  'rotation.signup.flexibility_notice':
+    "Your preferences help us plan the schedule. However, you may occasionally be assigned to a different group or station based on the church's needs. Serving is about being available where God needs you.",
   'rotation.signup.consent_label':
     'I understand I may be contacted about serving assignments',
   'rotation.signup.submit': 'Sign up to serve',
@@ -972,6 +974,8 @@ const en: Dictionary = {
   'rotation.admin.volunteers.edit_stations': 'Willing to serve at',
   'rotation.admin.volunteers.edit_stations_hint':
     'Leave all unticked to mean “anywhere”.',
+  'rotation.admin.volunteers.reassignment_note':
+    'Volunteers can be reassigned as needed. Preferences are honoured where possible.',
   'rotation.admin.volunteers.edit_save': 'Save changes',
   'rotation.admin.err.name_required': 'Give the volunteer a name.',
   'rotation.admin.err.name_too_long': 'That name is too long.',
@@ -2949,6 +2953,8 @@ const fr: Dictionary = {
   'rotation.signup.group_e_label': 'Cinquième dimanche (groupe E)',
   'rotation.signup.group_e_hint':
     'Le groupe E ne sert que les mois comptant un cinquième dimanche. Vous pouvez le rejoindre en plus d’un groupe régulier.',
+  'rotation.signup.flexibility_notice':
+    "Vos préférences nous aident à planifier. Cependant, vous pouvez occasionnellement être assigné à un autre groupe ou poste selon les besoins de l'église. Servir, c'est être disponible là où Dieu a besoin de vous.",
   'rotation.signup.consent_label':
     'Je comprends que je peux être contacté au sujet des affectations de service',
   'rotation.signup.submit': "S'inscrire pour servir",
@@ -3031,6 +3037,8 @@ const fr: Dictionary = {
   'rotation.admin.volunteers.edit_stations': 'Accepte de servir à',
   'rotation.admin.volunteers.edit_stations_hint':
     "Ne cochez rien pour signifier « n'importe où ».",
+  'rotation.admin.volunteers.reassignment_note':
+    'Les bénévoles peuvent être réaffectés selon les besoins. Les préférences sont respectées dans la mesure du possible.',
   'rotation.admin.volunteers.edit_save': 'Enregistrer les modifications',
   'rotation.admin.err.name_required': 'Donnez un nom au bénévole.',
   'rotation.admin.err.name_too_long': 'Ce nom est trop long.',

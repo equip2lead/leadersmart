@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
+import { Info } from 'lucide-react';
 import { t } from '@/lib/i18n';
 import { FIFTH_SUNDAY_GROUP, ROTATION_GROUPS } from '@/lib/types';
 import type { AppLanguage, ServingGroup } from '@/lib/types';
@@ -168,6 +169,20 @@ export function SignupForm({
           </>
         )}
       </fieldset>
+
+      {/* Sits between the two preference fieldsets on purpose: it is a caveat
+          about both, and a volunteer who reads it here has already made one
+          set of choices and is about to make the other. Placed after the form
+          it would be an afterthought; before it, a discouragement. */}
+      <div className="flex items-start gap-3 rounded-xl border border-indigo-royal-200 bg-indigo-royal-50 p-4">
+        <Info
+          className="mt-0.5 h-4 w-4 shrink-0 text-indigo-royal-700"
+          aria-hidden="true"
+        />
+        <p className="text-sm leading-relaxed text-ink">
+          {t('rotation.signup.flexibility_notice', lang)}
+        </p>
+      </div>
 
       <fieldset>
         <legend className="label">{t('rotation.signup.groups_label', lang)}</legend>

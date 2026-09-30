@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState, useTransition } from 'react';
-import { X } from 'lucide-react';
+import { Info, X } from 'lucide-react';
 import { t } from '@/lib/i18n';
 import { FIFTH_SUNDAY_GROUP, ROTATION_GROUPS } from '@/lib/types';
 import type { AppLanguage, ServingGroup } from '@/lib/types';
@@ -207,6 +207,17 @@ export function EditVolunteerModal({
               {t('rotation.admin.volunteers.edit_stations_hint', lang)}
             </p>
           </fieldset>
+
+          {/* The admin-facing half of the same expectation the sign-up form
+              sets, so the two surfaces do not quietly disagree about whether
+              preferences are binding. Quieter here: an admin already knows. */}
+          <p className="flex items-start gap-2 rounded-lg border border-indigo-royal-200 bg-indigo-royal-50 px-3 py-2 text-xs leading-relaxed text-body">
+            <Info
+              className="mt-0.5 h-3.5 w-3.5 shrink-0 text-indigo-royal-700"
+              aria-hidden="true"
+            />
+            {t('rotation.admin.volunteers.reassignment_note', lang)}
+          </p>
 
           {error && (
             <p role="alert" className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-700">
