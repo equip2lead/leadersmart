@@ -6,8 +6,9 @@ import { canReviewAssignments, isOwner } from '@/lib/roles';
 import { createClient } from '@/lib/supabase/server';
 import { canUseRotation } from '@/lib/rotation';
 import { logAudit } from '@/lib/audit';
-import { FIFTH_SUNDAY_GROUP } from '@/lib/types';
-import type { VolunteerStatus } from '@/lib/types';
+import { FIFTH_SUNDAY_GROUP, SERVING_GROUPS } from '@/lib/types';
+import { looksLikePhone, normalisePhone } from '@/lib/whatsapp/provider';
+import type { ServingGroup, VolunteerStatus } from '@/lib/types';
 
 // Admin actions on the volunteer directory.
 //
@@ -214,4 +215,196 @@ export async function purgeTestVolunteers(): Promise<
   revalidatePath('/admin/rotation/volunteers');
   revalidatePath('/admin/rotation/schedule');
   return { ok: true, count };
+}
+
+export type UpdateVolunteerInput = {
+  fullName: string;
+  phone: string;
+  email: string | null;
+  groups: ServingGroup[];
+  stationIds: string[];
+};
+
+/**
+ * Correct a volunteer's details.
+ *
+ * Exists because sign-up is self-service and public: a mistyped digit in a
+ * phone number means the assignment message goes nowhere, and the volunteer
+ * has no way to fix it themselves.
+ *
+ * Groups and stations are reconciled as sets rather than replaced wholesale.
+ * A delete-then-insert would churn joined_at on memberships the edit never
+ * touched, losing when someone actually joined a group.
+ */
+export async function updateVolunteer(
+  volunteerId: string,
+  input: UpdateVolunteerInput,
+): Promise<VolunteerResult> {
+  const { me, error } = await requireRotationAdmin();
+  if (!me) return { ok: false, error };
+
+  const ids = await ownedVolunteerIds([volunteerId], me.church.id);
+  if (ids.length === 0) return { ok: false, error: 'not_found' };
+
+  const fullName = input.fullName.trim();
+  if (!fullName) return { ok: false, error: 'name_required' };
+  if (fullName.length > 120) return { ok: false, error: 'name_too_long' };
+
+  // The same normaliser the public form runs through, so a number corrected
+  // here is stored in exactly the shape a number typed at sign-up would be.
+  const phone = normalisePhone(input.phone);
+  if (!looksLikePhone(phone)) return { ok: false, error: 'invalid_phone' };
+
+  const email = input.email?.trim() || null;
+  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return { ok: false, error: 'invalid_email' };
+  }
+
+  const groups = [...new Set(input.groups)].filter((g) =>
+    SERVING_GROUPS.includes(g),
+  );
+  // A volunteer in no group is invisible to the generator — they would sit in
+  // the directory forever and never be rostered.
+  if (groups.length === 0) return { ok: false, error: 'group_required' };
+
+  const supabase = await createClient();
+
+  // Stations are intersected with this church's own list. The ids come from a
+  // browser, so they are input rather than fact.
+  const { data: allowedStations } = await supabase
+    .from('rotation_stations')
+    .select('id')
+    .eq('church_id', me.church.id)
+    .eq('is_active', true)
+    .eq('is_fire_kids', false);
+  const allowed = new Set(
+    ((allowedStations ?? []) as Array<{ id: string }>).map((s) => s.id),
+  );
+  const stationIds = [...new Set(input.stationIds)].filter((id) => allowed.has(id));
+
+  const { data: before } = await supabase
+    .from('volunteers')
+    .select('full_name, whatsapp_phone, email')
+    .eq('id', volunteerId)
+    .maybeSingle();
+
+  const { data: updated, error: upErr } = await supabase
+    .from('volunteers')
+    .update({
+      full_name: fullName,
+      whatsapp_phone: phone,
+      email,
+      // Primary group is the first chosen. volunteers.serving_group is NOT
+      // NULL and still means "their main group"; the memberships table is
+      // what expresses holding several.
+      serving_group: groups[0],
+    })
+    .eq('id', volunteerId)
+    .select('id')
+    .maybeSingle();
+  if (upErr) return { ok: false, error: upErr.message };
+  if (!updated) return { ok: false, error: 'not_admin' };
+
+  // ── Reconcile group memberships ──────────────────────────────────────────
+  const { data: currentGroups } = await supabase
+    .from('volunteer_group_memberships')
+    .select('serving_group')
+    .eq('volunteer_id', volunteerId);
+  const have = new Set(
+    ((currentGroups ?? []) as Array<{ serving_group: ServingGroup }>).map(
+      (g) => g.serving_group,
+    ),
+  );
+  const want = new Set(groups);
+
+  const toAdd = groups.filter((g) => !have.has(g));
+  const toRemove = [...have].filter((g) => !want.has(g));
+
+  if (toAdd.length > 0) {
+    const { error: addErr } = await supabase
+      .from('volunteer_group_memberships')
+      .upsert(
+        toAdd.map((g) => ({
+          church_id: me.church.id,
+          volunteer_id: volunteerId,
+          serving_group: g,
+        })),
+        { onConflict: 'volunteer_id,serving_group' },
+      );
+    if (addErr) return { ok: false, error: addErr.message };
+  }
+  if (toRemove.length > 0) {
+    const { error: remErr } = await supabase
+      .from('volunteer_group_memberships')
+      .delete()
+      .eq('volunteer_id', volunteerId)
+      .in('serving_group', toRemove);
+    if (remErr) return { ok: false, error: remErr.message };
+  }
+
+  // ── Reconcile station preferences ────────────────────────────────────────
+  const { data: currentStations } = await supabase
+    .from('volunteer_station_preferences')
+    .select('station_id')
+    .eq('volunteer_id', volunteerId)
+    .eq('is_excluded', false);
+  const haveStations = new Set(
+    ((currentStations ?? []) as Array<{ station_id: string }>).map(
+      (s) => s.station_id,
+    ),
+  );
+  const wantStations = new Set(stationIds);
+
+  const addStations = stationIds.filter((id) => !haveStations.has(id));
+  const removeStations = [...haveStations].filter((id) => !wantStations.has(id));
+
+  if (addStations.length > 0) {
+    const { error: addErr } = await supabase
+      .from('volunteer_station_preferences')
+      .insert(
+        addStations.map((station_id) => ({
+          volunteer_id: volunteerId,
+          station_id,
+          is_excluded: false,
+        })),
+      );
+    if (addErr) return { ok: false, error: addErr.message };
+  }
+  if (removeStations.length > 0) {
+    const { error: remErr } = await supabase
+      .from('volunteer_station_preferences')
+      .delete()
+      .eq('volunteer_id', volunteerId)
+      .eq('is_excluded', false)
+      .in('station_id', removeStations);
+    if (remErr) return { ok: false, error: remErr.message };
+  }
+
+  // The existing audit_log already carries a 'volunteer' entity type, so no
+  // separate volunteer audit table is needed. Phone and email are recorded
+  // because a wrong number is exactly what this edit exists to fix, and
+  // knowing what it was is what makes a mistaken "fix" recoverable.
+  await logAudit({
+    churchId: me.church.id,
+    userId: me.user.id,
+    action: 'update',
+    entityType: 'volunteer',
+    entityId: volunteerId,
+    beforeValue: {
+      full_name: before?.full_name,
+      phone: before?.whatsapp_phone,
+      email: before?.email,
+    },
+    afterValue: {
+      full_name: fullName,
+      phone,
+      email,
+      groups,
+      stations: stationIds.length,
+    },
+  });
+
+  revalidatePath('/admin/rotation/volunteers');
+  revalidatePath('/admin/rotation/schedule');
+  return { ok: true };
 }

@@ -73,16 +73,35 @@ export default async function RotationVolunteersPage() {
   );
 
   const stationsByVolunteer = new Map<string, string[]>();
+  const stationIdsByVolunteer = new Map<string, string[]>();
   for (const p of (prefRes.data ?? []) as Array<{
     volunteer_id: string;
     station_id: string;
   }>) {
+    const ids = stationIdsByVolunteer.get(p.volunteer_id) ?? [];
+    ids.push(p.station_id);
+    stationIdsByVolunteer.set(p.volunteer_id, ids);
+
     const name = stationName.get(p.station_id);
     if (!name) continue;
     const list = stationsByVolunteer.get(p.volunteer_id) ?? [];
     list.push(name);
     stationsByVolunteer.set(p.volunteer_id, list);
   }
+
+  // The full station list for the edit form — the per-volunteer map above only
+  // covers stations someone already chose.
+  const { data: allStationRows } = await supabase
+    .from('rotation_stations')
+    .select('id, name')
+    .eq('church_id', church.id)
+    .eq('is_active', true)
+    .eq('is_fire_kids', false)
+    .order('display_order')
+    .order('name');
+  const allStations = ((allStationRows ?? []) as Array<{ id: string; name: string }>).map(
+    (s) => ({ id: s.id, name: s.name }),
+  );
 
   const rows: VolunteerRow[] = volunteers.map((v) => ({
     id: v.id,
@@ -93,6 +112,7 @@ export default async function RotationVolunteersPage() {
     // there; fall back to the primary group so the column is never blank.
     groups: (groupsByVolunteer.get(v.id) ?? [v.serving_group]).sort(),
     stations: (stationsByVolunteer.get(v.id) ?? []).sort(),
+    stationIds: stationIdsByVolunteer.get(v.id) ?? [],
     status: v.status,
     joinedAt: v.joined_at,
     isTestData: v.is_test_data,
@@ -127,6 +147,7 @@ export default async function RotationVolunteersPage() {
             lang={lang}
             rows={rows}
             canDelete={isOwner(user.role)}
+            stations={allStations}
           />
         )}
       </div>

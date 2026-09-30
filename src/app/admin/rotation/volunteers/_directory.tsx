@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
-import { Trash2, UserMinus, UserPlus } from 'lucide-react';
+import { Pencil, Trash2, UserMinus, UserPlus } from 'lucide-react';
 import { t } from '@/lib/i18n';
 import { initialsOf } from '@/lib/leaders';
 import { formatEventDate } from '@/lib/events';
@@ -14,6 +14,7 @@ import {
   setGroupEMembership,
   setVolunteerStatus,
 } from './actions';
+import { EditVolunteerModal, type StationOption } from './_edit-modal';
 
 export type VolunteerRow = {
   id: string;
@@ -22,6 +23,9 @@ export type VolunteerRow = {
   email: string | null;
   groups: ServingGroup[];
   stations: string[];
+  /** Station ids behind those names. The table shows names; the edit form has
+      to send ids. */
+  stationIds: string[];
   status: VolunteerStatus;
   joinedAt: string;
   /** Seeded fixture rather than a real sign-up. */
@@ -48,17 +52,21 @@ export function VolunteerDirectory({
   lang,
   rows,
   canDelete,
+  stations,
 }: {
   lang: AppLanguage;
   rows: VolunteerRow[];
   /** Owner only — deleting takes the assignment history with it. */
   canDelete: boolean;
+  /** Every station a volunteer may be willing to serve at, for the edit form. */
+  stations: StationOption[];
 }) {
   const router = useRouter();
   const [selected, setSelected] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [confirmDelete, setConfirmDelete] = useState<string | null>(null);
   const [confirmPurge, setConfirmPurge] = useState(false);
+  const [editing, setEditing] = useState<VolunteerRow | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
 
@@ -333,6 +341,15 @@ export function VolunteerDirectory({
                     <button
                       type="button"
                       disabled={pending}
+                      onClick={() => setEditing(r)}
+                      className="inline-flex items-center gap-1 text-xs font-medium text-muted hover:text-ink"
+                    >
+                      <Pencil className="h-3.5 w-3.5" aria-hidden="true" />
+                      {t('rotation.admin.volunteers.edit_button', lang)}
+                    </button>
+                    <button
+                      type="button"
+                      disabled={pending}
                       onClick={() =>
                         run(() =>
                           setVolunteerStatus(
@@ -368,6 +385,20 @@ export function VolunteerDirectory({
           </tbody>
         </table>
       </div>
+
+      {editing && (
+        <EditVolunteerModal
+          lang={lang}
+          volunteer={editing}
+          stations={stations}
+          onClose={() => setEditing(null)}
+          onSaved={(msg) => {
+            setEditing(null);
+            setNotice(msg);
+            router.refresh();
+          }}
+        />
+      )}
 
       {confirmDelete && (
         <div
