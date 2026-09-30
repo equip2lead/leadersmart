@@ -1094,6 +1094,8 @@ const en: Dictionary = {
   'settings.whatsapp.test_phone_prompt': 'Phone number to test',
   'settings.whatsapp.test_phone_hint': 'Include the country code, e.g. +237…',
   'settings.whatsapp.test_success': 'Test sent. Provider reference: {providerMessageId}',
+  'settings.whatsapp.test_success_no_id':
+    'Test sent, but the provider returned no message reference — it cannot be traced later.',
   'settings.whatsapp.test_failed': 'Test failed: {error}',
   'settings.whatsapp.last_test': 'Last test: {time} — {status}',
   'settings.whatsapp.never_tested': 'Never tested.',
@@ -3127,6 +3129,8 @@ const fr: Dictionary = {
   'settings.whatsapp.test_phone_prompt': 'Numéro de téléphone à tester',
   'settings.whatsapp.test_phone_hint': "Indiquez l'indicatif pays, ex. +237…",
   'settings.whatsapp.test_success': 'Test envoyé. Référence du fournisseur : {providerMessageId}',
+  'settings.whatsapp.test_success_no_id':
+    "Test envoyé, mais le fournisseur n'a renvoyé aucune référence — impossible de le retrouver plus tard.",
   'settings.whatsapp.test_failed': 'Échec du test : {error}',
   'settings.whatsapp.last_test': 'Dernier test : {time} — {status}',
   'settings.whatsapp.never_tested': 'Jamais testé.',

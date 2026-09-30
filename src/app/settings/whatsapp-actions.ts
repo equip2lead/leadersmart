@@ -23,7 +23,10 @@ import type { WhatsAppProviderKey } from '@/lib/types';
 
 export type WhatsAppResult = { ok: true } | { ok: false; error: string };
 export type TestResult =
-  | { ok: true; providerMessageId: string }
+  // providerMessageId is null when the provider accepted the send but named no
+  // message. The test still succeeded — the toast simply has no reference to
+  // quote, and says so rather than printing a placeholder.
+  | { ok: true; providerMessageId: string | null }
   | { ok: false; error: string };
 
 const PROVIDERS: WhatsAppProviderKey[] = ['wamatas', 'genuka', 'meta_cloud'];

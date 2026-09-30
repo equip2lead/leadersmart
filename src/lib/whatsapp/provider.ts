@@ -11,7 +11,21 @@
 // in a loop would take the whole publish with it.
 
 export type WhatsAppSendResult =
-  | { ok: true; providerMessageId: string }
+  | {
+      ok: true;
+      /** Null when the provider accepted the send but named no message.
+          Deliberately nullable rather than a placeholder: an earlier version
+          substituted the string 'unknown', which made "we have no reference"
+          indistinguishable from "the reference is literally unknown" and hid
+          the fact that every single send was untracked. Null is a fact; a
+          fake id is a lie that queries cannot see through. */
+      providerMessageId: string | null;
+      /** Set when the send succeeded but something about the response is worth
+          noticing — currently only a missing message id. */
+      warning?: 'no_message_id_in_response';
+      /** The provider's unmodified body, kept for the send log. */
+      raw?: unknown;
+    }
   | {
       ok: false;
       error: string;
@@ -20,6 +34,9 @@ export type WhatsAppSendResult =
           bad token, an unregistered template, a malformed number. Retrying a
           non-retryable failure just burns quota. */
       retryable: boolean;
+      /** Present whenever the provider answered at all. Absent for transport
+          failures, where there is no body to keep. */
+      raw?: unknown;
     };
 
 export type WhatsAppProviderName = 'wamatas' | 'genuka' | 'meta_cloud';

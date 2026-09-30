@@ -583,7 +583,12 @@ export interface WhatsAppSendLog {
   provider: string;
   provider_message_id: string | null;
   status: WhatsAppSendStatus;
+  /** On a failure, the provider's reason. On a success, a warning about the
+      send when there is one — currently only a missing message id. */
   error_message: string | null;
+  /** The provider's unmodified response body, kept so a disagreement between
+      what was recorded and what happened can be settled from evidence. */
+  raw_response: unknown;
   created_at: string;
 }
 

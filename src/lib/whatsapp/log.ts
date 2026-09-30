@@ -50,9 +50,20 @@ export async function logWhatsAppSend(entry: LogEntry): Promise<void> {
       phone: entry.phone,
       message_preview: entry.message.slice(0, PREVIEW_LENGTH),
       provider: entry.provider,
+      // Null, not a placeholder, when the provider named no message. A query
+      // for untracked sends is `WHERE status='sent' AND provider_message_id IS
+      // NULL`, which only works if the column tells the truth.
       provider_message_id: entry.result.ok ? entry.result.providerMessageId : null,
       status: entry.result.ok ? 'sent' : 'failed',
-      error_message: entry.result.ok ? null : entry.result.error,
+      // A successful send with a warning records it here rather than in a
+      // column of its own — error_message is already "what was odd about this
+      // send", and a second nearly-identical column would just drift.
+      error_message: entry.result.ok
+        ? (entry.result.warning ?? null)
+        : entry.result.error,
+      // Stored on success and failure alike: a rejection body is as
+      // diagnostic as an acceptance.
+      raw_response: (entry.result.raw ?? null) as object | null,
     });
   } catch {
     // Swallowed on purpose — see the doc comment.

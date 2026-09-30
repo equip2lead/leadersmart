@@ -106,11 +106,16 @@ export function WhatsAppForm({
         router.refresh();
         return;
       }
+      // A send with no provider reference is still a send; the message simply
+      // cannot be correlated later, and the copy says that instead of printing
+      // an empty slot.
       setNotice(
-        t('settings.whatsapp.test_success', lang).replace(
-          '{providerMessageId}',
-          res.providerMessageId,
-        ),
+        res.providerMessageId
+          ? t('settings.whatsapp.test_success', lang).replace(
+              '{providerMessageId}',
+              res.providerMessageId,
+            )
+          : t('settings.whatsapp.test_success_no_id', lang),
       );
       router.refresh();
     });

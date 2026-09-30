@@ -25,24 +25,58 @@ type WamatasConfig = {
 
 /** Wamatas replies are loosely typed and have changed shape between versions,
     so every field is optional and read defensively. */
-type WamatasResponse = {
+type WamatasIdBearing = {
+  id?: string;
+  message_id?: string;
+  messageId?: string;
+  msgId?: string;
+  key?: { id?: string };
+};
+
+type WamatasResponse = WamatasIdBearing & {
   status?: string | boolean;
   message?: string;
   error?: string;
-  data?: { id?: string; message_id?: string; key?: { id?: string } };
-  id?: string;
-  message_id?: string;
+  // Gateways in this family nest the payload inconsistently — sometimes
+  // `data`, sometimes `data.data`, sometimes `data.result`. All three are
+  // probed rather than assumed.
+  data?: WamatasIdBearing & {
+    data?: WamatasIdBearing;
+    result?: WamatasIdBearing;
+  };
 };
 
+/** Every place a message id has been observed or is plausible for a
+    WhatsApp-Web-based gateway, checked outermost-first.
+
+    Deliberately a list rather than a chain of ?? so the set is greppable and
+    so adding a newly-discovered path is a one-line change. Only non-empty
+    strings count — some gateways return "" or null in the id slot on a queued
+    send, and an empty string is not a reference. */
 function messageIdFrom(body: WamatasResponse): string | null {
-  return (
-    body.data?.id ??
-    body.data?.message_id ??
-    body.data?.key?.id ??
-    body.id ??
-    body.message_id ??
-    null
-  );
+  const candidates: Array<string | undefined> = [
+    body.data?.id,
+    body.data?.message_id,
+    body.data?.messageId,
+    body.data?.msgId,
+    body.data?.key?.id,
+    body.data?.data?.id,
+    body.data?.data?.message_id,
+    body.data?.data?.messageId,
+    body.data?.data?.key?.id,
+    body.data?.result?.id,
+    body.data?.result?.message_id,
+    body.data?.result?.messageId,
+    body.id,
+    body.message_id,
+    body.messageId,
+    body.msgId,
+    body.key?.id,
+  ];
+  for (const c of candidates) {
+    if (typeof c === 'string' && c.trim().length > 0) return c;
+  }
+  return null;
 }
 
 /** Wamatas signals success as `status: true`, `"true"`, or `"success"`
@@ -66,8 +100,8 @@ async function post(
   path: string,
   payload: Record<string, unknown>,
 ): Promise<
-  | { ok: true; body: WamatasResponse }
-  | { ok: false; error: string; retryable: boolean }
+  | { ok: true; body: WamatasResponse; raw: unknown }
+  | { ok: false; error: string; retryable: boolean; raw?: unknown }
 > {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
@@ -94,6 +128,8 @@ async function post(
         ok: false,
         error: `non_json_response_${res.status}`,
         retryable: res.status >= 500,
+        // Truncated: an HTML error page is worth a glance, not a column.
+        raw: { non_json_body: text.slice(0, 500) },
       };
     }
 
@@ -104,10 +140,11 @@ async function post(
         // 4xx means the request itself is wrong — a bad token, a bad number.
         // Only 5xx and 429 are worth trying again.
         retryable: res.status >= 500 || res.status === 429,
+        raw: body,
       };
     }
 
-    return { ok: true, body };
+    return { ok: true, body, raw: body };
   } catch (err) {
     // AbortError is the timeout above; everything else here is a network
     // failure. Both are worth retrying.
@@ -116,6 +153,7 @@ async function post(
       ok: false,
       error: name === 'AbortError' ? 'timeout' : 'network_error',
       retryable: true,
+      // No body: nothing was received, so there is nothing to keep.
     };
   } finally {
     clearTimeout(timer);
@@ -138,7 +176,14 @@ export function createWamatasProvider(config: WamatasConfig): WhatsAppProvider {
         message,
         ...credentials,
       });
-      if (!res.ok) return { ok: false, error: res.error, retryable: res.retryable };
+      if (!res.ok) {
+        return {
+          ok: false,
+          error: res.error,
+          retryable: res.retryable,
+          raw: res.raw,
+        };
+      }
 
       if (!isSuccess(res.body)) {
         // HTTP 200 with a failure in the body — the case that makes status
@@ -147,13 +192,33 @@ export function createWamatasProvider(config: WamatasConfig): WhatsAppProvider {
           ok: false,
           error: errorFrom(res.body, 'send_failed'),
           retryable: false,
+          raw: res.raw,
         };
       }
 
-      // A send that succeeded without an id is still a send. Falling back to a
-      // marker keeps the success path honest rather than inventing an id or
-      // downgrading it to a failure.
-      return { ok: true, providerMessageId: messageIdFrom(res.body) ?? 'unknown' };
+      const providerMessageId = messageIdFrom(res.body);
+
+      // TEMPORARY — remove once a real id field is identified from stored
+      // raw_response values. Logs the body of a send that Wamatas accepted
+      // without naming a message, which is the case this whole change exists
+      // to investigate.
+      if (!providerMessageId) {
+        console.warn(
+          '[wamatas:sendText] accepted with no message id — body:',
+          JSON.stringify(res.body),
+        );
+      }
+
+      // No fabricated id. Null says "the provider named no message", which is
+      // a fact a query can act on; the old 'unknown' placeholder said the same
+      // thing in a way that looked like data and hid that every send was
+      // untracked.
+      return {
+        ok: true,
+        providerMessageId,
+        ...(providerMessageId ? {} : { warning: 'no_message_id_in_response' as const }),
+        raw: res.raw,
+      };
     },
 
     async sendTemplate(): Promise<WhatsAppSendResult> {
