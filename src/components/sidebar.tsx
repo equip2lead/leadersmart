@@ -28,6 +28,7 @@ import {
   History,
   BarChart3,
   MessageSquareQuote,
+  MessageSquare,
   type LucideIcon,
 } from 'lucide-react';
 import { cn } from '@/lib/cn';
@@ -167,6 +168,19 @@ function adminSections(
     titleKey: 'nav.section.settings',
     items: [
       { href: '/settings', labelKey: 'nav.settings', icon: Settings },
+      // Gated on REVIEW_ROLES to match the table's own SELECT policy
+      // (has_admin_rights). Deliberately wider than the credentials in
+      // Settings, which are owner-only: seeing whether a message landed is not
+      // the same trust as holding the token that sent it.
+      ...(canReviewAssignments(role)
+        ? [
+            {
+              href: '/admin/whatsapp',
+              labelKey: 'whatsapp.log.sidebar_link',
+              icon: MessageSquare,
+            },
+          ]
+        : []),
     ],
   },
   ];

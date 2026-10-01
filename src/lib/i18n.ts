@@ -1147,6 +1147,38 @@ const en: Dictionary = {
 
   'whatsapp.messages.test':
     'LeaderSmart test — if you see this, WhatsApp is connected.',
+
+  // WhatsApp delivery log — /admin/whatsapp
+  'whatsapp.log.page_title': 'WhatsApp log',
+  'whatsapp.log.subtitle': 'Every message the platform has tried to send.',
+  'whatsapp.log.sidebar_link': 'WhatsApp log',
+  'whatsapp.log.view_link': 'View log',
+  'whatsapp.log.empty_title': 'Nothing sent yet',
+  'whatsapp.log.empty_body':
+    'Messages appear here once you send a test or publish a schedule.',
+  'whatsapp.log.empty_filtered': 'Nothing matches this filter.',
+  'whatsapp.log.col_when': 'When',
+  'whatsapp.log.col_to': 'To',
+  'whatsapp.log.col_purpose': 'Purpose',
+  'whatsapp.log.col_status': 'Status',
+  'whatsapp.log.col_reference': 'Reference',
+  'whatsapp.log.status_sent': 'Sent',
+  'whatsapp.log.status_failed': 'Failed',
+  'whatsapp.log.purpose_test': 'Test',
+  'whatsapp.log.purpose_rotation_assignment': 'Rotation assignment',
+  'whatsapp.log.purpose_rotation_reminder': 'Rotation reminder',
+  'whatsapp.log.filter_all': 'All',
+  'whatsapp.log.filter_sent': 'Sent',
+  'whatsapp.log.filter_failed': 'Failed',
+  'whatsapp.log.deleted_volunteer': 'Volunteer removed',
+  'whatsapp.log.no_reference': 'None returned',
+  'whatsapp.log.show_details': 'Details',
+  'whatsapp.log.hide_details': 'Hide',
+  'whatsapp.log.untracked_note':
+    '{count} sent without a provider reference — those cannot be traced back to the gateway.',
+  'whatsapp.log.not_configured':
+    'WhatsApp is not set up for this organisation yet.',
+  'whatsapp.log.showing': 'Showing the most recent {count}.',
   'whatsapp.messages.rotation_assignment':
     "Hi {name}, you're serving at {station} on {date} at {time}. Thanks!",
   'whatsapp.messages.rotation_assignment_no_time':
@@ -3214,6 +3246,38 @@ const fr: Dictionary = {
 
   'whatsapp.messages.test':
     'Test LeaderSmart — si vous voyez ceci, WhatsApp est connecté.',
+
+  // Journal des envois WhatsApp — /admin/whatsapp
+  'whatsapp.log.page_title': 'Journal WhatsApp',
+  'whatsapp.log.subtitle': "Tous les messages que la plateforme a tenté d'envoyer.",
+  'whatsapp.log.sidebar_link': 'Journal WhatsApp',
+  'whatsapp.log.view_link': 'Voir le journal',
+  'whatsapp.log.empty_title': 'Aucun envoi',
+  'whatsapp.log.empty_body':
+    'Les messages apparaîtront ici après un test ou la publication d’un planning.',
+  'whatsapp.log.empty_filtered': 'Aucun résultat pour ce filtre.',
+  'whatsapp.log.col_when': 'Quand',
+  'whatsapp.log.col_to': 'Destinataire',
+  'whatsapp.log.col_purpose': 'Objet',
+  'whatsapp.log.col_status': 'Statut',
+  'whatsapp.log.col_reference': 'Référence',
+  'whatsapp.log.status_sent': 'Envoyé',
+  'whatsapp.log.status_failed': 'Échec',
+  'whatsapp.log.purpose_test': 'Test',
+  'whatsapp.log.purpose_rotation_assignment': 'Affectation de rotation',
+  'whatsapp.log.purpose_rotation_reminder': 'Rappel de rotation',
+  'whatsapp.log.filter_all': 'Tous',
+  'whatsapp.log.filter_sent': 'Envoyés',
+  'whatsapp.log.filter_failed': 'Échecs',
+  'whatsapp.log.deleted_volunteer': 'Bénévole supprimé',
+  'whatsapp.log.no_reference': 'Aucune',
+  'whatsapp.log.show_details': 'Détails',
+  'whatsapp.log.hide_details': 'Masquer',
+  'whatsapp.log.untracked_note':
+    "{count} envoyés sans référence du fournisseur — impossible de les retrouver auprès de la passerelle.",
+  'whatsapp.log.not_configured':
+    "WhatsApp n'est pas encore configuré pour cette organisation.",
+  'whatsapp.log.showing': 'Affichage des {count} plus récents.',
   'whatsapp.messages.rotation_assignment':
     'Bonjour {name}, vous servez au poste {station} le {date} à {time}. Merci !',
   'whatsapp.messages.rotation_assignment_no_time':

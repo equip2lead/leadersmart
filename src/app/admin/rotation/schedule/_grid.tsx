@@ -114,6 +114,8 @@ export function ScheduleGrid({
   const [filter, setFilter] = useState<Filter>('all');
   const [warnings, setWarnings] = useState<GenerateWarning[]>(initialWarnings);
   const [message, setMessage] = useState<string | null>(null);
+  /** Set alongside the publish summary so "2 failed" has somewhere to lead. */
+  const [messageLink, setMessageLink] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [dragging, setDragging] = useState<CellPerson | null>(null);
   const [history, setHistory] = useState<HistoryEntry[]>([]);
@@ -188,6 +190,7 @@ export function ScheduleGrid({
 
     setError(null);
     setMessage(null);
+    setMessageLink(null);
 
     startTransition(async () => {
       const res = await swapAssignment(assignmentId, toStationId, toDate, force);
@@ -273,6 +276,7 @@ export function ScheduleGrid({
   function run(fn: () => Promise<{ ok: boolean; error?: string }>) {
     setError(null);
     setMessage(null);
+    setMessageLink(null);
     startTransition(async () => {
       const res = await fn();
       if (!res.ok) {
@@ -290,6 +294,7 @@ export function ScheduleGrid({
   function publish(scheduleId: string) {
     setError(null);
     setMessage(null);
+    setMessageLink(null);
     startTransition(async () => {
       const res = await publishSchedule(scheduleId);
       if (!res.ok) {
@@ -303,6 +308,9 @@ export function ScheduleGrid({
               .replace('{failed}', String(res.notified.failed))
           : t('rotation.admin.schedule.publish_no_whatsapp', lang),
       );
+      // Only when messages were actually attempted — a church without WhatsApp
+      // should not be shown a log with nothing in it.
+      setMessageLink(res.notified ? '/admin/whatsapp' : null);
       router.refresh();
     });
   }
@@ -310,6 +318,7 @@ export function ScheduleGrid({
   function generate() {
     setError(null);
     setMessage(null);
+    setMessageLink(null);
     startTransition(async () => {
       const res = await generateSchedule(year, month);
       if (!res.ok) {
@@ -400,8 +409,19 @@ export function ScheduleGrid({
       </div>
 
       {message && (
-        <p role="status" className="mt-4 rounded-lg bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
+        <p
+          role="status"
+          className="mt-4 flex flex-wrap items-center gap-2 rounded-lg bg-emerald-50 px-4 py-3 text-sm text-emerald-800"
+        >
           {message}
+          {messageLink && (
+            <Link
+              href={messageLink}
+              className="font-semibold text-emerald-900 underline hover:no-underline"
+            >
+              {t('whatsapp.log.view_link', lang)}
+            </Link>
+          )}
         </p>
       )}
       {error && (

@@ -253,7 +253,16 @@ export function WhatsAppForm({
           {t('settings.whatsapp.test_phone_hint', lang)}
         </p>
 
-        <p className="mt-3 text-xs text-muted">
+        <p className="mt-3 flex flex-wrap items-center gap-2 text-xs text-muted">
+          <a
+            href="/admin/whatsapp"
+            className="font-semibold text-indigo-royal-700 hover:underline"
+          >
+            {t('whatsapp.log.view_link', lang)}
+          </a>
+        </p>
+
+        <p className="mt-2 text-xs text-muted">
           {summary?.lastTestSentAt
             ? t('settings.whatsapp.last_test', lang)
                 .replace('{time}', relativeTime(summary.lastTestSentAt, lang))
