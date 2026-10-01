@@ -314,9 +314,33 @@ function NavList({
   );
 }
 
-function SectionHeader({ title }: { title: string }) {
+/**
+ * A section label, with 16px of air above it unless it is flush.
+ *
+ * `flush` is an explicit prop rather than Tailwind's `first:` utility, which
+ * was the bug: each section is wrapped in its own <div>, so the header is
+ * always that div's first child and `first:mt-0` matched every one of them —
+ * cancelling the separation on all six sections instead of just the top one.
+ *
+ * It also has to be a decision the caller makes, not a position the CSS can
+ * infer. Owner Tools is flush for a different reason than the first section:
+ * its wrapper already carries mt-6 and a border, so adding the header's own
+ * margin would double the gap. Only the callsite knows that.
+ */
+function SectionHeader({
+  title,
+  flush = false,
+}: {
+  title: string;
+  flush?: boolean;
+}) {
   return (
-    <p className="mt-4 mb-2 px-3 text-[10px] font-semibold uppercase tracking-wider text-muted first:mt-0">
+    <p
+      className={cn(
+        'mb-2 px-3 text-[10px] font-semibold uppercase tracking-wider text-muted',
+        !flush && 'mt-4',
+      )}
+    >
       {title}
     </p>
   );
@@ -374,33 +398,33 @@ export function Sidebar({
       <nav className="flex-1 overflow-y-auto p-3">
         {showAdminSidebar ? (
           <>
-            {adminSections(orgType, lang, role, pendingReviews, rotationEnabled).map((section) => (
+            {adminSections(orgType, lang, role, pendingReviews, rotationEnabled).map((section, i) => (
               <div key={section.titleKey}>
-                <SectionHeader title={t(section.titleKey, lang)} />
+                <SectionHeader title={t(section.titleKey, lang)} flush={i === 0} />
                 <NavList items={section.items} pathname={pathname} lang={lang} />
               </div>
             ))}
             {showOwnerTools && (
               <div className="mt-6 border-t border-gray-100 pt-4">
-                <SectionHeader title={t('nav.owner.section', lang)} />
+                <SectionHeader title={t('nav.owner.section', lang)} flush />
                 <NavList items={OWNER_TOOLS} pathname={pathname} lang={lang} />
               </div>
             )}
           </>
         ) : showLeaderSidebar ? (
           <>
-            {LEADER_SECTIONS.map((section) => (
+            {LEADER_SECTIONS.map((section, i) => (
               <div key={section.titleKey}>
-                <SectionHeader title={t(section.titleKey, lang)} />
+                <SectionHeader title={t(section.titleKey, lang)} flush={i === 0} />
                 <NavList items={section.items} pathname={pathname} lang={lang} />
               </div>
             ))}
           </>
         ) : (
           <>
-            {PASTOR_SECTIONS.map((section) => (
+            {PASTOR_SECTIONS.map((section, i) => (
               <div key={section.titleKey}>
-                <SectionHeader title={t(section.titleKey, lang)} />
+                <SectionHeader title={t(section.titleKey, lang)} flush={i === 0} />
                 <NavList items={section.items} pathname={pathname} lang={lang} />
               </div>
             ))}
