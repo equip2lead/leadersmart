@@ -15,15 +15,18 @@
 -- addresses sit on .test, which RFC 2606 reserves and no mail can reach.
 --
 -- NOTE ON HEADQUARTERS: branches_hq_uniq allows one is_headquarters row per
--- church, and this tenant already has a real one from onboarding. Yaoundé is
--- therefore seeded as a regular branch. Seeding does not rewrite data the
--- tenant created itself.
+-- church, so Yaoundé takes that slot only when it is free. If the tenant
+-- already has a headquarters of its own, Yaoundé is seeded as a regular branch
+-- and the existing row is left alone — seeding does not rewrite data the tenant
+-- created itself. Retiring such a placeholder is a decision for whoever owns
+-- the tenant, not a side effect of running a seed.
 
 DO $seed$
 DECLARE
   v_church UUID; v_owner UUID;
   v_yao UUID; v_dla UUID; v_lag UUID; v_abj UUID; v_acc UUID;
   v_mat2 UUID; v_mat3 UUID; v_ld UUID; v_uid UUID; r RECORD;
+  v_hq_free BOOLEAN;
 BEGIN
   SELECT id INTO v_church FROM churches
    WHERE name = 'Faithmin inter' AND organization_type = 'ministry';
@@ -69,9 +72,16 @@ BEGIN
   END LOOP;
 
   ---------------------------------------------------------------- branches
-  -- See the headquarters note above: all five are regular branches.
+  -- See the headquarters note above.
+  SELECT NOT EXISTS (
+    SELECT 1 FROM branches WHERE church_id = v_church AND is_headquarters
+  ) INTO v_hq_free;
+
   INSERT INTO branches (church_id,name,country_code,city,is_headquarters,is_test_data) VALUES
-    (v_church,'Yaoundé','CM','Yaoundé',FALSE,TRUE) RETURNING id INTO v_yao;
+    (v_church,'Yaoundé','CM','Yaoundé',v_hq_free,TRUE) RETURNING id INTO v_yao;
+  IF NOT v_hq_free THEN
+    RAISE NOTICE 'Tenant already has a headquarters — Yaoundé seeded as a regular branch.';
+  END IF;
   INSERT INTO branches (church_id,name,country_code,city,is_headquarters,is_test_data) VALUES
     (v_church,'Douala','CM','Douala',FALSE,TRUE) RETURNING id INTO v_dla;
   INSERT INTO branches (church_id,name,country_code,city,is_headquarters,is_test_data) VALUES
