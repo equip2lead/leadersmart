@@ -164,3 +164,76 @@ One gap: `inviteUserByEmail` (`src/app/admin/users/actions.ts:78`,
 | EN-only auth emails | Dashboard templates + invite locale | **No — needs a decision** |
 | `description_fr` on 3 level tables | — | Not a gap; EN is empty too |
 | i18n key parity | — | Not a gap; already perfect |
+
+---
+
+# Part 2 result — lesson_content_fr translated
+
+Applied 2 October 2026. All twelve lesson bodies translated and written to all
+four tenants.
+
+| | Before | After |
+|---|---|---|
+| Rows with `lesson_content_fr` | 0 / 48 | **48 / 48** |
+| Distinct French bodies | 0 | **12** |
+| Characters per tenant | 0 | **96,722** (EN 82,604, +17%) |
+| French identical to English | — | **0** |
+| French still beginning "LESSON" | — | **0** |
+
+12 of 12 in each of FIRE CHURCH, Fire Church Test, Faithmin inter and
+Nice ministry.
+
+## Translation decisions worth a second opinion
+
+Flagged for review rather than buried. Each is a judgement call, not an
+oversight.
+
+| English | French used | Why it needed a decision |
+|---|---|---|
+| Grace-Full Leadership (GFL) | leadership plein de grâce (LPG) | The English is a pun on "graceful" / "full of grace". French has no single word carrying both; the pun is lost and only the theological sense survives. |
+| Personhood (Level 5) | stature personnelle | Maxwell's French editions vary (apogée, sommet). Chose a literal rendering over a publisher's. |
+| Follow their "knows" | suivent ce qu'ils savent | Pun on "nose" / "knows". Unrecoverable. |
+| wet feet rather than cold feet | les pieds mouillés plutôt que de se dérober | "Cold feet" is idiomatic; the literal French loses the pairing. |
+| IDEA (Instruction, Demonstration, Experience, Assessment) | kept I-D-E-A, glossed | Instruction / Démonstration / Expérience / Analyse keeps the letters, but IDEA is not a French word, so the page now says « idée » en anglais. |
+| PARENT acrostic | **preserved** | Propos, Analyse, Relation, Émancipation, Navigation, Trousse à outils. |
+| INFLUENCE acrostic | **preserved** | All nine letters work in French. |
+| Triple A / Attitude of Gratitude | trois A / attitude de gratitude | Both survive, rhyme included. |
+| stewardship | intendance | Over "gérance", which reads commercial. |
+| empowerment | habilitation | Over "autonomisation", which reads bureaucratic. |
+| discipleship | discipulat | Per brief. |
+| Great Commission | la Grande Commission | Some French traditions prefer "l'ordre missionnaire". |
+| Gentiles | les païens | Segond usage; "les nations" is the alternative. |
+
+Bible references were converted to French book names at the same chapter and
+verse, per the brief. No French Bible version was specified, so quoted
+passages follow Segond-style phrasing without claiming to reproduce any
+edition verbatim. **Worth confirming** which version FIRE Bible Institute
+uses, so quotations can be aligned exactly.
+
+## Defects found in the ENGLISH source
+
+Not introduced by the translation — present in `lesson_content` and visible to
+every English reader today.
+
+- **OCR damage throughout.** Detached list numbers (Lesson 1's Nehemiah list
+  renders its 1–4 after the items), orphaned `-` and `•` on their own lines,
+  and PDF page numbers (114, 115, 116, 108–111) sitting mid-sentence. The
+  French mirrors the paragraph order but renders clean prose rather than
+  reproducing the noise.
+- **Each lesson ends with the next lesson's heading** — a page-break artifact.
+  Preserved in French for 1:1 structure.
+- **`Luke 6:50` (Lesson 37)** — Luke 6 has 49 verses. Citation is wrong.
+- **`I Thess. 5:7-11` (Lesson 26)** — the quoted passage is 1 Thessalonians
+  2:7-11, not 5:7-11.
+- **`Jake Welch, CEO of General Electric` (Lesson 37)** — Jack Welch.
+  Preserved as written; correcting it silently would diverge from the English.
+- **Lesson 25 calls its fifth point "A fourth gift".**
+- **Lesson 36 refers to the `Church of the Nazarene`** and to district budgets
+  and apportionments — denominational material from another tradition, sitting
+  inside FIRE Bible Institute's course.
+- Typos: "Promise Land", "Mosses", "an leader", "organization s going",
+  "hones evaluations", "expenes", "budgetry".
+
+All of these are worth a pass over the English before the lessons go in front
+of students. The French does not inherit the typos, which means the two
+languages now differ in polish.
