@@ -1007,7 +1007,7 @@ const en: Dictionary = {
   'rotation.admin.volunteers.test_badge': 'Test',
   'rotation.admin.volunteers.test_badge_title':
     'Seeded fixture, not a real sign-up.',
-  'rotation.admin.volunteers.purge_test_data': 'Remove test data',
+  'rotation.admin.volunteers.purge_test_data': 'Remove test volunteers',
   'rotation.admin.volunteers.purge_count': '{count} test volunteers',
   'rotation.admin.volunteers.confirm_purge':
     'Delete every test volunteer in this church? Their groups, preferences and assignments go with them. Real sign-ups are not touched.',
@@ -1780,6 +1780,18 @@ const en: Dictionary = {
   'owner.danger.title': 'Danger Zone',
   'owner.danger.subtitle': 'Irreversible church-wide actions',
   'owner.danger.body': 'Data export and account deletion controls will appear here in Phase 3. All actions in this section will require typed confirmation.',
+
+  'admin.test_data.title': 'Test data',
+  'admin.test_data.subtitle': 'Seeded fixture rows in this organisation',
+  'admin.test_data.summary_line': '{total} test rows across {tables} tables',
+  'admin.test_data.remove_button': 'Remove test data',
+  'admin.test_data.confirm_modal_title': 'Remove all test data?',
+  'admin.test_data.confirm_modal_body':
+    'This will delete all seeded test data across volunteers, branches, zones, leaders, events, reports, and submissions. Real data is untouched. This cannot be undone.',
+  'admin.test_data.confirm_delete': 'Delete all test data',
+  'admin.test_data.success_toast': 'Removed {total} rows across {tables} tables.',
+  'admin.test_data.none': 'No test data in this organisation.',
+  'admin.test_data.error': 'Could not remove test data. Nothing was deleted.',
   // Invite gating messages
   'invite.form.nonOwnerHint': 'Only the Senior Pastor (Owner) can invite Admin Pastors or the Fire Kids Coordinator.',
   'invite.error.ownerOnly': 'That role can only be granted by the Senior Pastor (Owner).',
@@ -3127,7 +3139,7 @@ const fr: Dictionary = {
   'rotation.admin.volunteers.test_badge': 'Test',
   'rotation.admin.volunteers.test_badge_title':
     "Donnée de test, pas une véritable inscription.",
-  'rotation.admin.volunteers.purge_test_data': 'Supprimer les données de test',
+  'rotation.admin.volunteers.purge_test_data': 'Supprimer les bénévoles de test',
   'rotation.admin.volunteers.purge_count': '{count} bénévoles de test',
   'rotation.admin.volunteers.confirm_purge':
     "Supprimer tous les bénévoles de test de cette église ? Leurs groupes, préférences et affectations disparaîtront avec eux. Les inscriptions réelles ne sont pas touchées.",
@@ -3901,6 +3913,21 @@ const fr: Dictionary = {
   'owner.danger.title': 'Zone Sensible',
   'owner.danger.subtitle': 'Actions irréversibles à l\'échelle de l\'église',
   'owner.danger.body': 'L\'export de données et la suppression du compte seront disponibles ici en Phase 3. Toutes ces actions demanderont une confirmation par saisie.',
+
+  'admin.test_data.title': 'Données de test',
+  'admin.test_data.subtitle': 'Lignes de démonstration dans cette organisation',
+  'admin.test_data.summary_line':
+    '{total} lignes de test réparties sur {tables} tables',
+  'admin.test_data.remove_button': 'Supprimer les données de test',
+  'admin.test_data.confirm_modal_title': 'Supprimer toutes les données de test ?',
+  'admin.test_data.confirm_modal_body':
+    'Cette action supprimera toutes les données de test des bénévoles, branches, zones, responsables, événements, rapports et devoirs. Les données réelles ne sont pas touchées. Cette action est irréversible.',
+  'admin.test_data.confirm_delete': 'Supprimer toutes les données de test',
+  'admin.test_data.success_toast':
+    '{total} lignes supprimées sur {tables} tables.',
+  'admin.test_data.none': 'Aucune donnée de test dans cette organisation.',
+  'admin.test_data.error':
+    'Impossible de supprimer les données de test. Rien n\'a été supprimé.',
   // Messages liés aux invitations
   'invite.form.nonOwnerHint': 'Seul le Pasteur Principal (Owner) peut inviter des Pasteurs Administrateurs ou le Coordinateur Fire Kids.',
   'invite.error.ownerOnly': 'Ce rôle ne peut être accordé que par le Pasteur Principal (Owner).',
