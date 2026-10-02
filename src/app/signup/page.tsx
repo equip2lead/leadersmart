@@ -7,6 +7,10 @@ import { Flame } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { t } from '@/lib/i18n';
 import type { AppLanguage } from '@/lib/types';
+import {
+  GoogleSignInButton,
+  OrDivider,
+} from '@/components/google-sign-in-button';
 
 export default function SignupPage() {
   const router = useRouter();
@@ -198,6 +202,11 @@ export default function SignupPage() {
               {loading ? t('common.loading') : t('auth.signup.button')}
             </button>
           </form>
+
+          {/* lang follows the picker above, so the Google label switches with
+              the rest of the form rather than staying English until signup. */}
+          <OrDivider lang={language} />
+          <GoogleSignInButton mode="signup" lang={language} />
 
           <p className="mt-6 text-center text-sm text-body">
             {t('auth.signup.hasAccount')}{' '}

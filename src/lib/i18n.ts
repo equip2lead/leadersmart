@@ -418,6 +418,18 @@ const en: Dictionary = {
   'auth.reset.password_too_short_error': 'Password must be at least 8 characters.',
   'auth.reset.password_no_number_error': 'Password must include at least one number.',
 
+  'auth.login.google_button': 'Sign in with Google',
+  'auth.login.or_divider': 'or',
+  'auth.signup.google_button': 'Sign up with Google',
+  'auth.oauth.error': 'Could not start Google sign-in. Please try again.',
+
+  'auth.onboarding.google_welcome':
+    "Welcome! Let's finish setting up your church or ministry.",
+  'auth.welcome.org_name_label': 'Church or ministry name',
+  'auth.welcome.org_name_hint': 'You can change this later in Settings.',
+  'auth.welcome.submit': 'Continue',
+  'auth.welcome.error': 'Could not finish setting up your account. Please try again.',
+
   // ─────────────────────────────────────────────────────────────
   // Onboarding wizard (owner-only, 4 steps)
   // ─────────────────────────────────────────────────────────────
@@ -2543,6 +2555,21 @@ const fr: Dictionary = {
     'Le mot de passe doit comporter au moins 8 caractères.',
   'auth.reset.password_no_number_error':
     'Le mot de passe doit contenir au moins un chiffre.',
+
+  'auth.login.google_button': 'Se connecter avec Google',
+  'auth.login.or_divider': 'ou',
+  'auth.signup.google_button': 'S\'inscrire avec Google',
+  'auth.oauth.error':
+    'Impossible de démarrer la connexion Google. Veuillez réessayer.',
+
+  'auth.onboarding.google_welcome':
+    'Bienvenue ! Finalisons la configuration de votre église ou ministère.',
+  'auth.welcome.org_name_label': 'Nom de l\'église ou du ministère',
+  'auth.welcome.org_name_hint':
+    'Vous pourrez le modifier plus tard dans les paramètres.',
+  'auth.welcome.submit': 'Continuer',
+  'auth.welcome.error':
+    'Impossible de finaliser la configuration de votre compte. Veuillez réessayer.',
 
   // ─────────────────────────────────────────────────────────────
   // Assistant d\'installation (Pasteur Principal uniquement, 4 étapes)

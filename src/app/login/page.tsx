@@ -6,6 +6,10 @@ import Link from 'next/link';
 import { Flame } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { t } from '@/lib/i18n';
+import {
+  GoogleSignInButton,
+  OrDivider,
+} from '@/components/google-sign-in-button';
 
 function LoginForm() {
   const router = useRouter();
@@ -121,6 +125,11 @@ function LoginForm() {
           {loading ? t('common.loading') : t('auth.login.button')}
         </button>
       </form>
+
+      {/* Below the form, not above: email/password is the established path and
+          most existing accounts have no Google identity linked. */}
+      <OrDivider />
+      <GoogleSignInButton mode="signin" />
 
       <p className="mt-6 text-center text-sm text-body">
         {t('auth.login.noAccount')}{' '}
