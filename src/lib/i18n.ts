@@ -396,6 +396,28 @@ const en: Dictionary = {
   'auth.checkEmail': 'Check your email — we sent a confirmation link to finish setup.',
   'auth.error.generic': 'Something went wrong. Please try again.',
 
+  'auth.forgot.title': 'Reset your password',
+  'auth.forgot.subtitle':
+    'Enter the email address on your account and we will send you a link to set a new password.',
+  'auth.forgot.email_label': 'Email address',
+  'auth.forgot.submit_button': 'Send reset link',
+  'auth.forgot.success_message':
+    'If an account exists for that email, a reset link will arrive within 2 minutes. Check your spam folder if it does not appear.',
+  'auth.forgot.back_to_login': 'Back to sign in',
+  'auth.forgot.link_expired':
+    'That reset link has expired or has already been used. Request a new one below.',
+
+  'auth.reset.title': 'Set a new password',
+  'auth.reset.subtitle': 'Choose a password you have not used on this account before.',
+  'auth.reset.new_password_label': 'New password',
+  'auth.reset.confirm_password_label': 'Confirm new password',
+  'auth.reset.requirements_hint': 'At least 8 characters, including a number.',
+  'auth.reset.submit_button': 'Update password',
+  'auth.reset.success_toast': "Password updated. You're signed in.",
+  'auth.reset.password_mismatch_error': 'Those passwords do not match.',
+  'auth.reset.password_too_short_error': 'Password must be at least 8 characters.',
+  'auth.reset.password_no_number_error': 'Password must include at least one number.',
+
   // ─────────────────────────────────────────────────────────────
   // Onboarding wizard (owner-only, 4 steps)
   // ─────────────────────────────────────────────────────────────
@@ -2484,6 +2506,31 @@ const fr: Dictionary = {
   'auth.signup.loginLink': 'Se connecter',
   'auth.checkEmail': 'Vérifiez votre e-mail — nous vous avons envoyé un lien de confirmation pour finaliser votre compte.',
   'auth.error.generic': 'Une erreur est survenue. Veuillez réessayer.',
+
+  'auth.forgot.title': 'Réinitialiser votre mot de passe',
+  'auth.forgot.subtitle':
+    'Saisissez l\'adresse e-mail de votre compte et nous vous enverrons un lien pour définir un nouveau mot de passe.',
+  'auth.forgot.email_label': 'Adresse e-mail',
+  'auth.forgot.submit_button': 'Envoyer le lien',
+  'auth.forgot.success_message':
+    'Si un compte existe pour cette adresse, un lien de réinitialisation arrivera dans les 2 minutes. Vérifiez vos courriers indésirables s\'il n\'apparaît pas.',
+  'auth.forgot.back_to_login': 'Retour à la connexion',
+  'auth.forgot.link_expired':
+    'Ce lien de réinitialisation a expiré ou a déjà été utilisé. Demandez-en un nouveau ci-dessous.',
+
+  'auth.reset.title': 'Définir un nouveau mot de passe',
+  'auth.reset.subtitle':
+    'Choisissez un mot de passe que vous n\'avez pas déjà utilisé sur ce compte.',
+  'auth.reset.new_password_label': 'Nouveau mot de passe',
+  'auth.reset.confirm_password_label': 'Confirmer le nouveau mot de passe',
+  'auth.reset.requirements_hint': 'Au moins 8 caractères, dont un chiffre.',
+  'auth.reset.submit_button': 'Mettre à jour le mot de passe',
+  'auth.reset.success_toast': 'Mot de passe mis à jour. Vous êtes connecté.',
+  'auth.reset.password_mismatch_error': 'Ces mots de passe ne correspondent pas.',
+  'auth.reset.password_too_short_error':
+    'Le mot de passe doit comporter au moins 8 caractères.',
+  'auth.reset.password_no_number_error':
+    'Le mot de passe doit contenir au moins un chiffre.',
 
   // ─────────────────────────────────────────────────────────────
   // Assistant d\'installation (Pasteur Principal uniquement, 4 étapes)

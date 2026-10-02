@@ -44,7 +44,20 @@ export async function updateSession(request: NextRequest) {
   //
   // The ADMIN rotation screens live under /admin/rotation and stay behind
   // both this check and their own layout guard.
-  const publicRoutes = ['/', '/login', '/signup', '/auth', '/rotation', '/me'];
+  //
+  // /forgot-password is public for the obvious reason: someone who cannot sign
+  // in is exactly who needs it. /reset-password is deliberately NOT listed —
+  // it requires the session that /auth/confirm creates from a recovery link,
+  // so an unauthenticated visit should be bounced like any other private page.
+  const publicRoutes = [
+    '/',
+    '/login',
+    '/signup',
+    '/forgot-password',
+    '/auth',
+    '/rotation',
+    '/me',
+  ];
   const isPublic = publicRoutes.some(
     (route) => pathname === route || pathname.startsWith(`${route}/`),
   );
