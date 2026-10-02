@@ -96,12 +96,12 @@ function LoginForm() {
             />
             {t('auth.login.remember')}
           </label>
-          <a
-            href="#"
+          <Link
+            href="/forgot-password"
             className="text-sm font-medium text-indigo-royal-700 hover:underline"
           >
             {t('auth.login.forgot')}
-          </a>
+          </Link>
         </div>
 
         {error && (
