@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
-import Link from 'next/link';
-import { Flame } from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
+import { langFor } from '@/lib/lang-cookie';
+import { AuthPageShell } from '@/components/auth-page-shell';
 import type { AppLanguage } from '@/lib/types';
 import { ResetPasswordForm } from './_form';
 
@@ -24,28 +24,23 @@ export default async function ResetPasswordPage() {
   if (!user) redirect('/forgot-password?expired=1');
 
   // Best-effort language. A recovery session can read its own users row under
-  // RLS; if that lookup comes back empty for any reason the page still renders,
-  // in English, rather than failing on the way to a password reset.
+  // RLS; if that lookup comes back empty for any reason the page still renders
+  // rather than failing on the way to a password reset.
   const { data: profile } = await supabase
     .from('users')
     .select('preferred_language')
     .eq('id', user.id)
     .maybeSingle();
 
-  const lang = (profile?.preferred_language ?? 'en') as AppLanguage;
+  // Cookie first, stored preference second — someone who just pressed FR on
+  // this page means it, even when their profile still says 'en'.
+  const lang = await langFor(
+    (profile?.preferred_language ?? null) as AppLanguage | null,
+  );
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-12">
-      <div className="w-full max-w-md">
-        <Link
-          href="/"
-          className="mb-6 flex items-center justify-center gap-2 text-ink"
-        >
-          <Flame className="h-8 w-8 text-gold-warm-600" aria-hidden="true" />
-          <span className="text-xl font-bold">LeaderSmart</span>
-        </Link>
-        <ResetPasswordForm lang={lang} />
-      </div>
-    </main>
+    <AuthPageShell lang={lang}>
+      <ResetPasswordForm lang={lang} />
+    </AuthPageShell>
   );
 }

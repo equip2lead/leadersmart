@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
-import Link from 'next/link';
-import { Flame } from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
+import { langFor } from '@/lib/lang-cookie';
+import { AuthPageShell } from '@/components/auth-page-shell';
 import type { AppLanguage } from '@/lib/types';
 import { WelcomeForm } from './_form';
 
@@ -42,19 +42,15 @@ export default async function WelcomePage() {
     (typeof meta.full_name === 'string' && meta.full_name) ||
     (typeof meta.name === 'string' && meta.name) ||
     '';
-  // No users row yet, so there is no stored preference to read — the identity
-  // metadata is the only hint available.
-  const lang: AppLanguage = meta.preferred_language === 'fr' ? 'fr' : 'en';
+  // No users row yet, so there is no stored preference — the cookie, then the
+  // identity metadata, are the only hints available.
+  const lang = await langFor(
+    (meta.preferred_language === 'fr' ? 'fr' : null) as AppLanguage | null,
+  );
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-12">
-      <div className="w-full max-w-md">
-        <Link href="/" className="mb-6 flex items-center justify-center gap-2 text-ink">
-          <Flame className="h-8 w-8 text-gold-warm-600" aria-hidden="true" />
-          <span className="text-xl font-bold">LeaderSmart</span>
-        </Link>
-        <WelcomeForm lang={lang} suggestedName={suggestedName} />
-      </div>
-    </main>
+    <AuthPageShell lang={lang}>
+      <WelcomeForm lang={lang} suggestedName={suggestedName} />
+    </AuthPageShell>
   );
 }
