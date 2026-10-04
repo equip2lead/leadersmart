@@ -429,6 +429,22 @@ const en: Dictionary = {
   'auth.welcome.org_name_hint': 'You can change this later in Settings.',
   'auth.welcome.submit': 'Continue',
   'auth.welcome.error': 'Could not finish setting up your account. Please try again.',
+  'auth.welcome.step1_title': 'What are you setting up?',
+  'auth.welcome.step1_subtitle':
+    'This decides the vocabulary and the tools you get. You can change it later in Settings.',
+  'auth.welcome.org_type.church.title': 'I lead a church',
+  'auth.welcome.org_type.church.subtitle':
+    'A local church with services, departments, and pastors',
+  'auth.welcome.org_type.ministry.title': 'I lead a ministry',
+  'auth.welcome.org_type.ministry.subtitle':
+    'A ministry with branches, zones, or multiple locations',
+  'auth.welcome.step2_back_button': 'Back',
+  'auth.welcome.church_name_label': 'Church name',
+  'auth.welcome.ministry_name_label': 'Ministry name',
+  'auth.welcome.church_name_placeholder': 'Grace Community Church',
+  'auth.welcome.ministry_name_placeholder': 'Faith Nations Ministry',
+  'auth.welcome.submit_button': 'Continue',
+  'auth.welcome.step_label': 'Step {current} of {total}',
 
   // ─────────────────────────────────────────────────────────────
   // Onboarding wizard (owner-only, 4 steps)
@@ -2570,6 +2586,22 @@ const fr: Dictionary = {
   'auth.welcome.submit': 'Continuer',
   'auth.welcome.error':
     'Impossible de finaliser la configuration de votre compte. Veuillez réessayer.',
+  'auth.welcome.step1_title': 'Que configurez-vous ?',
+  'auth.welcome.step1_subtitle':
+    'Ce choix détermine le vocabulaire et les outils dont vous disposerez. Vous pourrez le modifier plus tard dans les paramètres.',
+  'auth.welcome.org_type.church.title': 'Je dirige une église',
+  'auth.welcome.org_type.church.subtitle':
+    'Une église locale avec des services, départements et pasteurs',
+  'auth.welcome.org_type.ministry.title': 'Je dirige un ministère',
+  'auth.welcome.org_type.ministry.subtitle':
+    'Un ministère avec antennes, zones ou plusieurs sites',
+  'auth.welcome.step2_back_button': 'Retour',
+  'auth.welcome.church_name_label': 'Nom de l\'église',
+  'auth.welcome.ministry_name_label': 'Nom du ministère',
+  'auth.welcome.church_name_placeholder': 'Église Communautaire de la Grâce',
+  'auth.welcome.ministry_name_placeholder': 'Ministère Foi des Nations',
+  'auth.welcome.submit_button': 'Continuer',
+  'auth.welcome.step_label': 'Étape {current} sur {total}',
 
   // ─────────────────────────────────────────────────────────────
   // Assistant d\'installation (Pasteur Principal uniquement, 4 étapes)

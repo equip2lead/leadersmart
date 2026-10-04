@@ -1,6 +1,7 @@
 'use server';
 
 import { createClient } from '@/lib/supabase/server';
+import type { OrganizationType } from '@/lib/types';
 
 export type CompleteSignupResult = { ok: true } | { ok: false; error: string };
 
@@ -16,6 +17,11 @@ const MAX_ORG_NAME = 120;
  * metadata before the account exists, and a Google identity cannot, so it is
  * typed here instead.
  *
+ * The org type goes in at creation rather than being corrected afterwards.
+ * Passing it here is what stops a tenant existing — even briefly — with a type
+ * nobody chose, and the function stamps onboarding step 0 as answered so the
+ * wizard does not ask the same question again on the next screen.
+ *
  * Idempotent by virtue of the function itself — bootstrap_my_church returns
  * the existing church_id when the caller already has a users row, so a double
  * submit cannot create a second church.
@@ -23,6 +29,7 @@ const MAX_ORG_NAME = 120;
 export async function completeGoogleSignup(
   orgName: string,
   fullName: string,
+  orgType: OrganizationType,
 ): Promise<CompleteSignupResult> {
   const supabase = await createClient();
   const {
@@ -30,6 +37,13 @@ export async function completeGoogleSignup(
   } = await supabase.auth.getUser();
 
   if (!user) return { ok: false, error: 'not_authenticated' };
+
+  // Re-checked server-side: the picker is client state, and the function
+  // raises on anything else, so a bad value would surface as a database error
+  // rather than a clear refusal.
+  if (orgType !== 'church' && orgType !== 'ministry') {
+    return { ok: false, error: 'invalid_org_type' };
+  }
 
   const name = orgName.trim();
   if (name.length === 0) return { ok: false, error: 'org_name_required' };
@@ -50,6 +64,7 @@ export async function completeGoogleSignup(
     p_church_name: name,
     p_full_name: resolvedName,
     p_language: language,
+    p_org_type: orgType,
   });
 
   if (error) return { ok: false, error: error.message };
