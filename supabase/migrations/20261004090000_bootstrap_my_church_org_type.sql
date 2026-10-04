@@ -6,10 +6,17 @@
 -- a name before anything had asked what kind of organisation it was — which is
 -- how "Love of God ministry" came to exist as organization_type = 'church'.
 --
--- Also stamps user_onboarding_progress.org_type_selected_at, so a type chosen
--- at /welcome is not asked again fifteen seconds later by the wizard's step 0.
--- Without this the owner answers the same question twice, and the second
--- answer silently overrides the first.
+-- When a type IS passed, it also stamps
+-- user_onboarding_progress.org_type_selected_at, so a choice made at /welcome
+-- is not asked again fifteen seconds later by the wizard's step 0. Without
+-- that the owner answers the same question twice and the second answer
+-- silently overrides the first.
+--
+-- p_org_type defaults to NULL rather than 'church' so the two cases stay
+-- distinguishable. SQL cannot tell a defaulted argument from an explicitly
+-- passed identical one, so a 'church' default would stamp step 0 for the
+-- 3-argument email-signup path too — and those users would never be asked
+-- church vs ministry anywhere.
 --
 -- DROP then CREATE, not CREATE OR REPLACE: a fourth parameter changes the
 -- signature, so replace would leave the 3-argument version in place as an
@@ -23,7 +30,7 @@ CREATE OR REPLACE FUNCTION public.bootstrap_my_church(
   p_church_name text,
   p_full_name   text,
   p_language    text DEFAULT 'en',
-  p_org_type    text DEFAULT 'church'
+  p_org_type    text DEFAULT NULL
 )
 RETURNS uuid
 LANGUAGE plpgsql
@@ -42,7 +49,10 @@ BEGIN
     RAISE EXCEPTION 'Not authenticated';
   END IF;
 
-  IF p_org_type NOT IN ('church', 'ministry') THEN
+  -- NULL means "caller did not ask" — the 3-argument email-signup path. That
+  -- must keep taking the column default AND must leave step 0 unstamped, or
+  -- email signups would silently skip the church/ministry question.
+  IF p_org_type IS NOT NULL AND p_org_type NOT IN ('church', 'ministry') THEN
     RAISE EXCEPTION 'Invalid organization type: %', p_org_type;
   END IF;
 
@@ -91,7 +101,7 @@ BEGIN
     VALUES (
       p_church_name,
       p_language::public.app_language,
-      p_org_type::public.organization_type
+      coalesce(p_org_type, 'church')::public.organization_type
     )
     RETURNING id INTO v_church_id;
 
@@ -112,22 +122,24 @@ BEGIN
       p_language::public.app_language
     );
 
-  -- Record that the type question is answered, so the wizard skips step 0.
-  -- The progress row would otherwise be created on the first /onboarding hit
-  -- with a null stamp, and the decision page would ask again.
-  INSERT INTO public.user_onboarding_progress (user_id, church_id, org_type_selected_at)
-    VALUES (v_user_id, v_church_id, now())
-  ON CONFLICT (user_id) DO UPDATE
-    SET org_type_selected_at = coalesce(
-          public.user_onboarding_progress.org_type_selected_at, now()
-        );
+  -- Only when the caller actually asked. /welcome passes a type the owner
+  -- chose, so step 0 would be the same question twice; the email path passes
+  -- nothing, so step 0 is still the only place it gets asked.
+  IF p_org_type IS NOT NULL THEN
+    INSERT INTO public.user_onboarding_progress (user_id, church_id, org_type_selected_at)
+      VALUES (v_user_id, v_church_id, now())
+    ON CONFLICT (user_id) DO UPDATE
+      SET org_type_selected_at = coalesce(
+            public.user_onboarding_progress.org_type_selected_at, now()
+          );
+  END IF;
 
   RETURN v_church_id;
 END;
 $function$;
 
 COMMENT ON FUNCTION public.bootstrap_my_church(text, text, text, text) IS
-  'Creates a tenant and its owner row, or links an invited user to the inviting church. p_org_type applies to the self-signup path only and marks onboarding step 0 as answered.';
+  'Creates a tenant and its owner row, or links an invited user to the inviting church. p_org_type applies to the self-signup path only; NULL keeps the column default and leaves onboarding step 0 to ask.';
 
 REVOKE ALL ON FUNCTION public.bootstrap_my_church(text, text, text, text) FROM PUBLIC;
 GRANT EXECUTE ON FUNCTION public.bootstrap_my_church(text, text, text, text) TO authenticated;
