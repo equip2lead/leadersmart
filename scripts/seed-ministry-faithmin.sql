@@ -239,5 +239,37 @@ END
 $seed$;
 
 -- Confirm what landed, per table.
-SELECT table_name, test_rows FROM test_data_summary
- WHERE church = 'Faithmin inter' ORDER BY table_name;
+--
+-- Counted inline rather than through a view. test_data_summary was dropped as
+-- a SECURITY DEFINER view that reported every tenant, and test_data_counts()
+-- is no substitute here: it scopes to auth.uid(), which is NULL when this
+-- script runs on a service-role connection, so it would report zeros.
+WITH ch AS (
+  SELECT id FROM churches
+   WHERE name = 'Faithmin inter' AND organization_type = 'ministry'
+)
+SELECT 'users' AS table_name, count(*) AS test_rows
+  FROM users WHERE church_id = (SELECT id FROM ch) AND is_test_data
+UNION ALL
+SELECT 'branches', count(*)
+  FROM branches WHERE church_id = (SELECT id FROM ch) AND is_test_data
+UNION ALL
+SELECT 'zones', count(*)
+  FROM zones z JOIN branches b ON b.id = z.branch_id
+ WHERE b.church_id = (SELECT id FROM ch) AND z.is_test_data
+UNION ALL
+SELECT 'leader_development', count(*)
+  FROM leader_development WHERE church_id = (SELECT id FROM ch) AND is_test_data
+UNION ALL
+SELECT 'events', count(*)
+  FROM events WHERE church_id = (SELECT id FROM ch) AND is_test_data
+UNION ALL
+SELECT 'branch_reports', count(*)
+  FROM branch_reports r JOIN branches b ON b.id = r.branch_id
+ WHERE b.church_id = (SELECT id FROM ch) AND r.is_test_data
+UNION ALL
+SELECT 'assignment_responses', count(*)
+  FROM assignment_responses a
+       JOIN leader_development l ON l.id = a.leader_development_id
+ WHERE l.church_id = (SELECT id FROM ch) AND a.is_test_data
+ORDER BY table_name;
